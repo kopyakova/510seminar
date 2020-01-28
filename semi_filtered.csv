@@ -109,7 +109,6 @@
 107,2014-07-30,2,14.511079999999998,121.05721,EM'S Signal Village Elementary School,10.45,"NCR, Fourth District"
 108,2014-08-06,2,14.511079999999998,121.05721,EM'S Signal Village Elementary School,10.0,"NCR, Fourth District"
 109,2014-08-14,2,14.511079999999998,121.05721,EM'S Signal Village Elementary School,11.27,"NCR, Fourth District"
-110,2014-08-21,2,14.511079999999998,121.05721,EM'S Signal Village Elementary School,1.35,"NCR, Fourth District"
 111,2014-08-28,2,14.511079999999998,121.05721,EM'S Signal Village Elementary School,3.8,"NCR, Fourth District"
 112,2014-09-03,2,14.511079999999998,121.05721,EM'S Signal Village Elementary School,11.39,"NCR, Fourth District"
 113,2014-09-10,2,14.511079999999998,121.05721,EM'S Signal Village Elementary School,7.5,"NCR, Fourth District"
@@ -311,8 +310,6 @@
 309,2014-11-19,6,14.50036,121.06263,"Ricardo P. Cruz, Sr. Elementary School",1.94,"NCR, Fourth District"
 310,2014-11-26,6,14.50036,121.06263,"Ricardo P. Cruz, Sr. Elementary School",6.8,"NCR, Fourth District"
 311,2014-12-03,6,14.50036,121.06263,"Ricardo P. Cruz, Sr. Elementary School",7.77,"NCR, Fourth District"
-355,2012-06-26,23,14.61823,120.99677,Dr. A. Albert Elementary School,1.37,"NCR, City of Manila, First District"
-356,2012-07-03,23,14.61823,120.99677,Dr. A. Albert Elementary School,0.68,"NCR, City of Manila, First District"
 357,2012-07-10,23,14.61823,120.99677,Dr. A. Albert Elementary School,6.16,"NCR, City of Manila, First District"
 358,2012-07-17,23,14.61823,120.99677,Dr. A. Albert Elementary School,6.85,"NCR, City of Manila, First District"
 359,2012-07-24,23,14.61823,120.99677,Dr. A. Albert Elementary School,19.18,"NCR, City of Manila, First District"
@@ -354,7 +351,6 @@
 395,2013-12-10,23,14.61823,120.99677,Dr. A. Albert Elementary School,7.64,"NCR, City of Manila, First District"
 396,2013-12-17,23,14.61823,120.99677,Dr. A. Albert Elementary School,6.94,"NCR, City of Manila, First District"
 397,2014-07-03,23,14.61823,120.99677,Dr. A. Albert Elementary School,100.0,"NCR, City of Manila, First District"
-398,2014-07-21,23,14.61823,120.99677,Dr. A. Albert Elementary School,1.39,"NCR, City of Manila, First District"
 399,2014-07-22,23,14.61823,120.99677,Dr. A. Albert Elementary School,3.47,"NCR, City of Manila, First District"
 400,2014-07-30,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.78,"NCR, City of Manila, First District"
 401,2014-08-05,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.78,"NCR, City of Manila, First District"
@@ -377,7 +373,6 @@
 418,2015-08-11,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.78,"NCR, City of Manila, First District"
 419,2015-08-18,23,14.61823,120.99677,Dr. A. Albert Elementary School,3.47,"NCR, City of Manila, First District"
 420,2015-08-25,23,14.61823,120.99677,Dr. A. Albert Elementary School,4.17,"NCR, City of Manila, First District"
-421,2015-09-01,23,14.61823,120.99677,Dr. A. Albert Elementary School,1.39,"NCR, City of Manila, First District"
 422,2015-09-08,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.08,"NCR, City of Manila, First District"
 423,2015-09-15,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.08,"NCR, City of Manila, First District"
 424,2015-09-22,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.78,"NCR, City of Manila, First District"
@@ -394,13 +389,11 @@
 435,2016-01-19,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.78,"NCR, City of Manila, First District"
 436,2016-01-26,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.08,"NCR, City of Manila, First District"
 437,2016-02-02,23,14.61823,120.99677,Dr. A. Albert Elementary School,2.78,"NCR, City of Manila, First District"
-523,2012-06-26,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,1.45,"NCR, City of Manila, First District"
 524,2012-07-03,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,5.07,"NCR, City of Manila, First District"
 525,2012-07-10,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,13.04,"NCR, City of Manila, First District"
 526,2012-07-17,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,5.07,"NCR, City of Manila, First District"
 527,2012-07-24,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.9,"NCR, City of Manila, First District"
 528,2012-08-21,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.9,"NCR, City of Manila, First District"
-529,2012-08-28,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,1.45,"NCR, City of Manila, First District"
 530,2012-09-04,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,5.07,"NCR, City of Manila, First District"
 531,2012-09-11,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,3.62,"NCR, City of Manila, First District"
 532,2012-09-18,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,6.52,"NCR, City of Manila, First District"
@@ -436,24 +429,15 @@
 562,2014-07-05,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,60.0,"NCR, City of Manila, First District"
 563,2014-07-23,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,0.0,"NCR, City of Manila, First District"
 564,2014-07-30,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,0.0,"NCR, City of Manila, First District"
-565,2014-08-06,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,0.71,"NCR, City of Manila, First District"
-566,2014-08-12,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,1.43,"NCR, City of Manila, First District"
-567,2014-08-26,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,1.43,"NCR, City of Manila, First District"
 568,2014-09-02,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.13,"NCR, City of Manila, First District"
-569,2014-09-09,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,1.44,"NCR, City of Manila, First District"
 570,2014-09-16,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.14,"NCR, City of Manila, First District"
-571,2014-09-23,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,1.43,"NCR, City of Manila, First District"
 572,2014-09-30,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.86,"NCR, City of Manila, First District"
 573,2014-10-07,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.14,"NCR, City of Manila, First District"
 574,2014-10-21,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,4.29,"NCR, City of Manila, First District"
 575,2014-10-28,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.14,"NCR, City of Manila, First District"
-576,2014-11-04,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,1.43,"NCR, City of Manila, First District"
 577,2014-11-11,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.86,"NCR, City of Manila, First District"
-578,2014-11-18,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,1.43,"NCR, City of Manila, First District"
 579,2014-11-25,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.14,"NCR, City of Manila, First District"
 580,2015-07-21,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,0.0,"NCR, City of Manila, First District"
-581,2015-07-28,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,0.79,"NCR, City of Manila, First District"
-582,2015-08-05,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,0.79,"NCR, City of Manila, First District"
 583,2015-08-11,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,2.38,"NCR, City of Manila, First District"
 584,2015-08-18,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,4.76,"NCR, City of Manila, First District"
 585,2015-08-25,31,14.57858,121.00251000000002,F. Ma. Guerrero Elementary School,3.17,"NCR, City of Manila, First District"
@@ -570,7 +554,6 @@
 696,2016-02-16,32,14.61268,120.98094,Francisco Balagtas Elementary School,10.38,"NCR, City of Manila, First District"
 697,2016-02-23,32,14.61268,120.98094,Francisco Balagtas Elementary School,11.32,"NCR, City of Manila, First District"
 698,2016-03-01,32,14.61268,120.98094,Francisco Balagtas Elementary School,14.15,"NCR, City of Manila, First District"
-699,2012-06-26,38,14.61124,120.97676,Gen. M. Hizon Elementary School,0.8,"NCR, City of Manila, First District"
 700,2012-07-03,38,14.61124,120.97676,Gen. M. Hizon Elementary School,2.94,"NCR, City of Manila, First District"
 701,2012-07-10,38,14.61124,120.97676,Gen. M. Hizon Elementary School,2.21,"NCR, City of Manila, First District"
 702,2012-07-17,38,14.61124,120.97676,Gen. M. Hizon Elementary School,3.68,"NCR, City of Manila, First District"
@@ -629,7 +612,6 @@
 755,2015-11-17,38,14.61124,120.97676,Gen. M. Hizon Elementary School,0.0,"NCR, City of Manila, First District"
 756,2016-01-19,38,14.61124,120.97676,Gen. M. Hizon Elementary School,0.0,"NCR, City of Manila, First District"
 757,2016-01-26,38,14.61124,120.97676,Gen. M. Hizon Elementary School,0.0,"NCR, City of Manila, First District"
-758,2012-06-26,45,14.5838,120.999,I. Delos Reyes Elementary School ,1.41,"NCR, City of Manila, First District"
 759,2012-07-03,45,14.5838,120.999,I. Delos Reyes Elementary School ,9.52,"NCR, City of Manila, First District"
 760,2012-07-10,45,14.5838,120.999,I. Delos Reyes Elementary School ,3.52,"NCR, City of Manila, First District"
 761,2012-07-17,45,14.5838,120.999,I. Delos Reyes Elementary School ,4.23,"NCR, City of Manila, First District"
@@ -650,7 +632,6 @@
 776,2012-12-11,45,14.5838,120.999,I. Delos Reyes Elementary School ,2.82,"NCR, City of Manila, First District"
 777,2012-12-18,45,14.5838,120.999,I. Delos Reyes Elementary School ,7.04,"NCR, City of Manila, First District"
 778,2013-07-16,45,14.5838,120.999,I. Delos Reyes Elementary School ,1.88,"NCR, City of Manila, First District"
-779,2013-07-23,45,14.5838,120.999,I. Delos Reyes Elementary School ,1.26,"NCR, City of Manila, First District"
 780,2013-07-30,45,14.5838,120.999,I. Delos Reyes Elementary School ,3.13,"NCR, City of Manila, First District"
 781,2013-08-06,45,14.5838,120.999,I. Delos Reyes Elementary School ,5.63,"NCR, City of Manila, First District"
 782,2013-08-13,45,14.5838,120.999,I. Delos Reyes Elementary School ,3.75,"NCR, City of Manila, First District"
@@ -661,7 +642,6 @@
 787,2013-10-29,45,14.5838,120.999,I. Delos Reyes Elementary School ,6.25,"NCR, City of Manila, First District"
 788,2013-11-05,45,14.5838,120.999,I. Delos Reyes Elementary School ,3.13,"NCR, City of Manila, First District"
 789,2013-11-12,45,14.5838,120.999,I. Delos Reyes Elementary School ,4.38,"NCR, City of Manila, First District"
-790,2013-11-20,45,14.5838,120.999,I. Delos Reyes Elementary School ,1.25,"NCR, City of Manila, First District"
 791,2014-07-03,45,14.5838,120.999,I. Delos Reyes Elementary School ,33.33,"NCR, City of Manila, First District"
 792,2014-07-23,45,14.5838,120.999,I. Delos Reyes Elementary School ,1.88,"NCR, City of Manila, First District"
 793,2014-07-30,45,14.5838,120.999,I. Delos Reyes Elementary School ,3.13,"NCR, City of Manila, First District"
@@ -674,7 +654,6 @@
 800,2014-09-30,45,14.5838,120.999,I. Delos Reyes Elementary School ,5.63,"NCR, City of Manila, First District"
 801,2014-10-07,45,14.5838,120.999,I. Delos Reyes Elementary School ,3.13,"NCR, City of Manila, First District"
 802,2014-10-14,45,14.5838,120.999,I. Delos Reyes Elementary School ,6.25,"NCR, City of Manila, First District"
-803,2014-11-03,45,14.5838,120.999,I. Delos Reyes Elementary School ,1.25,"NCR, City of Manila, First District"
 804,2014-11-25,45,14.5838,120.999,I. Delos Reyes Elementary School ,5.0,"NCR, City of Manila, First District"
 805,2015-04-14,45,14.5838,120.999,I. Delos Reyes Elementary School ,5.0,"NCR, City of Manila, First District"
 806,2015-04-21,45,14.5838,120.999,I. Delos Reyes Elementary School ,8.0,"NCR, City of Manila, First District"
@@ -746,7 +725,6 @@
 920,2014-02-14,55,14.61204,120.99882,Legarda Elementary School,8.96,"NCR, City of Manila, First District"
 921,2014-02-21,55,14.61204,120.99882,Legarda Elementary School,9.63,"NCR, City of Manila, First District"
 922,2014-07-03,55,14.61204,120.99882,Legarda Elementary School,50.0,"NCR, City of Manila, First District"
-923,2014-07-23,55,14.61204,120.99882,Legarda Elementary School,0.67,"NCR, City of Manila, First District"
 924,2014-07-31,55,14.61204,120.99882,Legarda Elementary School,2.7,"NCR, City of Manila, First District"
 925,2014-08-13,55,14.61204,120.99882,Legarda Elementary School,10.0,"NCR, City of Manila, First District"
 926,2014-08-20,55,14.61204,120.99882,Legarda Elementary School,11.33,"NCR, City of Manila, First District"
@@ -888,8 +866,6 @@
 1111,2012-10-09,70,14.60215,120.96245,R. Almario Elementary School,9.09,"NCR, City of Manila, First District"
 1112,2012-10-16,70,14.60215,120.96245,R. Almario Elementary School,10.23,"NCR, City of Manila, First District"
 1113,2012-11-13,70,14.60215,120.96245,R. Almario Elementary School,7.39,"NCR, City of Manila, First District"
-1114,2013-07-09,70,14.60215,120.96245,R. Almario Elementary School,0.55,"NCR, City of Manila, First District"
-1115,2013-07-10,70,14.60215,120.96245,R. Almario Elementary School,0.55,"NCR, City of Manila, First District"
 1116,2013-07-16,70,14.60215,120.96245,R. Almario Elementary School,3.85,"NCR, City of Manila, First District"
 1117,2013-07-23,70,14.60215,120.96245,R. Almario Elementary School,13.74,"NCR, City of Manila, First District"
 1118,2013-07-30,70,14.60215,120.96245,R. Almario Elementary School,9.34,"NCR, City of Manila, First District"
@@ -945,7 +921,6 @@
 1168,2016-01-19,70,14.60215,120.96245,R. Almario Elementary School,0.0,"NCR, City of Manila, First District"
 1169,2016-01-26,70,14.60215,120.96245,R. Almario Elementary School,0.0,"NCR, City of Manila, First District"
 1170,2012-06-26,72,14.5797,121.01172,Sta. Ana Elementary School,2.56,"NCR, City of Manila, First District"
-1171,2012-07-03,72,14.5797,121.01172,Sta. Ana Elementary School,0.64,"NCR, City of Manila, First District"
 1172,2012-07-10,72,14.5797,121.01172,Sta. Ana Elementary School,17.31,"NCR, City of Manila, First District"
 1173,2012-07-17,72,14.5797,121.01172,Sta. Ana Elementary School,26.92,"NCR, City of Manila, First District"
 1174,2012-07-24,72,14.5797,121.01172,Sta. Ana Elementary School,24.36,"NCR, City of Manila, First District"
@@ -968,7 +943,6 @@
 1191,2013-07-10,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
 1192,2013-07-16,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
 1193,2013-07-23,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
-1194,2013-07-30,72,14.5797,121.01172,Sta. Ana Elementary School,1.0,"NCR, City of Manila, First District"
 1195,2013-08-06,72,14.5797,121.01172,Sta. Ana Elementary School,2.0,"NCR, City of Manila, First District"
 1196,2013-08-13,72,14.5797,121.01172,Sta. Ana Elementary School,2.0,"NCR, City of Manila, First District"
 1197,2013-09-10,72,14.5797,121.01172,Sta. Ana Elementary School,6.0,"NCR, City of Manila, First District"
@@ -988,21 +962,14 @@
 1211,2014-09-02,72,14.5797,121.01172,Sta. Ana Elementary School,5.0,"NCR, City of Manila, First District"
 1212,2014-12-16,72,14.5797,121.01172,Sta. Ana Elementary School,1.5,"NCR, City of Manila, First District"
 1213,2015-02-02,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
-1214,2015-07-21,72,14.5797,121.01172,Sta. Ana Elementary School,0.5,"NCR, City of Manila, First District"
 1215,2015-07-28,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
 1216,2015-08-04,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
-1217,2015-08-11,72,14.5797,121.01172,Sta. Ana Elementary School,1.0,"NCR, City of Manila, First District"
 1218,2015-08-18,72,14.5797,121.01172,Sta. Ana Elementary School,1.5,"NCR, City of Manila, First District"
-1219,2015-08-25,72,14.5797,121.01172,Sta. Ana Elementary School,0.5,"NCR, City of Manila, First District"
-1220,2015-09-01,72,14.5797,121.01172,Sta. Ana Elementary School,0.5,"NCR, City of Manila, First District"
 1221,2015-09-08,72,14.5797,121.01172,Sta. Ana Elementary School,1.5,"NCR, City of Manila, First District"
 1222,2015-09-15,72,14.5797,121.01172,Sta. Ana Elementary School,2.5,"NCR, City of Manila, First District"
-1223,2015-09-29,72,14.5797,121.01172,Sta. Ana Elementary School,1.0,"NCR, City of Manila, First District"
-1224,2015-10-06,72,14.5797,121.01172,Sta. Ana Elementary School,1.0,"NCR, City of Manila, First District"
 1225,2015-10-13,72,14.5797,121.01172,Sta. Ana Elementary School,2.0,"NCR, City of Manila, First District"
 1226,2015-10-20,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
 1227,2015-11-03,72,14.5797,121.01172,Sta. Ana Elementary School,2.0,"NCR, City of Manila, First District"
-1228,2015-11-10,72,14.5797,121.01172,Sta. Ana Elementary School,1.0,"NCR, City of Manila, First District"
 1229,2015-11-16,72,14.5797,121.01172,Sta. Ana Elementary School,1.5,"NCR, City of Manila, First District"
 1230,2016-01-19,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
 1231,2016-01-26,72,14.5797,121.01172,Sta. Ana Elementary School,0.0,"NCR, City of Manila, First District"
@@ -1208,29 +1175,21 @@
 2551,2014-11-18,218,14.69171,120.96594,Malinta Elementary School,2.9,"NCR, Third District"
 2552,2014-11-26,218,14.69171,120.96594,Malinta Elementary School,2.9,"NCR, Third District"
 2553,2014-12-03,218,14.69171,120.96594,Malinta Elementary School,2.9,"NCR, Third District"
-2554,2015-07-20,218,14.69171,120.96594,Malinta Elementary School,1.23,"NCR, Third District"
 2555,2015-07-28,218,14.69171,120.96594,Malinta Elementary School,2.5,"NCR, Third District"
 2556,2015-08-04,218,14.69171,120.96594,Malinta Elementary School,2.5,"NCR, Third District"
 2557,2015-08-11,218,14.69171,120.96594,Malinta Elementary School,2.5,"NCR, Third District"
 2558,2015-08-18,218,14.69171,120.96594,Malinta Elementary School,2.5,"NCR, Third District"
 2559,2015-08-25,218,14.69171,120.96594,Malinta Elementary School,0.0,"NCR, Third District"
 2560,2015-09-02,218,14.69171,120.96594,Malinta Elementary School,0.0,"NCR, Third District"
-2561,2015-09-09,218,14.69171,120.96594,Malinta Elementary School,1.25,"NCR, Third District"
-2562,2015-09-15,218,14.69171,120.96594,Malinta Elementary School,1.25,"NCR, Third District"
-2563,2015-09-22,218,14.69171,120.96594,Malinta Elementary School,1.25,"NCR, Third District"
 2564,2015-10-06,218,14.69171,120.96594,Malinta Elementary School,2.5,"NCR, Third District"
 2565,2015-10-13,218,14.69171,120.96594,Malinta Elementary School,2.5,"NCR, Third District"
 2566,2015-10-20,218,14.69171,120.96594,Malinta Elementary School,2.5,"NCR, Third District"
 2567,2015-11-05,218,14.69171,120.96594,Malinta Elementary School,2.5,"NCR, Third District"
-2568,2015-11-16,218,14.69171,120.96594,Malinta Elementary School,1.25,"NCR, Third District"
 2569,2015-11-24,218,14.69171,120.96594,Malinta Elementary School,0.0,"NCR, Third District"
 2570,2015-12-02,218,14.69171,120.96594,Malinta Elementary School,0.0,"NCR, Third District"
 2571,2015-12-08,218,14.69171,120.96594,Malinta Elementary School,0.0,"NCR, Third District"
 2572,2016-01-11,218,14.69171,120.96594,Malinta Elementary School,0.0,"NCR, Third District"
-2573,2016-01-19,218,14.69171,120.96594,Malinta Elementary School,1.25,"NCR, Third District"
 2574,2016-01-26,218,14.69171,120.96594,Malinta Elementary School,0.0,"NCR, Third District"
-2575,2016-02-02,218,14.69171,120.96594,Malinta Elementary School,1.25,"NCR, Third District"
-2576,2016-02-10,218,14.69171,120.96594,Malinta Elementary School,1.25,"NCR, Third District"
 2577,2012-06-19,219,14.701770000000002,121.00027,Mapulang Lupa Elementary School,10.53,"NCR, Third District"
 2578,2012-07-03,219,14.701770000000002,121.00027,Mapulang Lupa Elementary School,15.0,"NCR, Third District"
 2579,2012-07-22,219,14.701770000000002,121.00027,Mapulang Lupa Elementary School,15.0,"NCR, Third District"
@@ -1693,7 +1652,6 @@
 3553,2015-10-06,310,14.58929,121.03086,Dona Pilar C. Gonzaga Elementary School,10.0,"NCR, Second District"
 3554,2015-10-12,310,14.58929,121.03086,Dona Pilar C. Gonzaga Elementary School,14.28,"NCR, Second District"
 3555,2015-10-22,310,14.58929,121.03086,Dona Pilar C. Gonzaga Elementary School,9.09,"NCR, Second District"
-3556,2015-11-09,310,14.58929,121.03086,Dona Pilar C. Gonzaga Elementary School,0.05,"NCR, Second District"
 3557,2015-11-16,310,14.58929,121.03086,Dona Pilar C. Gonzaga Elementary School,0.0,"NCR, Second District"
 3558,2015-11-18,310,14.58929,121.03086,Dona Pilar C. Gonzaga Elementary School,0.0,"NCR, Second District"
 3559,2015-12-01,310,14.58929,121.03086,Dona Pilar C. Gonzaga Elementary School,0.0,"NCR, Second District"
@@ -2662,7 +2620,6 @@
 4933,2017-07-06,361,14.546129999999998,121.06447,Comembo Elementary School,8.66,"NCR, Fourth District"
 4934,2017-07-11,361,14.546129999999998,121.06447,Comembo Elementary School,14.4,"NCR, Fourth District"
 4935,2017-07-21,361,14.546129999999998,121.06447,Comembo Elementary School,16.0,"NCR, Fourth District"
-4936,2012-07-03,365,14.56245,121.05797,Fort Bonifacio Elementary School,1.12,"NCR, Fourth District"
 4937,2012-07-10,365,14.56245,121.05797,Fort Bonifacio Elementary School,3.33,"NCR, Fourth District"
 4938,2012-07-17,365,14.56245,121.05797,Fort Bonifacio Elementary School,10.26,"NCR, Fourth District"
 4939,2012-07-24,365,14.56245,121.05797,Fort Bonifacio Elementary School,43.33,"NCR, Fourth District"
@@ -2745,8 +2702,6 @@
 5016,2015-07-02,365,14.56245,121.05797,Fort Bonifacio Elementary School,6.78,"NCR, Fourth District"
 5017,2015-07-15,365,14.56245,121.05797,Fort Bonifacio Elementary School,3.39,"NCR, Fourth District"
 5018,2015-07-21,365,14.56245,121.05797,Fort Bonifacio Elementary School,5.08,"NCR, Fourth District"
-5019,2015-07-28,365,14.56245,121.05797,Fort Bonifacio Elementary School,0.85,"NCR, Fourth District"
-5020,2015-08-05,365,14.56245,121.05797,Fort Bonifacio Elementary School,0.85,"NCR, Fourth District"
 5021,2015-08-11,365,14.56245,121.05797,Fort Bonifacio Elementary School,0.0,"NCR, Fourth District"
 5022,2015-08-26,365,14.56245,121.05797,Fort Bonifacio Elementary School,4.24,"NCR, Fourth District"
 5023,2015-09-03,365,14.56245,121.05797,Fort Bonifacio Elementary School,3.39,"NCR, Fourth District"
@@ -2790,7 +2745,6 @@
 5061,2016-09-13,365,14.56245,121.05797,Fort Bonifacio Elementary School,5.08,"NCR, Fourth District"
 5062,2016-09-20,365,14.56245,121.05797,Fort Bonifacio Elementary School,4.23,"NCR, Fourth District"
 5063,2016-09-28,365,14.56245,121.05797,Fort Bonifacio Elementary School,3.38,"NCR, Fourth District"
-5064,2016-10-12,365,14.56245,121.05797,Fort Bonifacio Elementary School,0.84,"NCR, Fourth District"
 5218,2012-07-03,375,14.560620000000002,121.00152,Palanan Elementary School,2.0,"NCR, Fourth District"
 5219,2012-07-10,375,14.560620000000002,121.00152,Palanan Elementary School,6.0,"NCR, Fourth District"
 5220,2012-07-17,375,14.560620000000002,121.00152,Palanan Elementary School,3.57,"NCR, Fourth District"
@@ -2804,13 +2758,8 @@
 5228,2012-10-02,375,14.560620000000002,121.00152,Palanan Elementary School,7.94,"NCR, Fourth District"
 5229,2012-10-09,375,14.560620000000002,121.00152,Palanan Elementary School,12.33,"NCR, Fourth District"
 5230,2012-10-16,375,14.560620000000002,121.00152,Palanan Elementary School,10.96,"NCR, Fourth District"
-5231,2012-11-19,375,14.560620000000002,121.00152,Palanan Elementary School,1.39,"NCR, Fourth District"
 5232,2012-11-26,375,14.560620000000002,121.00152,Palanan Elementary School,5.48,"NCR, Fourth District"
-5233,2013-01-16,375,14.560620000000002,121.00152,Palanan Elementary School,1.39,"NCR, Fourth District"
-5234,2013-01-23,375,14.560620000000002,121.00152,Palanan Elementary School,1.39,"NCR, Fourth District"
 5235,2013-01-30,375,14.560620000000002,121.00152,Palanan Elementary School,1.69,"NCR, Fourth District"
-5236,2013-02-05,375,14.560620000000002,121.00152,Palanan Elementary School,1.39,"NCR, Fourth District"
-5237,2013-02-12,375,14.560620000000002,121.00152,Palanan Elementary School,1.39,"NCR, Fourth District"
 5238,2013-07-30,375,14.560620000000002,121.00152,Palanan Elementary School,6.25,"NCR, Fourth District"
 5239,2013-09-03,375,14.560620000000002,121.00152,Palanan Elementary School,14.14,"NCR, Fourth District"
 5240,2013-09-24,375,14.560620000000002,121.00152,Palanan Elementary School,6.0,"NCR, Fourth District"
@@ -2965,8 +2914,6 @@
 5389,2014-09-22,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,7.14,"NCR, Fourth District"
 5390,2014-10-13,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
 5391,2014-10-27,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,5.33,"NCR, Fourth District"
-5392,2014-11-03,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,1.3,"NCR, Fourth District"
-5393,2014-11-11,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,1.28,"NCR, Fourth District"
 5394,2014-11-25,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,4.11,"NCR, Fourth District"
 5395,2014-12-10,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,6.45,"NCR, Fourth District"
 5396,2015-01-13,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
@@ -2978,7 +2925,6 @@
 5402,2015-07-21,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
 5403,2015-07-28,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
 5404,2015-08-04,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,6.94,"NCR, Fourth District"
-5405,2015-08-11,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,1.37,"NCR, Fourth District"
 5406,2015-08-18,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,10.77,"NCR, Fourth District"
 5407,2015-08-25,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
 5408,2015-09-01,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,6.94,"NCR, Fourth District"
@@ -2993,7 +2939,6 @@
 5417,2015-11-03,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,7.69,"NCR, Fourth District"
 5418,2015-11-10,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,7.14,"NCR, Fourth District"
 5419,2015-11-16,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
-5420,2015-12-01,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,1.35,"NCR, Fourth District"
 5421,2015-12-08,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
 5422,2015-12-15,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
 5423,2016-01-12,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
@@ -3010,12 +2955,10 @@
 5434,2016-03-29,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
 5435,2016-04-05,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,2.78,"NCR, Fourth District"
 5436,2016-04-12,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,5.41,"NCR, Fourth District"
-5437,2016-04-19,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,1.32,"NCR, Fourth District"
 5438,2016-04-26,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,4.23,"NCR, Fourth District"
 5439,2016-05-03,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,7.25,"NCR, Fourth District"
 5440,2016-05-10,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,2.82,"NCR, Fourth District"
 5441,2016-05-17,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,5.48,"NCR, Fourth District"
-5442,2016-05-24,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,1.28,"NCR, Fourth District"
 5443,2016-05-31,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,3.9,"NCR, Fourth District"
 5444,2016-06-07,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,0.0,"NCR, Fourth District"
 5445,2016-06-14,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,2.15,"NCR, Fourth District"
@@ -3023,11 +2966,9 @@
 5447,2016-06-28,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,5.26,"NCR, Fourth District"
 5448,2016-07-05,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,4.26,"NCR, Fourth District"
 5449,2016-07-12,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,2.06,"NCR, Fourth District"
-5450,2016-07-19,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,1.1,"NCR, Fourth District"
 5451,2016-07-26,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,3.09,"NCR, Fourth District"
 5452,2016-08-02,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,4.4,"NCR, Fourth District"
 5453,2016-08-09,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,6.32,"NCR, Fourth District"
-5454,2016-08-16,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,1.03,"NCR, Fourth District"
 5455,2016-08-23,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,4.35,"NCR, Fourth District"
 5456,2016-08-31,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,6.52,"NCR, Fourth District"
 5457,2016-09-06,373,14.55951,121.04264,Nemesio I. Yabut Elementary School,10.0,"NCR, Fourth District"
@@ -3119,7 +3060,6 @@
 5543,2015-09-22,378,14.53667,121.06042,Rizal Elementary School,6.12,"NCR, Fourth District"
 5544,2015-10-06,378,14.53667,121.06042,Rizal Elementary School,1.8,"NCR, Fourth District"
 5545,2015-10-13,378,14.53667,121.06042,Rizal Elementary School,2.91,"NCR, Fourth District"
-5546,2015-10-27,378,14.53667,121.06042,Rizal Elementary School,0.99,"NCR, Fourth District"
 5547,2015-11-02,378,14.53667,121.06042,Rizal Elementary School,3.54,"NCR, Fourth District"
 5548,2015-11-10,378,14.53667,121.06042,Rizal Elementary School,0.0,"NCR, Fourth District"
 5549,2015-11-17,378,14.53667,121.06042,Rizal Elementary School,0.0,"NCR, Fourth District"
@@ -3229,8 +3169,6 @@
 5721,2012-11-26,386,14.5624,121.05766,Fort Bonifacio High School,4.14,"NCR, Fourth District"
 5722,2013-02-05,386,14.5624,121.05766,Fort Bonifacio High School,6.98,"NCR, Fourth District"
 5723,2013-02-12,386,14.5624,121.05766,Fort Bonifacio High School,5.19,"NCR, Fourth District"
-5724,2013-07-09,386,14.5624,121.05766,Fort Bonifacio High School,0.94,"NCR, Fourth District"
-5725,2013-07-16,386,14.5624,121.05766,Fort Bonifacio High School,0.75,"NCR, Fourth District"
 5726,2013-07-23,386,14.5624,121.05766,Fort Bonifacio High School,5.67,"NCR, Fourth District"
 5727,2013-07-30,386,14.5624,121.05766,Fort Bonifacio High School,2.13,"NCR, Fourth District"
 5728,2013-08-06,386,14.5624,121.05766,Fort Bonifacio High School,13.51,"NCR, Fourth District"
@@ -3244,15 +3182,10 @@
 5736,2013-10-16,386,14.5624,121.05766,Fort Bonifacio High School,7.14,"NCR, Fourth District"
 5737,2013-10-22,386,14.5624,121.05766,Fort Bonifacio High School,6.25,"NCR, Fourth District"
 5738,2013-11-12,386,14.5624,121.05766,Fort Bonifacio High School,2.04,"NCR, Fourth District"
-5739,2013-11-19,386,14.5624,121.05766,Fort Bonifacio High School,1.32,"NCR, Fourth District"
 5740,2013-11-26,386,14.5624,121.05766,Fort Bonifacio High School,5.48,"NCR, Fourth District"
 5741,2013-12-03,386,14.5624,121.05766,Fort Bonifacio High School,2.0,"NCR, Fourth District"
 5742,2013-12-18,386,14.5624,121.05766,Fort Bonifacio High School,2.68,"NCR, Fourth District"
-5743,2014-01-14,386,14.5624,121.05766,Fort Bonifacio High School,1.32,"NCR, Fourth District"
 5744,2014-01-21,386,14.5624,121.05766,Fort Bonifacio High School,1.97,"NCR, Fourth District"
-5745,2014-01-28,386,14.5624,121.05766,Fort Bonifacio High School,0.71,"NCR, Fourth District"
-5746,2014-02-04,386,14.5624,121.05766,Fort Bonifacio High School,0.67,"NCR, Fourth District"
-5747,2014-02-11,386,14.5624,121.05766,Fort Bonifacio High School,1.37,"NCR, Fourth District"
 5748,2014-02-18,386,14.5624,121.05766,Fort Bonifacio High School,5.48,"NCR, Fourth District"
 5749,2014-02-25,386,14.5624,121.05766,Fort Bonifacio High School,2.03,"NCR, Fourth District"
 5750,2014-03-04,386,14.5624,121.05766,Fort Bonifacio High School,6.25,"NCR, Fourth District"
@@ -3265,7 +3198,6 @@
 5757,2014-07-22,386,14.5624,121.05766,Fort Bonifacio High School,4.17,"NCR, Fourth District"
 5758,2014-07-30,386,14.5624,121.05766,Fort Bonifacio High School,3.38,"NCR, Fourth District"
 5759,2014-08-04,386,14.5624,121.05766,Fort Bonifacio High School,2.72,"NCR, Fourth District"
-5760,2014-08-06,386,14.5624,121.05766,Fort Bonifacio High School,1.38,"NCR, Fourth District"
 5761,2014-08-13,386,14.5624,121.05766,Fort Bonifacio High School,4.86,"NCR, Fourth District"
 5762,2014-08-20,386,14.5624,121.05766,Fort Bonifacio High School,2.72,"NCR, Fourth District"
 5763,2014-08-27,386,14.5624,121.05766,Fort Bonifacio High School,3.5,"NCR, Fourth District"
@@ -3278,24 +3210,17 @@
 5770,2014-10-14,386,14.5624,121.05766,Fort Bonifacio High School,4.11,"NCR, Fourth District"
 5771,2014-10-21,386,14.5624,121.05766,Fort Bonifacio High School,7.64,"NCR, Fourth District"
 5772,2014-10-28,386,14.5624,121.05766,Fort Bonifacio High School,8.39,"NCR, Fourth District"
-5773,2014-11-04,386,14.5624,121.05766,Fort Bonifacio High School,1.42,"NCR, Fourth District"
-5774,2014-11-11,386,14.5624,121.05766,Fort Bonifacio High School,1.35,"NCR, Fourth District"
 5775,2014-11-18,386,14.5624,121.05766,Fort Bonifacio High School,2.07,"NCR, Fourth District"
-5776,2014-11-25,386,14.5624,121.05766,Fort Bonifacio High School,1.36,"NCR, Fourth District"
 5777,2014-12-16,386,14.5624,121.05766,Fort Bonifacio High School,2.08,"NCR, Fourth District"
 5778,2015-01-06,386,14.5624,121.05766,Fort Bonifacio High School,4.0,"NCR, Fourth District"
 5779,2015-01-27,386,14.5624,121.05766,Fort Bonifacio High School,3.0,"NCR, Fourth District"
 5780,2015-02-03,386,14.5624,121.05766,Fort Bonifacio High School,2.0,"NCR, Fourth District"
-5781,2015-02-10,386,14.5624,121.05766,Fort Bonifacio High School,1.0,"NCR, Fourth District"
 5782,2015-02-17,386,14.5624,121.05766,Fort Bonifacio High School,2.0,"NCR, Fourth District"
-5783,2015-02-24,386,14.5624,121.05766,Fort Bonifacio High School,1.0,"NCR, Fourth District"
 5784,2015-03-03,386,14.5624,121.05766,Fort Bonifacio High School,4.0,"NCR, Fourth District"
 5785,2015-03-10,386,14.5624,121.05766,Fort Bonifacio High School,2.0,"NCR, Fourth District"
-5786,2015-03-17,386,14.5624,121.05766,Fort Bonifacio High School,1.0,"NCR, Fourth District"
 5787,2015-06-30,386,14.5624,121.05766,Fort Bonifacio High School,2.67,"NCR, Fourth District"
 5788,2015-07-07,386,14.5624,121.05766,Fort Bonifacio High School,2.03,"NCR, Fourth District"
 5789,2015-07-14,386,14.5624,121.05766,Fort Bonifacio High School,2.72,"NCR, Fourth District"
-5790,2015-07-21,386,14.5624,121.05766,Fort Bonifacio High School,1.34,"NCR, Fourth District"
 5791,2015-08-04,386,14.5624,121.05766,Fort Bonifacio High School,1.92,"NCR, Fourth District"
 5792,2015-08-11,386,14.5624,121.05766,Fort Bonifacio High School,2.61,"NCR, Fourth District"
 5793,2015-08-18,386,14.5624,121.05766,Fort Bonifacio High School,2.05,"NCR, Fourth District"
@@ -3317,16 +3242,9 @@
 5809,2016-02-16,386,14.5624,121.05766,Fort Bonifacio High School,2.05,"NCR, Fourth District"
 5810,2016-02-19,386,14.5624,121.05766,Fort Bonifacio High School,2.65,"NCR, Fourth District"
 5811,2016-03-02,386,14.5624,121.05766,Fort Bonifacio High School,2.08,"NCR, Fourth District"
-5812,2016-03-08,386,14.5624,121.05766,Fort Bonifacio High School,1.41,"NCR, Fourth District"
-5813,2016-03-15,386,14.5624,121.05766,Fort Bonifacio High School,0.69,"NCR, Fourth District"
-5814,2016-03-22,386,14.5624,121.05766,Fort Bonifacio High School,1.37,"NCR, Fourth District"
-5815,2016-03-29,386,14.5624,121.05766,Fort Bonifacio High School,1.39,"NCR, Fourth District"
-5816,2016-06-15,386,14.5624,121.05766,Fort Bonifacio High School,1.39,"NCR, Fourth District"
 5817,2016-06-22,386,14.5624,121.05766,Fort Bonifacio High School,2.1,"NCR, Fourth District"
-5818,2016-06-29,386,14.5624,121.05766,Fort Bonifacio High School,1.4,"NCR, Fourth District"
 5819,2016-07-05,386,14.5624,121.05766,Fort Bonifacio High School,2.04,"NCR, Fourth District"
 5820,2016-07-12,386,14.5624,121.05766,Fort Bonifacio High School,2.68,"NCR, Fourth District"
-5821,2016-07-19,386,14.5624,121.05766,Fort Bonifacio High School,1.37,"NCR, Fourth District"
 5822,2016-07-26,386,14.5624,121.05766,Fort Bonifacio High School,6.94,"NCR, Fourth District"
 5823,2016-08-09,386,14.5624,121.05766,Fort Bonifacio High School,2.08,"NCR, Fourth District"
 5824,2016-08-16,386,14.5624,121.05766,Fort Bonifacio High School,2.78,"NCR, Fourth District"
@@ -3334,7 +3252,6 @@
 5826,2016-09-13,386,14.5624,121.05766,Fort Bonifacio High School,4.76,"NCR, Fourth District"
 5827,2016-09-20,386,14.5624,121.05766,Fort Bonifacio High School,7.64,"NCR, Fourth District"
 5828,2016-09-28,386,14.5624,121.05766,Fort Bonifacio High School,4.83,"NCR, Fourth District"
-5829,2016-10-04,386,14.5624,121.05766,Fort Bonifacio High School,0.68,"NCR, Fourth District"
 5830,2012-07-03,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,7.14,"NCR, Fourth District"
 5831,2012-07-10,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,17.39,"NCR, Fourth District"
 5832,2012-07-17,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,7.69,"NCR, Fourth District"
@@ -3345,7 +3262,6 @@
 5837,2012-09-18,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,11.11,"NCR, Fourth District"
 5838,2012-11-19,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,16.67,"NCR, Fourth District"
 5839,2012-11-26,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,9.52,"NCR, Fourth District"
-5840,2013-07-09,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,1.19,"NCR, Fourth District"
 5841,2013-07-16,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,3.53,"NCR, Fourth District"
 5842,2013-07-23,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,2.33,"NCR, Fourth District"
 5843,2013-07-30,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,0.0,"NCR, Fourth District"
@@ -3354,7 +3270,6 @@
 5846,2013-08-22,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,13.16,"NCR, Fourth District"
 5847,2013-09-03,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,3.7,"NCR, Fourth District"
 5848,2013-09-10,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,3.57,"NCR, Fourth District"
-5849,2013-09-17,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,1.23,"NCR, Fourth District"
 5850,2013-09-24,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,2.38,"NCR, Fourth District"
 5851,2013-10-02,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,3.7,"NCR, Fourth District"
 5852,2013-10-08,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,2.33,"NCR, Fourth District"
@@ -3386,8 +3301,6 @@
 5878,2015-09-22,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,5.56,"NCR, Fourth District"
 5879,2015-10-06,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,5.56,"NCR, Fourth District"
 5880,2015-10-13,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,4.05,"NCR, Fourth District"
-5881,2015-10-20,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,1.35,"NCR, Fourth District"
-5882,2015-10-27,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,1.33,"NCR, Fourth District"
 5883,2015-11-10,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,0.0,"NCR, Fourth District"
 5884,2015-11-17,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,0.0,"NCR, Fourth District"
 5885,2015-11-24,388,14.57073,121.02782,Gen. Pio Del Pilar National High School ,0.0,"NCR, Fourth District"
@@ -3529,7 +3442,6 @@
 6048,2014-10-14,391,14.55646,121.04676,Pitogo High School,2.78,"NCR, Fourth District"
 6049,2014-11-04,391,14.55646,121.04676,Pitogo High School,2.11,"NCR, Fourth District"
 6050,2014-11-11,391,14.55646,121.04676,Pitogo High School,4.23,"NCR, Fourth District"
-6051,2014-11-18,391,14.55646,121.04676,Pitogo High School,1.39,"NCR, Fourth District"
 6052,2015-07-21,391,14.55646,121.04676,Pitogo High School,4.76,"NCR, Fourth District"
 6053,2015-08-18,391,14.55646,121.04676,Pitogo High School,7.09,"NCR, Fourth District"
 6054,2015-08-26,391,14.55646,121.04676,Pitogo High School,6.34,"NCR, Fourth District"
@@ -3562,8 +3474,6 @@
 6081,2017-02-20,391,14.55646,121.04676,Pitogo High School,1.8,"NCR, Fourth District"
 6082,2017-02-27,391,14.55646,121.04676,Pitogo High School,10.0,"NCR, Fourth District"
 6083,2017-03-06,391,14.55646,121.04676,Pitogo High School,2.73,"NCR, Fourth District"
-6084,2017-03-13,391,14.55646,121.04676,Pitogo High School,0.91,"NCR, Fourth District"
-6085,2017-03-20,391,14.55646,121.04676,Pitogo High School,0.89,"NCR, Fourth District"
 6469,2012-06-19,450,14.66776,121.00162,East Bagong Barrio Elementary School,15.79,"NCR, Third District"
 6470,2012-06-26,450,14.66776,121.00162,East Bagong Barrio Elementary School,5.26,"NCR, Third District"
 6471,2012-07-24,450,14.66776,121.00162,East Bagong Barrio Elementary School,26.32,"NCR, Third District"
@@ -4110,20 +4020,13 @@
 7352,2017-07-25,503,14.66469,120.97818,Tugatog National High School ,15.38,"NCR, Third District"
 7353,2017-08-01,503,14.66469,120.97818,Tugatog National High School ,20.0,"NCR, Third District"
 7354,2017-08-08,503,14.66469,120.97818,Tugatog National High School ,90.91,"NCR, Third District"
-7394,2012-06-19,510,14.461570000000002,121.03138,Fourth Estate Elementary School,0.96,"NCR, Fourth District"
 7395,2012-06-26,510,14.461570000000002,121.03138,Fourth Estate Elementary School,1.89,"NCR, Fourth District"
 7396,2012-07-03,510,14.461570000000002,121.03138,Fourth Estate Elementary School,1.89,"NCR, Fourth District"
 7397,2012-07-10,510,14.461570000000002,121.03138,Fourth Estate Elementary School,2.83,"NCR, Fourth District"
-7398,2012-07-17,510,14.461570000000002,121.03138,Fourth Estate Elementary School,0.93,"NCR, Fourth District"
-7399,2012-07-24,510,14.461570000000002,121.03138,Fourth Estate Elementary School,0.93,"NCR, Fourth District"
 7400,2012-08-21,510,14.461570000000002,121.03138,Fourth Estate Elementary School,1.85,"NCR, Fourth District"
-7401,2012-08-28,510,14.461570000000002,121.03138,Fourth Estate Elementary School,0.93,"NCR, Fourth District"
-7402,2012-09-18,510,14.461570000000002,121.03138,Fourth Estate Elementary School,0.93,"NCR, Fourth District"
 7403,2012-09-25,510,14.461570000000002,121.03138,Fourth Estate Elementary School,2.78,"NCR, Fourth District"
 7404,2012-10-09,510,14.461570000000002,121.03138,Fourth Estate Elementary School,1.85,"NCR, Fourth District"
 7405,2012-10-16,510,14.461570000000002,121.03138,Fourth Estate Elementary School,2.83,"NCR, Fourth District"
-7406,2012-11-13,510,14.461570000000002,121.03138,Fourth Estate Elementary School,0.94,"NCR, Fourth District"
-7407,2012-11-20,510,14.461570000000002,121.03138,Fourth Estate Elementary School,0.94,"NCR, Fourth District"
 7408,2012-11-27,510,14.461570000000002,121.03138,Fourth Estate Elementary School,26.23,"NCR, Fourth District"
 7409,2013-07-09,510,14.461570000000002,121.03138,Fourth Estate Elementary School,12.5,"NCR, Fourth District"
 7410,2013-07-16,510,14.461570000000002,121.03138,Fourth Estate Elementary School,6.25,"NCR, Fourth District"
@@ -5351,7 +5254,6 @@
 9574,2015-09-17,644,14.4566,120.99471,Las Pinas National High School - Main,7.14,"NCR, Fourth District"
 9575,2015-10-01,644,14.4566,120.99471,Las Pinas National High School - Main,2.86,"NCR, Fourth District"
 9576,2015-10-08,644,14.4566,120.99471,Las Pinas National High School - Main,0.0,"NCR, Fourth District"
-9577,2015-10-15,644,14.4566,120.99471,Las Pinas National High School - Main,1.43,"NCR, Fourth District"
 9578,2016-01-19,644,14.4566,120.99471,Las Pinas National High School - Main,0.0,"NCR, Fourth District"
 9579,2016-01-26,644,14.4566,120.99471,Las Pinas National High School - Main,0.0,"NCR, Fourth District"
 9633,2012-07-17,649,14.6658,121.03844,Leopoldo B. Santos Elementary School,15.38,"NCR, Second District"
@@ -6201,7 +6103,6 @@
 11016,2012-07-03,759,14.64554,121.10032,Concepcion Elementary School,5.66,"NCR, Second District"
 11017,2012-07-10,759,14.64554,121.10032,Concepcion Elementary School,3.77,"NCR, Second District"
 11018,2012-08-21,759,14.64554,121.10032,Concepcion Elementary School,4.29,"NCR, Second District"
-11019,2012-08-28,759,14.64554,121.10032,Concepcion Elementary School,1.43,"NCR, Second District"
 11020,2012-09-04,759,14.64554,121.10032,Concepcion Elementary School,7.14,"NCR, Second District"
 11021,2012-09-12,759,14.64554,121.10032,Concepcion Elementary School,5.71,"NCR, Second District"
 11022,2012-09-18,759,14.64554,121.10032,Concepcion Elementary School,4.29,"NCR, Second District"
@@ -8341,7 +8242,6 @@
 22178,2016-01-20,4503,14.101886,120.921119,Tagaytay City National High School,2.38,Cavite
 22179,2016-01-27,4503,14.101886,120.921119,Tagaytay City National High School,4.55,Cavite
 22180,2016-02-03,4503,14.101886,120.921119,Tagaytay City National High School,8.0,Cavite
-22181,2016-02-10,4503,14.101886,120.921119,Tagaytay City National High School,1.16,Cavite
 22182,2016-02-17,4503,14.101886,120.921119,Tagaytay City National High School,5.88,Cavite
 22183,2016-02-24,4503,14.101886,120.921119,Tagaytay City National High School,2.47,Cavite
 22184,2016-03-02,4503,14.101886,120.921119,Tagaytay City National High School,8.7,Cavite
@@ -9957,9 +9857,6 @@
 31917,2014-09-05,7040,15.250588,120.855296,Cabiao NHS,2.33,Nueva Ecija
 31918,2014-09-12,7040,15.250588,120.855296,Cabiao NHS,2.33,Nueva Ecija
 31919,2014-09-19,7040,15.250588,120.855296,Cabiao NHS,2.33,Nueva Ecija
-31920,2014-09-26,7040,15.250588,120.855296,Cabiao NHS,1.16,Nueva Ecija
-31921,2014-10-03,7040,15.250588,120.855296,Cabiao NHS,1.16,Nueva Ecija
-31922,2014-10-10,7040,15.250588,120.855296,Cabiao NHS,1.16,Nueva Ecija
 31923,2014-10-20,7040,15.250588,120.855296,Cabiao NHS,0.0,Nueva Ecija
 31924,2014-10-28,7040,15.250588,120.855296,Cabiao NHS,0.0,Nueva Ecija
 31925,2014-11-03,7040,15.250588,120.855296,Cabiao NHS,0.0,Nueva Ecija
@@ -11312,14 +11209,10 @@
 37912,2015-08-17,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,5.0,Tarlac
 37913,2015-08-24,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,3.13,Tarlac
 37914,2015-09-01,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,2.17,Tarlac
-37915,2015-09-07,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,1.08,Tarlac
 37916,2015-09-14,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,0.0,Tarlac
 37917,2015-09-21,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,0.0,Tarlac
-37918,2015-09-29,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,1.1,Tarlac
 37919,2015-10-05,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,2.13,Tarlac
-37920,2015-10-12,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,1.15,Tarlac
 37921,2015-10-19,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,2.38,Tarlac
-37922,2015-10-26,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,1.23,Tarlac
 37923,2015-11-02,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,3.45,Tarlac
 37924,2015-11-09,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,1.72,Tarlac
 37925,2015-11-16,9121,15.326142,120.653223,Benigno S. Aquino NHS    ,3.33,Tarlac
@@ -13114,8 +13007,6 @@
 48838,2014-11-04,11753,13.932151,121.426493,Candelaria Elementary School Main,8.0,Quezon
 48839,2014-11-11,11753,13.932151,121.426493,Candelaria Elementary School Main,2.7,Quezon
 48840,2014-11-18,11753,13.932151,121.426493,Candelaria Elementary School Main,3.95,Quezon
-48841,2014-12-02,11753,13.932151,121.426493,Candelaria Elementary School Main,1.32,Quezon
-48842,2014-12-16,11753,13.932151,121.426493,Candelaria Elementary School Main,1.41,Quezon
 48843,2015-06-30,11753,13.932151,121.426493,Candelaria Elementary School Main,9.21,Quezon
 48844,2015-07-07,11753,13.932151,121.426493,Candelaria Elementary School Main,6.58,Quezon
 48845,2015-07-14,11753,13.932151,121.426493,Candelaria Elementary School Main,4.05,Quezon
@@ -13124,34 +13015,27 @@
 48848,2015-07-30,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
 48849,2015-08-11,11753,13.932151,121.426493,Candelaria Elementary School Main,2.63,Quezon
 48850,2015-08-18,11753,13.932151,121.426493,Candelaria Elementary School Main,4.11,Quezon
-48851,2015-08-25,11753,13.932151,121.426493,Candelaria Elementary School Main,1.32,Quezon
 48852,2015-08-27,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
 48853,2015-09-08,11753,13.932151,121.426493,Candelaria Elementary School Main,4.0,Quezon
 48854,2015-09-15,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
 48855,2015-09-22,11753,13.932151,121.426493,Candelaria Elementary School Main,2.63,Quezon
-48856,2015-09-29,11753,13.932151,121.426493,Candelaria Elementary School Main,1.33,Quezon
 48857,2015-10-06,11753,13.932151,121.426493,Candelaria Elementary School Main,5.26,Quezon
 48858,2015-10-13,11753,13.932151,121.426493,Candelaria Elementary School Main,2.82,Quezon
 48859,2015-10-20,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
-48860,2015-10-27,11753,13.932151,121.426493,Candelaria Elementary School Main,1.41,Quezon
 48861,2015-11-03,11753,13.932151,121.426493,Candelaria Elementary School Main,5.26,Quezon
 48862,2015-11-10,11753,13.932151,121.426493,Candelaria Elementary School Main,3.95,Quezon
 48863,2015-11-17,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
 48864,2015-11-24,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
 48865,2015-12-01,11753,13.932151,121.426493,Candelaria Elementary School Main,4.05,Quezon
-48866,2015-12-08,11753,13.932151,121.426493,Candelaria Elementary School Main,1.33,Quezon
 48867,2015-12-15,11753,13.932151,121.426493,Candelaria Elementary School Main,4.11,Quezon
 48868,2015-12-22,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
 48869,2015-12-29,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
 48870,2016-01-12,11753,13.932151,121.426493,Candelaria Elementary School Main,2.74,Quezon
-48871,2016-01-19,11753,13.932151,121.426493,Candelaria Elementary School Main,1.32,Quezon
 48872,2016-01-26,11753,13.932151,121.426493,Candelaria Elementary School Main,4.11,Quezon
 48873,2016-02-02,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
-48874,2016-02-09,11753,13.932151,121.426493,Candelaria Elementary School Main,1.32,Quezon
 48875,2016-02-16,11753,13.932151,121.426493,Candelaria Elementary School Main,2.78,Quezon
 48876,2016-02-23,11753,13.932151,121.426493,Candelaria Elementary School Main,5.26,Quezon
 48877,2016-03-01,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
-48878,2016-03-08,11753,13.932151,121.426493,Candelaria Elementary School Main,1.32,Quezon
 48879,2016-03-15,11753,13.932151,121.426493,Candelaria Elementary School Main,0.0,Quezon
 48884,2014-07-02,11757,8.450299000000001,123.033228,Ponot Central School,51.61,Zamboanga del Norte
 48885,2014-07-09,11757,8.450299000000001,123.033228,Ponot Central School,69.44,Zamboanga del Norte
@@ -13639,14 +13523,11 @@
 51167,2014-06-30,12359,14.864786,120.997131,Pulong Buhangin NHS,4.55,Bulacan
 51168,2014-07-04,12359,14.864786,120.997131,Pulong Buhangin NHS,0.0,Bulacan
 51169,2014-07-11,12359,14.864786,120.997131,Pulong Buhangin NHS,0.0,Bulacan
-51170,2014-07-21,12359,14.864786,120.997131,Pulong Buhangin NHS,1.09,Bulacan
 51171,2014-07-25,12359,14.864786,120.997131,Pulong Buhangin NHS,0.0,Bulacan
 51172,2014-08-04,12359,14.864786,120.997131,Pulong Buhangin NHS,0.0,Bulacan
-51173,2014-08-08,12359,14.864786,120.997131,Pulong Buhangin NHS,1.09,Bulacan
 51174,2014-08-18,12359,14.864786,120.997131,Pulong Buhangin NHS,2.15,Bulacan
 51175,2014-08-22,12359,14.864786,120.997131,Pulong Buhangin NHS,3.23,Bulacan
 51176,2014-09-01,12359,14.864786,120.997131,Pulong Buhangin NHS,0.0,Bulacan
-51177,2014-09-05,12359,14.864786,120.997131,Pulong Buhangin NHS,1.08,Bulacan
 51178,2014-09-16,12359,14.864786,120.997131,Pulong Buhangin NHS,3.23,Bulacan
 51179,2014-09-22,12359,14.864786,120.997131,Pulong Buhangin NHS,2.15,Bulacan
 51180,2014-10-01,12359,14.864786,120.997131,Pulong Buhangin NHS,2.15,Bulacan
@@ -13656,12 +13537,9 @@
 51184,2014-11-03,12359,14.864786,120.997131,Pulong Buhangin NHS,0.0,Bulacan
 51185,2014-11-10,12359,14.864786,120.997131,Pulong Buhangin NHS,3.23,Bulacan
 51186,2014-11-17,12359,14.864786,120.997131,Pulong Buhangin NHS,0.0,Bulacan
-51187,2014-11-24,12359,14.864786,120.997131,Pulong Buhangin NHS,1.08,Bulacan
 51188,2014-12-01,12359,14.864786,120.997131,Pulong Buhangin NHS,4.3,Bulacan
 51189,2014-12-10,12359,14.864786,120.997131,Pulong Buhangin NHS,2.15,Bulacan
-51190,2014-12-17,12359,14.864786,120.997131,Pulong Buhangin NHS,1.0,Bulacan
 51191,2015-01-12,12359,14.864786,120.997131,Pulong Buhangin NHS,3.0,Bulacan
-51192,2015-01-19,12359,14.864786,120.997131,Pulong Buhangin NHS,1.08,Bulacan
 51193,2015-01-26,12359,14.864786,120.997131,Pulong Buhangin NHS,5.0,Bulacan
 51194,2015-02-02,12359,14.864786,120.997131,Pulong Buhangin NHS,4.0,Bulacan
 51195,2015-02-09,12359,14.864786,120.997131,Pulong Buhangin NHS,5.0,Bulacan
@@ -14083,7 +13961,6 @@
 52781,2015-03-10,12963,14.210307,121.157813,Jose Rizal Memorial School,9.0,Laguna
 52782,2015-03-17,12963,14.210307,121.157813,Jose Rizal Memorial School,7.0,Laguna
 52783,2015-06-02,12963,14.210307,121.157813,Jose Rizal Memorial School,97.55,Laguna
-52784,2015-06-09,12963,14.210307,121.157813,Jose Rizal Memorial School,98.54,Laguna
 52785,2015-06-16,12963,14.210307,121.157813,Jose Rizal Memorial School,97.55,Laguna
 52786,2015-06-23,12963,14.210307,121.157813,Jose Rizal Memorial School,94.61,Laguna
 52787,2015-06-30,12963,14.210307,121.157813,Jose Rizal Memorial School,94.61,Laguna
@@ -16788,7 +16665,6 @@
 70421,2014-08-05,19527,12.919058,124.125721,Gubat North Central School,0.0,Sorsogon
 70422,2014-08-11,19527,12.919058,124.125721,Gubat North Central School,4.55,Sorsogon
 70423,2014-08-18,19527,12.919058,124.125721,Gubat North Central School,4.44,Sorsogon
-70424,2014-08-25,19527,12.919058,124.125721,Gubat North Central School,1.11,Sorsogon
 70425,2014-09-01,19527,12.919058,124.125721,Gubat North Central School,3.33,Sorsogon
 70426,2014-09-08,19527,12.919058,124.125721,Gubat North Central School,3.33,Sorsogon
 70427,2014-09-15,19527,12.919058,124.125721,Gubat North Central School,6.67,Sorsogon
@@ -16807,7 +16683,6 @@
 70440,2015-01-19,19527,12.919058,124.125721,Gubat North Central School,7.0,Sorsogon
 70441,2015-01-26,19527,12.919058,124.125721,Gubat North Central School,4.0,Sorsogon
 70442,2015-02-02,19527,12.919058,124.125721,Gubat North Central School,0.0,Sorsogon
-70443,2015-02-09,19527,12.919058,124.125721,Gubat North Central School,1.0,Sorsogon
 70444,2015-02-16,19527,12.919058,124.125721,Gubat North Central School,4.0,Sorsogon
 70445,2015-02-23,19527,12.919058,124.125721,Gubat North Central School,2.0,Sorsogon
 70446,2015-03-02,19527,12.919058,124.125721,Gubat North Central School,0.0,Sorsogon
@@ -16826,14 +16701,11 @@
 70459,2016-03-14,19527,12.919058,124.125721,Gubat North Central School,2.38,Sorsogon
 70460,2016-03-21,19527,12.919058,124.125721,Gubat North Central School,0.0,Sorsogon
 70461,2016-08-22,19527,12.919058,124.125721,Gubat North Central School,7.9,Sorsogon
-70462,2016-08-29,19527,12.919058,124.125721,Gubat North Central School,1.1,Sorsogon
 70463,2016-09-12,19527,12.919058,124.125721,Gubat North Central School,0.0,Sorsogon
 70464,2016-09-19,19527,12.919058,124.125721,Gubat North Central School,2.3,Sorsogon
-70465,2016-09-26,19527,12.919058,124.125721,Gubat North Central School,1.12,Sorsogon
 70466,2016-10-03,19527,12.919058,124.125721,Gubat North Central School,3.33,Sorsogon
 70467,2016-10-10,19527,12.919058,124.125721,Gubat North Central School,2.22,Sorsogon
 70468,2016-10-17,19527,12.919058,124.125721,Gubat North Central School,0.0,Sorsogon
-70469,2016-11-14,19527,12.919058,124.125721,Gubat North Central School,1.12,Sorsogon
 70470,2016-11-21,19527,12.919058,124.125721,Gubat North Central School,0.0,Sorsogon
 70471,2016-11-28,19527,12.919058,124.125721,Gubat North Central School,3.37,Sorsogon
 70472,2016-12-05,19527,12.919058,124.125721,Gubat North Central School,3.41,Sorsogon
@@ -16853,7 +16725,6 @@
 70486,2017-03-27,19527,12.919058,124.125721,Gubat North Central School,6.67,Sorsogon
 70487,2017-07-03,19527,12.919058,124.125721,Gubat North Central School,2.45,Sorsogon
 70488,2017-07-10,19527,12.919058,124.125721,Gubat North Central School,5.74,Sorsogon
-70489,2017-07-17,19527,12.919058,124.125721,Gubat North Central School,1.14,Sorsogon
 70490,2017-07-31,19527,12.919058,124.125721,Gubat North Central School,17.8,Sorsogon
 70491,2017-08-07,19527,12.919058,124.125721,Gubat North Central School,23.59,Sorsogon
 70492,2017-09-04,19527,12.919058,124.125721,Gubat North Central School,13.64,Sorsogon
@@ -16861,7 +16732,6 @@
 70494,2018-01-29,19527,12.919058,124.125721,Gubat North Central School,11.76,Sorsogon
 70495,2018-07-02,19527,12.919058,124.125721,Gubat North Central School,10.47,Sorsogon
 70496,2018-07-09,19527,12.919058,124.125721,Gubat North Central School,4.55,Sorsogon
-70497,2018-07-16,19527,12.919058,124.125721,Gubat North Central School,1.11,Sorsogon
 70498,2018-07-30,19527,12.919058,124.125721,Gubat North Central School,7.78,Sorsogon
 70499,2018-08-06,19527,12.919058,124.125721,Gubat North Central School,5.56,Sorsogon
 70500,2018-08-27,19527,12.919058,124.125721,Gubat North Central School,9.64,Sorsogon
@@ -17998,9 +17868,7 @@
 77443,2013-11-15,22154,14.69537,121.120711,Guitnangbayan ES,4.0,Rizal
 77444,2013-11-22,22154,14.69537,121.120711,Guitnangbayan ES,2.67,Rizal
 77445,2013-11-29,22154,14.69537,121.120711,Guitnangbayan ES,2.67,Rizal
-77446,2013-12-03,22154,14.69537,121.120711,Guitnangbayan ES,1.33,Rizal
 77447,2013-12-10,22154,14.69537,121.120711,Guitnangbayan ES,0.0,Rizal
-77448,2013-12-17,22154,14.69537,121.120711,Guitnangbayan ES,1.33,Rizal
 77449,2014-01-16,22154,14.69537,121.120711,Guitnangbayan ES,4.0,Rizal
 77450,2014-01-21,22154,14.69537,121.120711,Guitnangbayan ES,6.67,Rizal
 77451,2014-01-28,22154,14.69537,121.120711,Guitnangbayan ES,6.67,Rizal
@@ -21079,7 +20947,6 @@
 94151,2017-03-07,26234,16.101938,119.966279,Alos Elementary School,34.62,Pangasinan
 94152,2017-03-14,26234,16.101938,119.966279,Alos Elementary School,19.23,Pangasinan
 94153,2017-03-21,26234,16.101938,119.966279,Alos Elementary School,7.69,Pangasinan
-94180,2013-11-22,26276,15.777655,120.457167,Amancosiling Elementary School,1.0,Pangasinan
 94181,2013-11-27,26276,15.777655,120.457167,Amancosiling Elementary School,6.67,Pangasinan
 94182,2013-12-03,26276,15.777655,120.457167,Amancosiling Elementary School,3.57,Pangasinan
 94183,2014-06-24,26276,15.777655,120.457167,Amancosiling Elementary School,46.67,Pangasinan
@@ -21158,7 +21025,6 @@
 94256,2016-11-15,26276,15.777655,120.457167,Amancosiling Elementary School,8.33,Pangasinan
 94257,2016-11-22,26276,15.777655,120.457167,Amancosiling Elementary School,5.56,Pangasinan
 94258,2016-11-29,26276,15.777655,120.457167,Amancosiling Elementary School,8.33,Pangasinan
-94292,2013-11-22,26302,15.868367,120.388674,Anambongan Elementary School,1.0,Pangasinan
 94293,2013-12-03,26302,15.868367,120.388674,Anambongan Elementary School,0.0,Pangasinan
 94294,2014-01-14,26302,15.868367,120.388674,Anambongan Elementary School,0.0,Pangasinan
 94295,2014-06-25,26302,15.868367,120.388674,Anambongan Elementary School,15.38,Pangasinan
@@ -21251,7 +21117,6 @@
 94705,2013-11-05,26590,16.282162,119.958975,Aruab Elementary School,11.11,Pangasinan
 94706,2013-11-12,26590,16.282162,119.958975,Aruab Elementary School,0.0,Pangasinan
 94707,2013-11-19,26590,16.282162,119.958975,Aruab Elementary School,0.0,Pangasinan
-94708,2013-11-22,26590,16.282162,119.958975,Aruab Elementary School,1.0,Pangasinan
 94709,2013-11-26,26590,16.282162,119.958975,Aruab Elementary School,22.22,Pangasinan
 94710,2013-12-03,26590,16.282162,119.958975,Aruab Elementary School,0.0,Pangasinan
 94711,2013-12-10,26590,16.282162,119.958975,Aruab Elementary School,0.0,Pangasinan
@@ -21404,7 +21269,6 @@
 95950,2013-11-04,26845,15.85911,120.442803,Nalsian-Tomling Elementary School,35.56,Pangasinan
 95951,2013-11-11,26845,15.85911,120.442803,Nalsian-Tomling Elementary School,45.71,Pangasinan
 95952,2013-11-18,26845,15.85911,120.442803,Nalsian-Tomling Elementary School,37.14,Pangasinan
-95953,2013-11-22,26845,15.85911,120.442803,Nalsian-Tomling Elementary School,1.0,Pangasinan
 95954,2013-11-25,26845,15.85911,120.442803,Nalsian-Tomling Elementary School,17.14,Pangasinan
 95955,2013-12-02,26845,15.85911,120.442803,Nalsian-Tomling Elementary School,27.78,Pangasinan
 95956,2013-12-09,26845,15.85911,120.442803,Nalsian-Tomling Elementary School,38.89,Pangasinan
@@ -21653,7 +21517,6 @@
 97210,2016-03-09,27219,9.24,118.03,Quezon NHS*,8.93,Palawan
 97211,2016-03-16,27219,9.24,118.03,Quezon NHS*,7.14,Palawan
 97212,2016-03-23,27219,9.24,118.03,Quezon NHS*,10.71,Palawan
-98638,2013-11-22,27649,16.042612,120.333115,West Central Elementary School I,1.0,Pangasinan
 98639,2014-01-29,27649,16.042612,120.333115,West Central Elementary School I,15.0,Pangasinan
 98640,2014-02-14,27649,16.042612,120.333115,West Central Elementary School I,16.96,Pangasinan
 98641,2014-02-28,27649,16.042612,120.333115,West Central Elementary School I,12.17,Pangasinan
@@ -21716,7 +21579,6 @@
 98698,2016-11-25,27649,16.042612,120.333115,West Central Elementary School I,8.2,Pangasinan
 98699,2016-12-02,27649,16.042612,120.333115,West Central Elementary School I,8.2,Pangasinan
 100040,2013-10-08,27886,16.160137,119.982593,Alaminos Central School,2.22,Pangasinan
-100041,2013-10-15,27886,16.160137,119.982593,Alaminos Central School,1.11,Pangasinan
 100042,2013-10-22,27886,16.160137,119.982593,Alaminos Central School,0.0,Pangasinan
 100043,2013-10-29,27886,16.160137,119.982593,Alaminos Central School,2.25,Pangasinan
 100044,2013-11-05,27886,16.160137,119.982593,Alaminos Central School,3.33,Pangasinan
@@ -21729,7 +21591,6 @@
 100051,2013-12-18,27886,16.160137,119.982593,Alaminos Central School,0.0,Pangasinan
 100052,2014-01-13,27886,16.160137,119.982593,Alaminos Central School,0.0,Pangasinan
 100053,2014-08-04,27886,16.160137,119.982593,Alaminos Central School,0.0,Pangasinan
-100054,2014-08-11,27886,16.160137,119.982593,Alaminos Central School,1.43,Pangasinan
 100055,2014-08-18,27886,16.160137,119.982593,Alaminos Central School,0.0,Pangasinan
 100056,2014-08-26,27886,16.160137,119.982593,Alaminos Central School,25.49,Pangasinan
 100057,2014-09-02,27886,16.160137,119.982593,Alaminos Central School,11.63,Pangasinan
@@ -21747,7 +21608,6 @@
 100069,2014-12-08,27886,16.160137,119.982593,Alaminos Central School,12.0,Pangasinan
 100070,2015-01-12,27886,16.160137,119.982593,Alaminos Central School,2.0,Pangasinan
 100071,2015-01-19,27886,16.160137,119.982593,Alaminos Central School,0.0,Pangasinan
-100072,2015-01-26,27886,16.160137,119.982593,Alaminos Central School,1.0,Pangasinan
 100073,2015-07-02,27886,16.160137,119.982593,Alaminos Central School,19.15,Pangasinan
 100074,2015-07-22,27886,16.160137,119.982593,Alaminos Central School,13.83,Pangasinan
 100075,2015-07-29,27886,16.160137,119.982593,Alaminos Central School,15.96,Pangasinan
@@ -21955,7 +21815,6 @@
 100602,2017-03-01,27917,16.141475,119.99223,San Vicente Elementary School,0.0,Pangasinan
 100603,2017-03-08,27917,16.141475,119.99223,San Vicente Elementary School,0.0,Pangasinan
 100604,2017-03-15,27917,16.141475,119.99223,San Vicente Elementary School,0.0,Pangasinan
-100926,2013-11-22,27965,15.978477,120.313465,Pallas-Papagueyan Elementary School,1.0,Pangasinan
 100927,2013-12-06,27965,15.978477,120.313465,Pallas-Papagueyan Elementary School,37.5,Pangasinan
 100928,2013-12-13,27965,15.978477,120.313465,Pallas-Papagueyan Elementary School,46.15,Pangasinan
 100929,2013-12-20,27965,15.978477,120.313465,Pallas-Papagueyan Elementary School,33.33,Pangasinan
@@ -22006,7 +21865,6 @@
 100974,2016-11-29,27965,15.978477,120.313465,Pallas-Papagueyan Elementary School,33.33,Pangasinan
 100975,2016-12-06,27965,15.978477,120.313465,Pallas-Papagueyan Elementary School,14.29,Pangasinan
 100976,2016-12-13,27965,15.978477,120.313465,Pallas-Papagueyan Elementary School,13.33,Pangasinan
-101744,2013-11-22,28121,15.783334,120.287867,Mangatarem II Central School,1.0,Pangasinan
 101745,2013-12-03,28121,15.783334,120.287867,Mangatarem II Central School,100.0,Pangasinan
 101746,2013-12-11,28121,15.783334,120.287867,Mangatarem II Central School,76.92,Pangasinan
 101747,2014-01-13,28121,15.783334,120.287867,Mangatarem II Central School,38.46,Pangasinan
@@ -22070,7 +21928,6 @@
 101805,2017-02-14,28121,15.783334,120.287867,Mangatarem II Central School,72.73,Pangasinan
 101806,2017-02-21,28121,15.783334,120.287867,Mangatarem II Central School,80.0,Pangasinan
 101807,2017-02-28,28121,15.783334,120.287867,Mangatarem II Central School,51.61,Pangasinan
-102199,2013-11-22,28199,15.8330081,120.46463590000002,Buenlag Elementary School,1.0,Pangasinan
 102200,2013-12-03,28199,15.8330081,120.46463590000002,Buenlag Elementary School,8.82,Pangasinan
 102201,2013-12-10,28199,15.8330081,120.46463590000002,Buenlag Elementary School,13.89,Pangasinan
 102202,2013-12-17,28199,15.8330081,120.46463590000002,Buenlag Elementary School,11.11,Pangasinan
@@ -22529,7 +22386,6 @@
 104544,2016-03-04,28692,16.7991001,121.122508,Lagawe Central School*,38.46,Ifugao
 104545,2016-03-11,28692,16.7991001,121.122508,Lagawe Central School*,53.84,Ifugao
 104546,2016-03-18,28692,16.7991001,121.122508,Lagawe Central School*,61.56,Ifugao
-105421,2013-11-22,28933,16.0145565,120.5750829,Castusu Elementary School,1.0,Pangasinan
 105422,2014-09-01,28933,16.0145565,120.5750829,Castusu Elementary School,0.0,Pangasinan
 105423,2014-09-08,28933,16.0145565,120.5750829,Castusu Elementary School,0.0,Pangasinan
 105424,2014-09-16,28933,16.0145565,120.5750829,Castusu Elementary School,0.0,Pangasinan
@@ -22593,7 +22449,6 @@
 105482,2017-03-16,28933,16.0145565,120.5750829,Castusu Elementary School,40.0,Pangasinan
 105483,2017-03-23,28933,16.0145565,120.5750829,Castusu Elementary School,20.0,Pangasinan
 105484,2017-03-30,28933,16.0145565,120.5750829,Castusu Elementary School,20.0,Pangasinan
-105807,2013-11-22,28980,16.037771,120.457308,Baloling Elementary School,1.0,Pangasinan
 105808,2013-11-27,28980,16.037771,120.457308,Baloling Elementary School,29.09,Pangasinan
 105809,2013-12-04,28980,16.037771,120.457308,Baloling Elementary School,36.36,Pangasinan
 105810,2013-12-16,28980,16.037771,120.457308,Baloling Elementary School,25.45,Pangasinan
@@ -22814,8 +22669,6 @@
 106797,2013-12-09,29184,15.933275,120.342462,Speaker Eugenio Perez Nat;l. Agr'l. Sch.,10.0,Pangasinan
 106798,2013-12-16,29184,15.933275,120.342462,Speaker Eugenio Perez Nat;l. Agr'l. Sch.,4.55,Pangasinan
 106799,2014-01-13,29184,15.933275,120.342462,Speaker Eugenio Perez Nat;l. Agr'l. Sch.,6.36,Pangasinan
-106800,2014-01-27,29184,15.933275,120.342462,Speaker Eugenio Perez Nat;l. Agr'l. Sch.,1.03,Pangasinan
-106801,2014-01-28,29184,15.933275,120.342462,Speaker Eugenio Perez Nat;l. Agr'l. Sch.,0.97,Pangasinan
 106802,2014-02-03,29184,15.933275,120.342462,Speaker Eugenio Perez Nat;l. Agr'l. Sch.,0.0,Pangasinan
 106803,2014-02-10,29184,15.933275,120.342462,Speaker Eugenio Perez Nat;l. Agr'l. Sch.,6.45,Pangasinan
 106804,2014-02-17,29184,15.933275,120.342462,Speaker Eugenio Perez Nat;l. Agr'l. Sch.,6.98,Pangasinan
@@ -22985,7 +22838,6 @@
 106988,2017-03-13,29189,16.166507,119.986677,Alaminos City National High School,26.14,Pangasinan
 107102,2013-11-20,29218,15.922385,120.412725,Malasiqui National High School,0.0,Pangasinan
 107103,2014-06-24,29218,15.922385,120.412725,Malasiqui National High School,0.0,Pangasinan
-107104,2014-07-01,29218,15.922385,120.412725,Malasiqui National High School,1.37,Pangasinan
 107105,2014-07-08,29218,15.922385,120.412725,Malasiqui National High School,4.0,Pangasinan
 107106,2014-07-15,29218,15.922385,120.412725,Malasiqui National High School,0.0,Pangasinan
 107107,2014-07-22,29218,15.922385,120.412725,Malasiqui National High School,0.0,Pangasinan
@@ -24286,7 +24138,6 @@
 115389,2015-03-03,30860,13.534272,123.28988,Pili National High School,10.2,Camarines Sur
 115390,2015-07-20,30860,13.534272,123.28988,Pili National High School,91.53,Camarines Sur
 115391,2015-07-27,30860,13.534272,123.28988,Pili National High School,97.33,Camarines Sur
-115392,2015-08-03,30860,13.534272,123.28988,Pili National High School,98.51,Camarines Sur
 115393,2015-08-10,30860,13.534272,123.28988,Pili National High School,97.37,Camarines Sur
 115394,2015-08-17,30860,13.534272,123.28988,Pili National High School,79.45,Camarines Sur
 115395,2015-08-24,30860,13.534272,123.28988,Pili National High School,83.78,Camarines Sur
@@ -24637,7 +24488,6 @@
 116594,2015-07-01,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),3.26,Cavite
 116595,2015-07-29,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),2.17,Cavite
 116596,2015-08-05,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),3.26,Cavite
-116597,2015-08-11,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),1.09,Cavite
 116598,2015-08-18,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
 116599,2015-08-25,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
 116600,2015-09-15,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),2.17,Cavite
@@ -24645,19 +24495,13 @@
 116602,2015-10-06,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),10.87,Cavite
 116603,2015-11-10,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
 116604,2016-01-06,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),2.17,Cavite
-116605,2016-01-13,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),1.09,Cavite
 116606,2016-01-20,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
 116607,2016-01-27,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),2.17,Cavite
-116608,2016-02-03,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),1.09,Cavite
-116609,2016-02-09,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),1.09,Cavite
 116610,2016-02-10,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
-116611,2016-02-16,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),1.09,Cavite
 116612,2016-02-17,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
 116613,2016-02-23,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),2.17,Cavite
-116614,2016-02-24,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),1.09,Cavite
 116615,2016-03-01,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),3.26,Cavite
 116616,2016-03-02,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
-116617,2016-03-08,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),1.09,Cavite
 116618,2016-03-15,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
 116619,2016-03-22,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
 116620,2016-03-28,31040,14.37628,120.878699,Gov. Ferrer Memorial National High School (Main),0.0,Cavite
@@ -24836,7 +24680,6 @@
 118825,2014-06-23,31394,18.2025079,120.5380438,E. F. Siazon Mem. Elementary School,100.0,Ilocos Norte
 118826,2014-07-07,31394,18.2025079,120.5380438,E. F. Siazon Mem. Elementary School,98.31,Ilocos Norte
 118827,2014-07-14,31394,18.2025079,120.5380438,E. F. Siazon Mem. Elementary School,100.0,Ilocos Norte
-118828,2014-07-21,31394,18.2025079,120.5380438,E. F. Siazon Mem. Elementary School,98.68,Ilocos Norte
 118829,2014-07-28,31394,18.2025079,120.5380438,E. F. Siazon Mem. Elementary School,100.0,Ilocos Norte
 118830,2014-08-04,31394,18.2025079,120.5380438,E. F. Siazon Mem. Elementary School,100.0,Ilocos Norte
 118831,2014-08-11,31394,18.2025079,120.5380438,E. F. Siazon Mem. Elementary School,100.0,Ilocos Norte
@@ -25866,9 +25709,7 @@
 127860,2014-03-20,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,7.59,Cotabato
 127861,2014-06-18,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127862,2014-06-25,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
-127863,2014-07-02,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.41,Cotabato
 127864,2014-07-09,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
-127865,2014-07-16,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.41,Cotabato
 127866,2014-07-23,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127867,2014-07-30,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,2.82,Cotabato
 127868,2014-08-13,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,4.23,Cotabato
@@ -25876,28 +25717,16 @@
 127870,2014-08-27,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127871,2014-09-03,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127872,2014-09-10,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
-127873,2014-09-17,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.41,Cotabato
-127874,2014-09-24,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.7,Cotabato
-127875,2014-10-01,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.41,Cotabato
 127876,2014-10-08,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127877,2014-10-15,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127878,2014-10-22,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127879,2014-10-29,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127880,2014-11-05,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
-127881,2014-11-19,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.7,Cotabato
-127882,2014-12-03,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.7,Cotabato
 127883,2014-12-10,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
-127884,2015-01-07,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.41,Cotabato
-127885,2015-01-21,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.0,Cotabato
-127886,2015-01-28,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.0,Cotabato
-127887,2015-02-03,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.0,Cotabato
-127888,2015-02-04,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.0,Cotabato
 127889,2015-02-11,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
 127890,2015-02-18,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,2.0,Cotabato
-127891,2015-02-25,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.0,Cotabato
 127892,2015-08-12,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,44.44,Cotabato
 127893,2015-10-21,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,4.17,Cotabato
-127894,2015-10-28,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,1.39,Cotabato
 127895,2015-11-04,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,2.82,Cotabato
 127896,2015-11-11,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,5.8,Cotabato
 127897,2015-11-25,33200,7.107444,124.827444,Kabacan Pilot Central Elementary School,0.0,Cotabato
@@ -26142,7 +25971,6 @@
 130217,2015-11-11,34140,17.573119100000003,120.3824276,Ilocos Sur National High School,22.37,Ilocos Sur
 130218,2015-11-18,34140,17.573119100000003,120.3824276,Ilocos Sur National High School,15.66,Ilocos Sur
 130219,2015-11-25,34140,17.573119100000003,120.3824276,Ilocos Sur National High School,5.88,Ilocos Sur
-130220,2015-11-29,34140,17.573119100000003,120.3824276,Ilocos Sur National High School,1.35,Ilocos Sur
 130221,2015-12-09,34140,17.573119100000003,120.3824276,Ilocos Sur National High School,28.57,Ilocos Sur
 130222,2015-12-15,34140,17.573119100000003,120.3824276,Ilocos Sur National High School,15.58,Ilocos Sur
 130223,2016-01-13,34140,17.573119100000003,120.3824276,Ilocos Sur National High School,0.0,Ilocos Sur
@@ -26599,7 +26427,6 @@
 132536,2016-09-13,36416,15.981829500000002,120.3716773,Central I Elementary School,9.84,Pangasinan
 132537,2016-09-20,36416,15.981829500000002,120.3716773,Central I Elementary School,0.0,Pangasinan
 132538,2013-11-25,36417,15.9782608,120.3760815,Central II Elementary School,0.0,Pangasinan
-132539,2013-12-02,36417,15.9782608,120.3760815,Central II Elementary School,1.04,Pangasinan
 132540,2013-12-09,36417,15.9782608,120.3760815,Central II Elementary School,6.25,Pangasinan
 132541,2013-12-16,36417,15.9782608,120.3760815,Central II Elementary School,5.21,Pangasinan
 132542,2014-01-13,36417,15.9782608,120.3760815,Central II Elementary School,2.08,Pangasinan
@@ -26649,10 +26476,8 @@
 132586,2015-10-13,36417,15.9782608,120.3760815,Central II Elementary School,4.08,Pangasinan
 132587,2015-10-20,36417,15.9782608,120.3760815,Central II Elementary School,2.04,Pangasinan
 132588,2015-10-27,36417,15.9782608,120.3760815,Central II Elementary School,0.0,Pangasinan
-132589,2015-11-03,36417,15.9782608,120.3760815,Central II Elementary School,1.02,Pangasinan
 132590,2015-11-10,36417,15.9782608,120.3760815,Central II Elementary School,2.04,Pangasinan
 132591,2015-11-17,36417,15.9782608,120.3760815,Central II Elementary School,0.0,Pangasinan
-132592,2015-11-24,36417,15.9782608,120.3760815,Central II Elementary School,1.02,Pangasinan
 132593,2015-12-01,36417,15.9782608,120.3760815,Central II Elementary School,0.0,Pangasinan
 132594,2015-12-08,36417,15.9782608,120.3760815,Central II Elementary School,0.0,Pangasinan
 132595,2015-12-15,36417,15.9782608,120.3760815,Central II Elementary School,0.0,Pangasinan
