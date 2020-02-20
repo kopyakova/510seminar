@@ -16,7 +16,7 @@ stage1 <- function(df, model = "logit", split_sample = TRUE, include_two_way_int
                    direction_search = "both", chronologically = FALSE){
   df <- add_value_indicator(df)
   df <- df[ ,-which(names(df) == "value")] #exclude value
-  
+  #change
   #split sample if needed
   if (split_sample){
     split_data <- split_train_test(df, chronologically = chronologically, smpl_size = 0.9, remove_NA = TRUE)
