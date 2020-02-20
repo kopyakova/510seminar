@@ -1,13 +1,14 @@
 weather <- read.csv("/Users/annakopyakova/Desktop/Case Study 510/Final data/new_weather_cleaned.csv")
 weather <- weather[, -1] #here first column is an index. must be dropped
 ovitrap <- read.csv("/Users/annakopyakova/Desktop/Case Study 510/Final data/Full_data_kNN_imputed.csv")
+data <- aggregate_data(weather, ovitrap, F)
 
 
-#' @description Merge two data sets; log transform variables perc and new perc, ls_temp day and night, windspeed;
-#' add 2 lags
+#' @description Merge two data sets; add 2 lags; perform log transformation if necessary
 #' @param weather data frame for weather with 14 variables (administration, date and all the variables)
 #' @param ovitrap data frame for ovitrap with variables. Must include administration (adm), date and value
-aggregate_data <- function(weather, ovitrap){
+#' @param log_transf should variables perc and new perc, ls_temp day and night, windspeed be log transform
+aggregate_data <- function(weather, ovitrap, log_transf = FALSE){
   all_variable_names <- colnames(weather)
   p <- dim(weather)[2]
   #Check if weather has the right label for administration
@@ -23,25 +24,28 @@ aggregate_data <- function(weather, ovitrap){
   #Merge the data sets
   merged_data = merge(ovitrap, weather, by=c("adm","date"))
   
-  #Log transformation
-  merged_data$perc <- log(merged_data$perc + 1) 
-  merged_data$ls_temp_day <- log(merged_data$ls_temp_day)
-  merged_data$ls_temp_night <- log(merged_data$ls_temp_night)
-  merged_data$wind_speed <- log(merged_data$wind_speed)
-  merged_data$new_perc <- log(merged_data$new_perc + 1)
-  
   all_variable_names <- colnames(merged_data)
-  all_variable_names[which(all_variable_names == "perc")] <- "log_perc"
-  all_variable_names[which(all_variable_names == "ls_temp_day") ] <- "log_ls_temp_day"
-  all_variable_names[which(all_variable_names == "ls_temp_night")] <- "log_ls_temp_night"
-  all_variable_names[which(all_variable_names == "wind_speed") ] <- "log_wind_speed"
-  all_variable_names[which(all_variable_names == "new_perc") ] <- "log_new_perc"
-  
-  colnames(merged_data) <- all_variable_names
-  
+  if (log_transf){
+    #Log transformation
+    merged_data$perc <- log(merged_data$perc + 1) 
+    merged_data$ls_temp_day <- log(merged_data$ls_temp_day)
+    merged_data$ls_temp_night <- log(merged_data$ls_temp_night)
+    merged_data$wind_speed <- log(merged_data$wind_speed)
+    merged_data$new_perc <- log(merged_data$new_perc + 1)
+    
+    all_variable_names[which(all_variable_names == "perc")] <- "log_perc"
+    all_variable_names[which(all_variable_names == "ls_temp_day") ] <- "log_ls_temp_day"
+    all_variable_names[which(all_variable_names == "ls_temp_night")] <- "log_ls_temp_night"
+    all_variable_names[which(all_variable_names == "wind_speed") ] <- "log_wind_speed"
+    all_variable_names[which(all_variable_names == "new_perc") ] <- "log_new_perc"
+    
+    colnames(merged_data) <- all_variable_names
+  }
+
   #add lagsvars_to_be_lagged = colnames(merged_data)[4:(p-2)]
-  vars_to_be_lagged <- all_variable_names[4:(p-1)] #omit adm, date, longitute and latitude 
+  vars_to_be_lagged <- all_variable_names[4:(p-1)] #omit adm, date, value, longitute and latitude 
   
+  print(all_variable_names)
   lag1 = make_lags(merged_data, num_lags = 1, vars_to_be_lagged = vars_to_be_lagged)
   lag2 = make_lags(merged_data, num_lags = 2, vars_to_be_lagged = vars_to_be_lagged)
   
@@ -81,5 +85,3 @@ make_lags <- function(data, id_index = "adm", date_index = "date", num_lags = 1,
   }
   return(lagged_vars)
 }
-
-data <- aggregate_data(weather, ovitrap)
