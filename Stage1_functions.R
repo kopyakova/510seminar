@@ -130,7 +130,7 @@ stage1_logit <- function(df, model = "logit", include_two_way_interactions = FAL
       selectedLogitMod <- step(logitMod, direction = direction_search, 
                                scope=list(upper = ~ .+.^2,lower=~.), trace = FALSE)
     } else {
-      selectedLogitMod <- step(logitMod, direction =  direction_search, trace = FALSE)
+      selectedLogitMod <- step(logitMod, direction =  "backward", trace = FALSE)
     }
     selected_model <- selectedLogitMod
   }
@@ -363,16 +363,40 @@ aggregate_data <- function(weather, ovitrap, log_transf = FALSE){
 #' @param num_lags how many time periods should be lagges
 #' @param vars_to_be_lagged list of variable that must be lagged
 make_lags <- function(data, weather_data, id_index = "adm", date_index = "date", num_lags = 1,
-                      vars_to_be_lagged =c("perc", "ls_temp_day", "ls_temp_night", "evi", "humid", 
+                      vars_to_be_lagged =c("ls_temp_day", "ls_temp_night", "evi", "humid", 
                                            "new_perc", "soil_moist", "soil_temp", "ns_temp", "wind_speed")){
   
   original_data <- data
+  #find first date of the data set - used for lag1
+  dates <- unique(original_data$date[order((original_data$date))])
+  date_1     <- as.character(dates[1])
+  split_data <- strsplit(date_1, "-")
+  month_1    <- as.numeric(split_data[[1]][2])
+  date1_lag_1 <- paste0(split_data[[1]][1], "-0", month_1-1, "-", split_data[[1]][3])
+  #date1_lag_2 <- paste0(split_data[[1]][1], "-0", month_1-2, "-", split_data[[1]][3])
+  
+  #find second date of the data set - used for lag2
+  date_2     <- as.character(dates[2])
+  split_data <- strsplit(date_2, "-")
+  month_2    <- as.numeric(split_data[[1]][2])
+  date2_lag_1 <- paste0(split_data[[1]][1], "-0", month_2-1, "-", split_data[[1]][3])
+  date2_lag_2 <- paste0(split_data[[1]][1], "-0", month_2-2, "-", split_data[[1]][3])
+
+ # print(date1_lag_1)#as.Date
+  print(".")
+  print(date_1)
+  print(date1_lag_1)
+  print(".")
+  print(date_2)
+  print(date2_lag_1)
+  print(date2_lag_2)
+ 
   #Check if weather has the right label for administration
   if (!("adm" %in% colnames(weather_data))){
     index <- which(colnames(weather_data) == "adm_level")
     colnames(weather_data)[index] <- "adm"
   }
-  
+ 
   data <- data.frame(data[,c(id_index, date_index, vars_to_be_lagged)])
   data <- data[order(data[,id_index], data[,date_index]),]
   p = length(vars_to_be_lagged)
@@ -392,38 +416,39 @@ make_lags <- function(data, weather_data, id_index = "adm", date_index = "date",
 
   
   df_NA <- lagged_vars[rowSums(is.na(lagged_vars)) > 2, ]
+
   
   missing_months <- unique(as.Date(df_NA[,"date"]))
   n_months       <- length(missing_months)
   weather_data <- weather_data[,c(id_index, date_index, vars_to_be_lagged)]
   if(num_lags == 1){
-    missing_data <- df_NA[as.Date(df_NA$date) == "2013-03-01",]
+    missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
     missing_data <- missing_data[,c(1,2)]
-    weather_feb  <- weather_data[as.Date(weather_data$date) == "2013-02-01",]
+    weather_feb  <- weather_data[as.Date(weather_data$date) == date1_lag_1,]
     
     merged <- merge(missing_data, weather_feb, by=c("adm"))
     merged <- merged[, -c(3)] #drop second date
-    df_NA[as.Date(df_NA$date) == "2013-03-01",] = merged
+    df_NA[as.Date(df_NA$date) == date_1,] = merged
   } else {
     for (i in 1:n_months){
       months <- missing_months[i]
-      if (months == "2013-03-01"){
-        missing_data <- df_NA[as.Date(df_NA$date) == "2013-03-01",]
+      if (months == date_1){
+        missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
         missing_data <- missing_data[,c(1,2)]
-        weather_jan  <- weather_data[as.Date(weather_data$date) == "2013-01-01",]
+        weather_jan  <- weather_data[as.Date(weather_data$date) == date2_lag_1,]
         
         merged <- merge(missing_data, weather_jan, by=c("adm"))
         merged <- merged[, -c(3)] #drop second date
-        df_NA[as.Date(df_NA$date) == "2013-03-01",] = merged
+        df_NA[as.Date(df_NA$date) == date_1,] = merged
       }
-      if (months == "2013-04-01"){
-        missing_data <- df_NA[as.Date(df_NA$date) == "2013-04-01",]
+      if (months == date_2){
+        missing_data <- df_NA[as.Date(df_NA$date) == date_2,]
         missing_data <- missing_data[,c(1,2)]
-        weather_feb  <- weather_data[as.Date(weather_data$date) == "2013-02-01",]
+        weather_feb  <- weather_data[as.Date(weather_data$date) == date2_lag_2,]
         
         merged <- merge(missing_data, weather_feb, by=c("adm"))
         merged <- merged[, -c(3)] #drop second date
-        df_NA[as.Date(df_NA$date) == "2013-04-01",] = merged
+        df_NA[as.Date(df_NA$date) == date_2,] = merged
       }
     }
   }

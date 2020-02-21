@@ -1,4 +1,4 @@
-main <- function(df){
+main <- function(df, cutoff = 0.1){
   
   # DO outside function and add them as input parameters
   weather <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
@@ -37,24 +37,25 @@ main <- function(df){
   
   # (6) Add value lags to the validation and test sets 
   # ANNAAAAAA --> Not ready yet!!! 
-  # valid_lag1 <- make_lags(df = validation_set, weather_data = weather, id_index = "adm", date_index = "date", 
-  #                         num_lags = 1)
-  # valid_lagged <- make_lags(df = valid_lag1, weather_data = weather, id_index = "adm", date_index = "date",
-  #                         num_lags = 2)
-  # 
-  # test_lag1 <- make_lags(df = test_set, weather_data = weather, id_index = "adm", date_index = "date", 
-  #                         num_lags = 1)
-  # test_lagged <- make_lags(df = test_lag1, weather_data = weather, id_index = "adm", date_index = "date",
-  #                         num_lags = 2)
+  
+  valid_lag1 <- make_lags(data = validation_set, weather_data = weather, id_index = "adm", date_index = "date",
+                          num_lags = 1)
+  valid_lagged <- make_lags(data = valid_lag1, weather_data = weather, id_index = "adm", date_index = "date",
+                          num_lags = 2)
+
+  test_lag1 <- make_lags(data = test_set, weather_data = weather, id_index = "adm", date_index = "date",
+                          num_lags = 1)
+  test_lagged <- make_lags(data = test_lag1, weather_data = weather, id_index = "adm", date_index = "date",
+                          num_lags = 2)
   # (7) Add indicators to the validation and test sets 
   cutoff = 0.1
-  valid_final <- add_value_indicator(validation_set, cutoff = cutoff) #DO : CHANGE TO LAGGED SETS
-  test_final  <- add_value_indicator(test_set, cutoff = cutoff)
+  valid_final <- add_value_indicator(valid_lagged, cutoff = cutoff) 
+  test_final  <- add_value_indicator(test_lagged, cutoff = cutoff)
   
   #(8) Call first stage
-  outpurt <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
+  output <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
                          training_set = training_set, number_of_bootstraps = 2, threshold_presentation = cutoff, 
-                         threshold_selection = 0.5, log_transf = FALSE) 
+                         threshold_selection = 0.5, log_transf = FALSE, weather = weather) 
   raining_set_na = training_set_na
   validation_set = valid_final
   training_set = training_set
@@ -70,7 +71,7 @@ main <- function(df){
 
 # FIRST STAGE 
 first_stage <- function(training_set_na, validation_set, training_set, number_of_bootstraps = 100, threshold_presentation = 0.1, 
-                        threshold_selection = 0.5, log_transf = FALSE) {
+                        threshold_selection = 0.5, log_transf = FALSE, weather) {
 
   set.seed(510)
   # number_of_covariates <- ncol(training_set) - 1 # -1 as the response is also included in training_set --> I probably have to change this!
@@ -88,7 +89,8 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
   # (2) Apply imputation methods, transform your dependent variable and add lagged values
   complete_samples  <- complete_samples(number_of_bootstraps = number_of_bootstraps, 
                                        threshold_presentation = threshold_presentation, 
-                                       bootstrap_samples = bootstrap_samples, log_transf = log_transf)
+                                       bootstrap_samples = bootstrap_samples, log_transf = log_transf, 
+                                       weather = weather)
   temp <- complete_samples[[1]][,-c(1,2,3)]  #DO maybe fix it 
   only_covariates <- temp[ ,!(names(temp) == "value_indicator")]
   number_of_covariates <- ncol(only_covariates) 
@@ -218,13 +220,13 @@ bootstrap_samples <- function(number_of_bootstraps = 100, training_set) {
 
 # Each bootstrap sample is imputed, the response variable is transformed and lagged values are added
 complete_samples <- function(number_of_bootstraps = 100, threshold_presentation = 0.1, bootstrap_samples,
-                             log_transf = F) {
+                             log_transf = F, weather) {
   
   set.seed(510) # reproducibility imputations
   complete_samples <- list()
   
   for (r in 1:number_of_bootstraps) {
-    
+   
     bootstrap_sample <- bootstrap_samples[[r]]
     
     # (1) Impute ovitrap data based on the incomplete weather data (KNN)
@@ -232,14 +234,14 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
     imputed_data <- imputations(5, 5, bootstrap_sample)
     
     # (3) Add lagged values to the complete data set
-    # imputed_data_lag1   <- make_lags(df = imputed_data, weather_data = weather, id_index = "adm", date_index = "date",
-    #                         num_lags = 1)
-    # imputed_data_lagged <- make_lags(df = imputed_data_lag1, weather_data = weather, id_index = "adm", date_index = "date",
+    imputed_data_lag1   <- make_lags(data = imputed_data, weather_data = weather, id_index = "adm", date_index = "date",
+                            num_lags = 1)
+    # imputed_data_lagged <- make_lags(data = imputed_data_lag1, weather_data = weather, id_index = "adm", date_index = "date",
     #                         num_lags = 2)
     
     # (4) Add indicators to the validation and test sets 
-    imputed_final <- add_value_indicator(imputed_data, cutoff = threshold_presentation) #DO : CHANGE TO LAGGED SETS- imputed_data_lagged 
-  
+    imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation) 
+    
     # (5) Standardise the explanatory space
     standardized_data <- scale_variables(imputed_final, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
     
@@ -270,7 +272,7 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
     
     if (model_type == "logit") {
       selected_model <- stage1_logit(df = complete_sample, model = "logit", include_two_way_interactions = FALSE,
-                                       direction_search = "both")
+                                       direction_search = "backward")
     } else if (model_type == "linear_regression") {
       # WHAT DOES THE COMPLETE_SAMPLE LOOKL LIKE (IN WHICH ORDER ARE THE VARIABLES)
       # DELET THE OVI_INDEX AND LEAVE THE MEAN_OVI
