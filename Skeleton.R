@@ -132,6 +132,14 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
   return_list$model <- logitMod
   return_list$data  <- selected_data
   
+  # OUTPUT: 
+  # (1) Provinces on risky 
+  # (2) Return final logit model 
+  # (3) TRAIN + VALIDATION WITH NA'S
+  #   - Order full_data_NA (like what we did we the fill_data_imputed)
+  #   - Determine where the NA's are in this ordered full_data_NA
+  #   - Shrink data set by removing test_set part
+  #   - Return this one for input in Second_Stage --> training_set_na
   return(return_list)
 }
 
@@ -142,6 +150,7 @@ second_stage <- function(number_of_bootstrap = 100, provinces_on_risk, threshold
   
   # (1) Select the 'sub-sample' from the training_set (with NA's) corresponding to those provinces which are on risk
   # Already done in previous First Stage
+  training_set_na <- training_set_na[as.character(training_set_na$adm) == provinces_on_risk, ]
   
   # (2) For this 'sub-sample' apply bootstrap, impute the missing data, estimate models, do variable selection and determine the final model 
   
@@ -149,8 +158,13 @@ second_stage <- function(number_of_bootstrap = 100, provinces_on_risk, threshold
   
   complete_samples <- complete_samples(number_of_bootstraps = number_of_bootstrap, threshold_presentation = threshold_presentation, bootstrap_samples = bootstrap_samples, log_transf = F)
   
-  number_of_covariates <- ncol((complete_samples[[1]])[, -c(1,2,ncol(complete_samples[[1]]))]) 
-  names_covariates     <- colnames(complete_samples[[1]])[-c(1,2,ncol(complete_samples[[1]]))] 
+  # number_of_covariates <- ncol((complete_samples[[1]])[, -c(1,2,ncol(complete_samples[[1]]))]) 
+  # names_covariates     <- colnames(complete_samples[[1]])[-c(1,2,ncol(complete_samples[[1]]))] 
+  temp <- complete_samples[[1]][ , -c(1,2,3)]  #DO maybe fix it 
+  only_covariates <- temp[ , !(names(temp) == "value_indicator")]
+  number_of_covariates <- ncol(only_covariates) 
+  names_covariates     <- colnames(only_covariates)
+  
   
   final_covariates <- estimation_and_selection_process(number_of_bootstraps = number_of_bootstraps, 
                                                        threshold_selection = threshold_selection, 
@@ -160,7 +174,8 @@ second_stage <- function(number_of_bootstrap = 100, provinces_on_risk, threshold
                                                        model_type = "linear_regression")
   
   # (3) Return the final model
-  final_model <- lm(... ~ ..., data = training_set)
+  final_model <- lm(value ~ ., data = training_set[, c(final_covariates, "value")]) 
+  #klopt het dat we hier alleen maar lm doen + klopt het dat final covariates de value niet include?
   
   return(final_model)
 }
@@ -254,12 +269,15 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
     #TODO: remove administration and date columns
     
     if (model_type == "logit") {
-      selected_model <- stage1_bootstrap(df = complete_sample, model = "logit", include_two_way_interactions = FALSE,
+      selected_model <- stage1_logit(df = complete_sample, model = "logit", include_two_way_interactions = FALSE,
                                        direction_search = "both")
     } else if (model_type == "linear_regression") {
       # WHAT DOES THE COMPLETE_SAMPLE LOOKL LIKE (IN WHICH ORDER ARE THE VARIABLES)
-      lm_model <- lm(... ~ ..., data = complete_sample)
-      selected_model <- stepAIC(object = lm_model, direction = c("both"))
+      # DELET THE OVI_INDEX AND LEAVE THE MEAN_OVI
+      selected_model <- stage2_regression(df = complete_sample, model = "linear_regression", include_two_way_interactions = FALSE, direction_search = "both")
+      
+      # lm_model <- lm(... ~ ..., data = complete_sample)
+      # selected_model <- stepAIC(object = lm_model, direction = c("both"))
     } else if (model_type == "beta_regression") {
       print("ERROR: no model selcted")
     } else {
@@ -345,6 +363,10 @@ fulldata <- function(weather, ovitrap_cleaned, ovitrap_original) {
   names(weather)[names(weather) == "adm_level"] <- "adm" 
   
   completedata <- merge(ovitrap_fulldata, weather, by = c("adm", "date"))
+  # completedata$value <- as.numeric(as.character(completedata$value))
+  # completedata$adm <- as.character(completedata$adm)
+  # completedata$date <- as.Date(as.character(completedata$date))
+  
   return(completedata)
 } 
 
@@ -367,11 +389,36 @@ imputations <- function(K, M, completedata) { # I used the standard setup where 
   names(imputed_weather)[names(imputed_weather) == "adm_level"] <- "adm" 
   
   result <- merge(ovitrap_imputed[,1:3], imputed_weather, by = c("adm", "date"))
-  # result$value <- as.numeric(as.character(result$value))
   result$value <- as.numeric(as.character(result$value))
+  # result$value <- as.numeric(as.character(result$value))
   
   return(result)
 }
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+stage2_regression <- function(df, model = "linear_regression", include_two_way_interactions = FALSE,
+                             direction_search = "both"){
+  # direction_search = "both"
+  # df <- temp
+  df <- df[ ,!(names(df) == "value_indicator")] #exclude value
+  df <- df[ ,!(names(df) == "adm")]
+  df <- df[ ,!(names(df) == "date")]
+  
+  if (model == "linear_regression"){
+    lsMod <- lm(value ~ ., data = df)
+    # logitMod <- glm(value_indicator ~. , data =  df, family = binomial(link='logit'))
+    if (include_two_way_interactions){
+      selectedLsMod <- step(lsMod, direction = direction_search, scope = list(upper = ~ .+.^2,lower=~.), trace = FALSE)
+      # selectedLogitMod <- step(logitMod, direction = direction_search, 
+      #                         scope=list(upper = ~ .+.^2,lower=~.), trace = FALSE)
+    } else {
+      selectedLsMod <- step(lsMod, direction = direction_search, trace = FALSE)
+      # selectedLogitMod <- step(logitMod, direction =  direction_search, trace = FALSE)
+    }
+    
+    selected_model <- selectedLsMod
+  }
+  
+  return(selected_model)
+}
