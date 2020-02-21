@@ -118,7 +118,11 @@ threshold_bootstrap <- function(train, valid, model,
 
 stage1_bootstrap <- function(df, model = "logit", include_two_way_interactions = FALSE,
                              direction_search = "both"){
-  df <- df[ ,-which(names(df) == "value")] #exclude value
+  # direction_search = "both"
+  # df <- temp
+  df <- df[ ,!(names(df) == "value")] #exclude value
+  df <- df[ ,!(names(df) == "adm")]
+  df <- df[ ,!(names(df) == "date")]
   
   if (model == "logit"){
     logitMod <- glm(value_indicator ~. , data =  df, family = binomial(link='logit'))
@@ -187,7 +191,7 @@ add_value_indicator <- function(df, cutoff = 10){
   }
   value_ind <- ifelse(df$value >= cutoff, 1, 0)
   prop_ones <- sum(value_ind == 1)/nrow(df)
-  print(paste0("Proportion of ones in the data ", prop_ones))
+  #print(paste0("Proportion of ones in the data ", prop_ones))
   df <- cbind(df, value_ind)
   colnames(df)[ncol(df)] <- "value_indicator"
   return(df)
