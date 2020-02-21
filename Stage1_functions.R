@@ -70,6 +70,52 @@ stage1 <- function(df, model = "logit", split_sample = TRUE, include_two_way_int
   return(return_list)
 }
 
+#' @description Find a threshold for logistic regression
+#' @param train data frame with training set
+#' @param valid data frame with validation set
+#' @param model object outputted by glm or step function
+#' @param dependent_variable name (string)
+#' @return best threshold (integer)
+threshold_bootstrap <- function(train, valid, model, 
+                                dependent_variable = "value_indicator"){
+
+  train <- train[ ,!(names(train) == "value")] #exclude value
+  valid <- valid[ ,!(names(valid) == "value")]
+
+  #make a prediction on the training test to select cutoffs
+  predicted_train <- model$fitted.values
+  target_train    <- train[ ,dependent_variable]
+
+  cutoffs   <- t(find_threshold(predicted_train, target_train))  #two thresholds
+  
+  #find number of misclassified observations
+  predicted_test <- predict(model, valid[,-which(names(valid) == dependent_variable)], 
+                            type="response")
+  target_test    <- valid[, dependent_variable]
+  
+  missclassTest <- c()
+  for (cutoff in cutoffs){
+    missclassTest <- c(missclassTest, sum(ifelse(predicted_test > cutoff,1,0) != target_test))
+  }
+  #select cut-off that minimizes number of miscalssifications
+  bestMethodInd <- which.min(missclassTest)
+  if (bestMethodInd == 2){
+    method = "F1 score"
+  } else {
+    method = "Sum of sensitivity and specificity"
+  }
+  best_cutoff <- cutoffs[bestMethodInd]
+  
+  accuracy      <- sum(ifelse(predicted_train > best_cutoff,1,0) == target_train)/nrow(train)
+  print(paste0("The accuracy (train set) based on the ", method, " is ", accuracy))
+  
+  #evaluate test set with the best cut-off
+  accuracy      <- sum(ifelse(predicted_test > best_cutoff,1,0) == target_test)/nrow(valid)
+  print(paste0("The accuracy (validation set) based on the ", method, " is ", accuracy))
+  
+  return(best_cutoff)
+}
+
 stage1_bootstrap <- function(df, model = "logit", include_two_way_interactions = FALSE,
                              direction_search = "both"){
   df <- df[ ,-which(names(df) == "value")] #exclude value
@@ -89,76 +135,9 @@ stage1_bootstrap <- function(df, model = "logit", include_two_way_interactions =
   return(selected_model)
 }
 
-#' @description Add the indicator column for value
-#' @param df data frame
-#' @param cutoff which cut-off should be used 
-#' @return df with value_indicator column
-add_value_indicator <- function(df, cutoff = 10){
-  if (cutoff < 1){
-    cutoff <- cutoff*100
-  }
-  value_ind <- ifelse(df$value >= cutoff, 1, 0)
-  prop_ones <- sum(value_ind == 1)/nrow(df)
-  print(paste0("Proportion of ones in the data ", prop_ones))
-  df <- cbind(df, value_ind)
-  colnames(df)[ncol(df)] <- "value_indicator"
-  return(df)
-}
-
-#' @description standardize weather variables
-#' @param df data frame to be standardaized
-#' @param variables_not_to_scale which variables must NOT be standardized
-#' @return standardized data frame
-scale_variables <- function(df, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude")){
-  all_variable_names <- colnames(df)
-  indices_to_exclude <- match(all_variable_names, !intersect(all_variable_names, variables_not_to_scale))
-  variables_to_scale <- all_variable_names[is.na(indices_to_exclude)]
-  scaled_variables   <- scale(df[ ,variables_to_scale]) #scale explenatory variables
-  df_scaled <- df
-  df_scaled[,variables_to_scale] <- scaled_variables
-  return(df_scaled)
-}
-
-#' @description Split data in training and testing set
-#' @param df data frame to be split
-#' @param smpl_size which sample size should be used for splitting
-#' @param chronologically should the sample be split chronologically
-#' @param remove_NA should rows with NA values (for lags) be removed
-#' @param remove_adm_date should the columns with administration and date be removed
-#' @return list with two data frames 
-split_train_test <- function(df, smpl_size = 0.9, chronologically = TRUE, remove_NA = TRUE,
-                             remove_adm_date = TRUE){
-  n <- nrow(df)
-  smp_size <- floor(smpl_size * n)
-  
-  if (remove_NA){ #drop NA
-    df <- df[rowSums(is.na(df)) == 0, ] 
-  }
-  n <- nrow(df)
-  #split data in training and testing sets
-  if (chronologically){ #chronologically
-    df <- df[order(df$date), ]
-    split_date <- as.Date(df[smp_size,"date"])
-    train <- df[as.Date(df[,"date"]) < as.Date(split_date), ]
-    test  <- df_scaled[as.Date(df_scaled[,"date"]) >= as.Date(split_date), ]
-  } else{ #random
-    train_index <- sample(seq_len(n), size = smp_size)
-    train <- df[train_index, ]
-    test  <- df[-train_index, ]
-  }
-  
-  #remove date and administration
-  if(remove_adm_date){
-    train <- train[,-c(1,2)] 
-    test  <- test[,-c(1,2)] 
-  }
-  return_list <- list()
-  return_list$train <- train
-  return_list$test  <- test
-  return(return_list)
-}
-
-#Find threshold function for logistic regression
+#' @description Find threshold function for logistic regression
+#' @param predicted predicted values
+#' @param target true values
 find_threshold <- function(predicted, target) {
   #make a prediction object (library ROCR)
   prediction_obj <- prediction(predicted, target)
@@ -180,6 +159,145 @@ find_threshold <- function(predicted, target) {
   return_list <- c()
   return_list[1]  <- cut_SENS_SPEC
   return_list[2]  <- cut_F1
+  return(return_list)
+}
+
+#' @description standardize weather variables
+#' @param df data frame to be standardaized
+#' @param variables_not_to_scale which variables must NOT be standardized
+#' @return standardized data frame
+scale_variables <- function(df, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude")){
+  all_variable_names <- colnames(df)
+  indices_to_exclude <- match(all_variable_names, intersect(all_variable_names, variables_not_to_scale))
+  variables_to_scale <- all_variable_names[is.na(indices_to_exclude)]
+  scaled_variables   <- scale(df[ ,variables_to_scale]) #scale explenatory variables
+  df_scaled <- df
+  df_scaled[,variables_to_scale] <- scaled_variables
+  return(df_scaled)
+}
+
+
+#' @description Add the indicator column for value
+#' @param df data frame
+#' @param cutoff which cut-off should be used 
+#' @return df with value_indicator column
+add_value_indicator <- function(df, cutoff = 10){
+  if (cutoff < 1){
+    cutoff <- cutoff*100
+  }
+  value_ind <- ifelse(df$value >= cutoff, 1, 0)
+  prop_ones <- sum(value_ind == 1)/nrow(df)
+  print(paste0("Proportion of ones in the data ", prop_ones))
+  df <- cbind(df, value_ind)
+  colnames(df)[ncol(df)] <- "value_indicator"
+  return(df)
+}
+
+#' @description Split data in training and testing set
+#' @param df data frame to be split
+#' @param train which fraction should be used for training set
+#' @param validate which fraction should be used for validation set
+#'  if NA there will be no validation set in the output
+#' @param chronologically should the sample be split chronologically
+#' @param remove_NA should rows with NA values (for lags) be removed
+#' @param remove_adm_date should the columns with administration and date be removed
+#' @return list with two data frames 
+split_train_test <- function(df, train = 0.8, validate = NA, chronologically = TRUE, remove_NA = TRUE,
+                             remove_adm_date = TRUE){
+  n <- nrow(df)
+  
+  if (remove_NA){ #drop NA
+    df <- df[rowSums(is.na(df)) == 0, ] 
+  }
+  
+  #if validation fraction is not provided split the data into training and testing sets only
+  if (is.na(validate)){
+    smp_size <- floor(train * n)
+    #split data in training and testing sets chronologically
+    if (chronologically){ 
+      df <- df[order(df$date), ]
+      split_date <- as.Date(df[smp_size,"date"])
+      train <- df[as.Date(df[,"date"]) < as.Date(split_date), ]
+      test  <- df[as.Date(df[,"date"]) >= as.Date(split_date), ]
+    
+    } 
+    #split data in training and testing sets randomly
+    else{ 
+      train_index <- sample(seq_len(n), size = smp_size)
+      train       <- df[train_index, ]
+      test        <- df[-train_index, ]
+    }
+  } 
+  #if validation fraction is  povided split the data into training, valiation and testing sets only
+  else {
+    fraction_train <- train
+    fraction_valid <- validate
+    fraction_test  <- 1 - train - validate
+    if (fraction_test < 0){
+      stop("fractions must sum up to one")
+    }
+    
+    #compute sample sizes
+    sample_train <- floor(fraction_train   * n)
+    sample_valid <- floor((fraction_valid) * n)
+    sample_test  <- floor((fraction_test)  * n)
+    
+    #split data in training, validation and testing sets chronologically
+    if (chronologically){ 
+      sample_valid <- floor((fraction_train + fraction_valid) * n)
+      df <- df[order(df$date), ]
+      
+      #first split
+      split_date <- as.Date(df[sample_train,"date"])
+      train      <- df[as.Date(df[,"date"]) < as.Date(split_date), ]
+      #data frame without training set
+      df2   <- df[as.Date(df[,"date"]) >= as.Date(split_date), ]
+      
+      #second split
+      split_date_2 <- as.Date(df[sample_valid,"date"])
+      
+      valid <- df2[as.Date(df2[,"date"]) < as.Date(split_date_2), ]
+      test  <- df2[as.Date(df2[,"date"]) >= as.Date(split_date_2), ]
+
+    }
+    #split data in training, validation and testing sets randomly
+    else{
+    #find indices
+    #avoid overlapping subsets of indices via setdiff
+    ind_train     <- sort(sample(seq_len(n), size=sample_train))
+    ind_not_train <- setdiff(seq_len(n), ind_train)
+    ind_valid     <- sort(sample(ind_not_train, size=sample_valid))
+    ind_test      <- setdiff(ind_not_train, ind_valid)
+    
+    train <- df[ind_train, ]
+    valid <- df[ind_valid, ]
+    test  <- df[ind_test, ]
+    }
+  }
+  
+  return_list <- list()
+  if (is.na(validate)){
+    
+    #remove date and administration
+    if(remove_adm_date){
+      train[,c("adm","date")] <- list(NULL)
+      test[,c("adm","date")] <- list(NULL)
+    }
+    
+    return_list$train <- train
+    return_list$test  <- test
+  } else {
+    #remove date and administration
+    if(remove_adm_date){
+      train[,c("adm","date")] <- list(NULL)
+      valid[,c("adm","date")] <- list(NULL)
+      test[,c("adm","date")] <- list(NULL)
+    }
+    
+    return_list$train <- train
+    return_list$valid <- valid
+    return_list$test  <- test
+  }
   return(return_list)
 }
 
@@ -226,28 +344,25 @@ aggregate_data <- function(weather, ovitrap, log_transf = FALSE){
   vars_to_be_lagged <- all_variable_names[4:(p-1)] #omit adm, date, value, longitute and latitude 
   print(paste0("These variables will be lagged: ", vars_to_be_lagged))
   
-  lag1 = make_lags(merged_data, num_lags = 1, vars_to_be_lagged = vars_to_be_lagged)
-  lag2 = make_lags(merged_data, num_lags = 2, vars_to_be_lagged = vars_to_be_lagged)
+  lag1 = make_lags(merged_data, weather_data = weather, num_lags = 1, vars_to_be_lagged = vars_to_be_lagged)
+  lag2 = make_lags(merged_data, weather_data = weather, num_lags = 2, vars_to_be_lagged = vars_to_be_lagged)
   
   merged_data2 = merge(merged_data, lag1, by=c("adm","date"))
   merged_data3 = merge(merged_data2, lag2, by=c("adm","date"))
   
   return(merged_data3)
 }
-######ADD LAGS######
+
 #' @description Create a data frame with lagged values
 #' @param data matrix or data frame of interest
 #' @param id_index name of the variable that has crossectional index
 #' @param date_index name of the variable that has time series index
 #' @param num_lags how many time periods should be lagges
 #' @param vars_to_be_lagged list of variable that must be lagged
-make_lags <- function(data, id_index = "adm", date_index = "date", num_lags = 1, log = FALSE,
+make_lags <- function(data, weather_data, id_index = "adm", date_index = "date", num_lags = 1,
                       vars_to_be_lagged = c("ns_temp", "evi", "perc", "ls_temp_day", "wind_speed", "humid", "ls_temp_night",
                                             "total_perc_rate", "soil_moist", "soil_temp")){
-  #TO DO: check naming 
-  if (log){
-    vars_to_be_lagged <- paste0("log_", vars_to_be_lagged)
-  }
+
   data <- data.frame(data[,c(id_index, date_index, vars_to_be_lagged)])
   data <- data[order(data[,id_index], data[,date_index]),]
   p = length(vars_to_be_lagged)
@@ -264,5 +379,11 @@ make_lags <- function(data, id_index = "adm", date_index = "date", num_lags = 1,
       }
     }
   }
+  # df <- df[rowSums(is.na(df)) == 0, ] 
+  df_NA <- lagged_vars[rowSums(is.na(lagged_vars)) > 2, ]
+  print(as.Date(df_NA[,"date"]) - 1)
+  `zsdxfdg`
+  lagged_weather = merge(df_NA, weather, by=c("adm","date"))
+  
   return(lagged_vars)
 }
