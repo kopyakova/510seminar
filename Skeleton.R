@@ -56,7 +56,9 @@ main <- function(df, cutoff = 0.1){
   output <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
                          training_set = training_set, number_of_bootstraps = 2, threshold_presentation = cutoff, 
                          threshold_selection = 0.5, log_transf = FALSE, weather = weather) 
-  raining_set_na = training_set_na
+  
+  # THIS IS ONLY HERE FOR CHECKING WHETHER THE CODE RUNS CORRECTLY
+  training_set_na = training_set_na
   validation_set = valid_final
   training_set = training_set
   number_of_bootstraps = 2
@@ -227,6 +229,7 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
   
   for (r in 1:number_of_bootstraps) {
    
+    # r = 1
     bootstrap_sample <- bootstrap_samples[[r]]
     
     # (1) Impute ovitrap data based on the incomplete weather data (KNN)
@@ -240,7 +243,8 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
     #                         num_lags = 2)
     
     # (4) Add indicators to the validation and test sets 
-    imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation) 
+    # imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation) # ADD THIS ONE AGAIN IN CASE OF RUNNING TWO LAGS --> and remove the sentence below!
+    imputed_final <- add_value_indicator(imputed_data_lag1, cutoff = threshold_presentation)
     
     # (5) Standardise the explanatory space
     standardized_data <- scale_variables(imputed_final, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
@@ -383,14 +387,20 @@ imputations <- function(K, M, completedata) { # I used the standard setup where 
   ovitrap_imputed <- kNN(completedata, variable = "value", k=K, imp_var = F)
   
   ######### Imputing weather data #########
-  weather_missing <- completedata[ ,!(names(full_data_NA) == "value")]
+  weather_missing <- completedata[ , !(names(full_data_NA) == "value")]
   
   imputation_mice <- mice(weather_missing, m = M, print = FALSE) # Impute by Multiple Imputations with Chained Equations
   imputed_weather <- complete(imputation_mice)
   
   names(imputed_weather)[names(imputed_weather) == "adm_level"] <- "adm" 
   
-  result <- merge(ovitrap_imputed[,1:3], imputed_weather, by = c("adm", "date"))
+  ovitrap_imputed <- as.data.frame(cbind(ovitrap_imputed, c(1:nrow(ovitrap_imputed))))
+  names(ovitrap_imputed)[names(ovitrap_imputed) == "c(1:nrow(ovitrap_imputed))"] <- "index" 
+  imputed_weather <- as.data.frame(cbind(imputed_weather, c(1:nrow(imputed_weather))))
+  names(imputed_weather)[names(imputed_weather) == "c(1:nrow(imputed_weather))"] <- "index" 
+  
+  result <- merge(ovitrap_imputed[,c(1:3, ncol(ovitrap_imputed))], imputed_weather, by = c("adm", "date", "index"))
+  result <- result[, -which(colnames(result) == "index")]
   result$value <- as.numeric(as.character(result$value))
   # result$value <- as.numeric(as.character(result$value))
   
