@@ -116,7 +116,7 @@ threshold_bootstrap <- function(train, valid, model,
   return(best_cutoff)
 }
 
-stage1_bootstrap <- function(df, model = "logit", include_two_way_interactions = FALSE,
+stage1_logit <- function(df, model = "logit", include_two_way_interactions = FALSE,
                              direction_search = "both"){
   # direction_search = "both"
   # df <- temp
@@ -132,7 +132,6 @@ stage1_bootstrap <- function(df, model = "logit", include_two_way_interactions =
     } else {
       selectedLogitMod <- step(logitMod, direction =  direction_search, trace = FALSE)
     }
-    
     selected_model <- selectedLogitMod
   }
   
@@ -364,9 +363,16 @@ aggregate_data <- function(weather, ovitrap, log_transf = FALSE){
 #' @param num_lags how many time periods should be lagges
 #' @param vars_to_be_lagged list of variable that must be lagged
 make_lags <- function(data, weather_data, id_index = "adm", date_index = "date", num_lags = 1,
-                      vars_to_be_lagged = c("ns_temp", "evi", "perc", "ls_temp_day", "wind_speed", "humid", "ls_temp_night",
-                                            "total_perc_rate", "soil_moist", "soil_temp")){
-
+                      vars_to_be_lagged =c("perc", "ls_temp_day", "ls_temp_night", "evi", "humid", 
+                                           "new_perc", "soil_moist", "soil_temp", "ns_temp", "wind_speed")){
+  
+  original_data <- data
+  #Check if weather has the right label for administration
+  if (!("adm" %in% colnames(weather_data))){
+    index <- which(colnames(weather_data) == "adm_level")
+    colnames(weather_data)[index] <- "adm"
+  }
+  
   data <- data.frame(data[,c(id_index, date_index, vars_to_be_lagged)])
   data <- data[order(data[,id_index], data[,date_index]),]
   p = length(vars_to_be_lagged)
@@ -383,11 +389,49 @@ make_lags <- function(data, weather_data, id_index = "adm", date_index = "date",
       }
     }
   }
-  # df <- df[rowSums(is.na(df)) == 0, ] 
-  df_NA <- lagged_vars[rowSums(is.na(lagged_vars)) > 2, ]
-  print(as.Date(df_NA[,"date"]) - 1)
-  `zsdxfdg`
-  lagged_weather = merge(df_NA, weather, by=c("adm","date"))
+
   
-  return(lagged_vars)
+  df_NA <- lagged_vars[rowSums(is.na(lagged_vars)) > 2, ]
+  
+  missing_months <- unique(as.Date(df_NA[,"date"]))
+  n_months       <- length(missing_months)
+  weather_data <- weather_data[,c(id_index, date_index, vars_to_be_lagged)]
+  if(num_lags == 1){
+    missing_data <- df_NA[as.Date(df_NA$date) == "2013-03-01",]
+    missing_data <- missing_data[,c(1,2)]
+    weather_feb  <- weather_data[as.Date(weather_data$date) == "2013-02-01",]
+    
+    merged <- merge(missing_data, weather_feb, by=c("adm"))
+    merged <- merged[, -c(3)] #drop second date
+    df_NA[as.Date(df_NA$date) == "2013-03-01",] = merged
+  } else {
+    for (i in 1:n_months){
+      months <- missing_months[i]
+      if (months == "2013-03-01"){
+        missing_data <- df_NA[as.Date(df_NA$date) == "2013-03-01",]
+        missing_data <- missing_data[,c(1,2)]
+        weather_jan  <- weather_data[as.Date(weather_data$date) == "2013-01-01",]
+        
+        merged <- merge(missing_data, weather_jan, by=c("adm"))
+        merged <- merged[, -c(3)] #drop second date
+        df_NA[as.Date(df_NA$date) == "2013-03-01",] = merged
+      }
+      if (months == "2013-04-01"){
+        missing_data <- df_NA[as.Date(df_NA$date) == "2013-04-01",]
+        missing_data <- missing_data[,c(1,2)]
+        weather_feb  <- weather_data[as.Date(weather_data$date) == "2013-02-01",]
+        
+        merged <- merge(missing_data, weather_feb, by=c("adm"))
+        merged <- merged[, -c(3)] #drop second date
+        df_NA[as.Date(df_NA$date) == "2013-04-01",] = merged
+      }
+    }
+  }
+  
+  lagged_vars[rowSums(is.na(lagged_vars)) > 2, ] <- df_NA
+  combined_data <- merge(original_data, lagged_vars, by=c("adm","date"))
+ 
+  return(combined_data)
 }
+
+
