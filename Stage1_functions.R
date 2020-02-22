@@ -76,12 +76,16 @@ stage1 <- function(df, model = "logit", split_sample = TRUE, include_two_way_int
 #' @param model object outputted by glm or step function
 #' @param dependent_variable name (string)
 #' @return best threshold (integer)
-threshold_bootstrap <- function(train, valid, model, 
+threshold_bootstrap <- function(train, valid = NULL, model, 
                                 dependent_variable = "value_indicator"){
+  if (is.null(valid)){
+    stop("Validation set is needed")
+  }
 
   train <- train[ ,!(names(train) == "value")] #exclude value
   valid <- valid[ ,!(names(valid) == "value")]
-
+  train <- train[rowSums(is.na(train))==0,]
+  valid <- valid[rowSums(is.na(valid))==0,]
   #make a prediction on the training test to select cutoffs
   predicted_train <- model$fitted.values
   target_train    <- train[ ,dependent_variable]
@@ -92,12 +96,14 @@ threshold_bootstrap <- function(train, valid, model,
   predicted_test <- predict(model, valid[,-which(names(valid) == dependent_variable)], 
                             type="response")
   target_test    <- valid[, dependent_variable]
-  
+ 
   missclassTest <- c()
   for (cutoff in cutoffs){
     missclassTest <- c(missclassTest, sum(ifelse(predicted_test > cutoff,1,0) != target_test))
+    print(ifelse(predicted_test > cutoff,1,0))
   }
   #select cut-off that minimizes number of miscalssifications
+  print(missclassTest)
   bestMethodInd <- which.min(missclassTest)
   if (bestMethodInd == 2){
     method = "F1 score"
@@ -118,8 +124,7 @@ threshold_bootstrap <- function(train, valid, model,
 
 stage1_logit <- function(df, model = "logit", include_two_way_interactions = FALSE,
                              direction_search = "both"){
-  # direction_search = "both"
-  # df <- temp
+  
   df <- df[ ,!(names(df) == "value")] #exclude value
   df <- df[ ,!(names(df) == "adm")]
   df <- df[ ,!(names(df) == "date")]
@@ -305,92 +310,17 @@ split_train_test <- function(df, train = 0.8, validate = NA, chronologically = T
 }
 
 
-#' @description Merge two data sets; add 2 lags; perform log transformation if necessary
-#' @param weather data frame for weather with 14 variables (administration, date and all the variables)
-#' @param ovitrap data frame for ovitrap with variables. Must include administration (adm), date and value
-#' @param log_transf should variables perc and new perc, ls_temp day and night, windspeed be log transform
-aggregate_data <- function(weather, ovitrap, log_transf = FALSE){
-  all_variable_names <- colnames(weather)
-  p <- dim(weather)[2]
-  #Check if weather has the right label for administration
-  if (!("adm" %in% all_variable_names)){
-    index <- which(all_variable_names == "adm_level")
-    all_variable_names[index] <- "adm"
-    colnames(weather)[index] <- "adm"
-  }
-  
-  #Drop redundant variables from ovitrap data
-  ovitrap <- ovitrap[,c("adm","date","value")]
-  
-  #Merge the data sets
-  merged_data = merge(ovitrap, weather, by=c("adm","date"))
-  
-  all_variable_names <- colnames(merged_data)
-  if (log_transf){
-    #Log transformation
-    merged_data$perc <- log(merged_data$perc + 1) 
-    merged_data$ls_temp_day <- log(merged_data$ls_temp_day)
-    merged_data$ls_temp_night <- log(merged_data$ls_temp_night)
-    merged_data$wind_speed <- log(merged_data$wind_speed)
-    merged_data$new_perc <- log(merged_data$new_perc + 1)
-    
-    all_variable_names[which(all_variable_names == "perc")] <- "log_perc"
-    all_variable_names[which(all_variable_names == "ls_temp_day") ] <- "log_ls_temp_day"
-    all_variable_names[which(all_variable_names == "ls_temp_night")] <- "log_ls_temp_night"
-    all_variable_names[which(all_variable_names == "wind_speed") ] <- "log_wind_speed"
-    all_variable_names[which(all_variable_names == "new_perc") ] <- "log_new_perc"
-    
-    colnames(merged_data) <- all_variable_names
-  }
-  
-  #add lagsvars_to_be_lagged = colnames(merged_data)[4:(p-2)]
-  vars_to_be_lagged <- all_variable_names[4:(p-1)] #omit adm, date, value, longitute and latitude 
-  print(paste0("These variables will be lagged: ", vars_to_be_lagged))
-  
-  lag1 = make_lags(merged_data, weather_data = weather, num_lags = 1, vars_to_be_lagged = vars_to_be_lagged)
-  lag2 = make_lags(merged_data, weather_data = weather, num_lags = 2, vars_to_be_lagged = vars_to_be_lagged)
-  
-  merged_data2 = merge(merged_data, lag1, by=c("adm","date"))
-  merged_data3 = merge(merged_data2, lag2, by=c("adm","date"))
-  
-  return(merged_data3)
-}
-
 #' @description Create a data frame with lagged values
 #' @param data matrix or data frame of interest
 #' @param id_index name of the variable that has crossectional index
 #' @param date_index name of the variable that has time series index
-#' @param num_lags how many time periods should be lagges
+#' @param num_lags indicates the "distance" in time of the lag. Num_lags 1 is the previous month
 #' @param vars_to_be_lagged list of variable that must be lagged
 make_lags <- function(data, weather_data, id_index = "adm", date_index = "date", num_lags = 1,
                       vars_to_be_lagged =c("ls_temp_day", "ls_temp_night", "evi", "humid", 
                                            "new_perc", "soil_moist", "soil_temp", "ns_temp", "wind_speed")){
   
   original_data <- data
-  #find first date of the data set - used for lag1
-  dates <- unique(original_data$date[order((original_data$date))])
-  date_1     <- as.character(dates[1])
-  split_data <- strsplit(date_1, "-")
-  month_1    <- as.numeric(split_data[[1]][2])
-  date1_lag_1 <- paste0(split_data[[1]][1], "-0", month_1-1, "-", split_data[[1]][3])
-  #date1_lag_2 <- paste0(split_data[[1]][1], "-0", month_1-2, "-", split_data[[1]][3])
-  
-  #find second date of the data set - used for lag2
-  date_2     <- as.character(dates[2])
-  split_data <- strsplit(date_2, "-")
-  month_2    <- as.numeric(split_data[[1]][2])
-  date2_lag_1 <- paste0(split_data[[1]][1], "-0", month_2-1, "-", split_data[[1]][3])
-  date2_lag_2 <- paste0(split_data[[1]][1], "-0", month_2-2, "-", split_data[[1]][3])
-
- # print(date1_lag_1)#as.Date
-  print(".")
-  print(date_1)
-  print(date1_lag_1)
-  print(".")
-  print(date_2)
-  print(date2_lag_1)
-  print(date2_lag_2)
- 
   #Check if weather has the right label for administration
   if (!("adm" %in% colnames(weather_data))){
     index <- which(colnames(weather_data) == "adm_level")
@@ -413,40 +343,85 @@ make_lags <- function(data, weather_data, id_index = "adm", date_index = "date",
       }
     }
   }
-
   
+  
+  ####Fix NA values in the first num_lags ####
   df_NA <- lagged_vars[rowSums(is.na(lagged_vars)) > 2, ]
 
-  
   missing_months <- unique(as.Date(df_NA[,"date"]))
   n_months       <- length(missing_months)
-  weather_data <- weather_data[,c(id_index, date_index, vars_to_be_lagged)]
+  weather_data   <- weather_data[,c(id_index, date_index, vars_to_be_lagged)]
+  dates          <- unique(original_data$date[order((original_data$date))])
+  date_1     <- as.character(dates[1])
+  date_2     <- as.character(dates[2])
   if(num_lags == 1){
+    #Find dates, that correspond to previous months
+    split_date <- strsplit(date_1, "-")
+    month_1    <- as.numeric(split_date[[1]][2])
+    if ((month_1-1) > 9){
+      date1_lag_1 <- paste0(split_date[[1]][1], "-", month_1-1, "-", split_date[[1]][3])
+    } else {
+      date1_lag_1 <- paste0(split_date[[1]][1], "-0", month_1-1, "-", split_date[[1]][3])
+    }
+    print(date_1)
+    print(date1_lag_1)
+    print(".")
+    #find weather data for the missing month
+    weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date1_lag_1, ]
+    
+    #merge the data
     missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
     missing_data <- missing_data[,c(1,2)]
-    weather_feb  <- weather_data[as.Date(weather_data$date) == date1_lag_1,]
     
-    merged <- merge(missing_data, weather_feb, by=c("adm"))
+    merged <- merge(missing_data, weather_month_lag1, by=c("adm"))
     merged <- merged[, -c(3)] #drop second date
     df_NA[as.Date(df_NA$date) == date_1,] = merged
   } else {
+    #Find dates, that correspond to two previous months
+    split_date <- strsplit(date_2, "-")
+    month_2    <- as.numeric(split_date[[1]][2])
+
+    if ((month_2-2) > 9){
+      date2_lag_2 <- paste0(split_date[[1]][1], "-", month_2-2, "-", split_date[[1]][3])
+    } else {
+      date2_lag_2 <- paste0(split_date[[1]][1], "-0", month_2-2, "-", split_date[[1]][3])
+    }
+    if ((month_2-3) > 9){
+      date2_lag_1 <- paste0(split_date[[1]][1], "-", month_2-3, "-", split_date[[1]][3])
+    } else {
+      date2_lag_1 <- paste0(split_date[[1]][1], "-0", month_2-3, "-", split_date[[1]][3])
+    }
+    
+    
+    
     for (i in 1:n_months){
       months <- missing_months[i]
       if (months == date_1){
+        #find weather data for the missing month
+        weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date2_lag_1,]
+        print(date_1)
+        print(date2_lag_1)
+        print(".")
+        #merge the data
         missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
         missing_data <- missing_data[,c(1,2)]
-        weather_jan  <- weather_data[as.Date(weather_data$date) == date2_lag_1,]
         
-        merged <- merge(missing_data, weather_jan, by=c("adm"))
+        merged <- merge(missing_data, weather_month_lag1, by=c("adm"))
         merged <- merged[, -c(3)] #drop second date
         df_NA[as.Date(df_NA$date) == date_1,] = merged
       }
       if (months == date_2){
+        #find weather data for the missing months
+        print(date_2)
+        print(date2_lag_2)
+        print(".")
+        weather_month_lag2  <- weather_data[as.Date(weather_data$date) == date2_lag_2,]
+        
+        #merge the data
         missing_data <- df_NA[as.Date(df_NA$date) == date_2,]
         missing_data <- missing_data[,c(1,2)]
-        weather_feb  <- weather_data[as.Date(weather_data$date) == date2_lag_2,]
         
-        merged <- merge(missing_data, weather_feb, by=c("adm"))
+        merged <- merge(missing_data, weather_month_lag2, by=c("adm"))
         merged <- merged[, -c(3)] #drop second date
         df_NA[as.Date(df_NA$date) == date_2,] = merged
       }

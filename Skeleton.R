@@ -1,10 +1,13 @@
 main <- function(df, cutoff = 0.1){
-  
+  cutoff = 0.1
   # DO outside function and add them as input parameters
   weather <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
   ovitrap_cleaned <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
   ovitrap_original <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
-  
+  # weather <- read.delim("new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
+  # ovitrap_cleaned <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
+  # ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+
   set.seed(510)
   
   # (1) Initial full data set with NA values - df
@@ -20,6 +23,7 @@ main <- function(df, cutoff = 0.1){
   # Months are not taken correctly into account yet --> Anna does it in her code! --> use it!
   split_sets <- split_train_test(df = full_data_imputed, train = 0.8, validate = 0.1, chronologically = TRUE, 
                                  remove_NA = TRUE, remove_adm_date = F) # remove_adm_date = F --> do not remove them --> needed in bootstrap 
+ 
   training_set   <- split_sets$train
   validation_set <- split_sets$valid
   test_set       <- split_sets$test
@@ -37,6 +41,10 @@ main <- function(df, cutoff = 0.1){
   
   # (6) Add value lags to the validation and test sets 
   # ANNAAAAAA --> Not ready yet!!! 
+  training_set_lag1 <- make_lags(data = training_set, weather_data = weather, id_index = "adm", date_index = "date",
+                                  num_lags = 1)
+  training_set_lagged <- make_lags(data = training_set_lag1, weather_data = weather, id_index = "adm", date_index = "date",
+                                  num_lags = 2)
   
   valid_lag1 <- make_lags(data = validation_set, weather_data = weather, id_index = "adm", date_index = "date",
                           num_lags = 1)
@@ -48,20 +56,21 @@ main <- function(df, cutoff = 0.1){
   test_lagged <- make_lags(data = test_lag1, weather_data = weather, id_index = "adm", date_index = "date",
                           num_lags = 2)
   # (7) Add indicators to the validation and test sets 
-  cutoff = 0.1
-  valid_final <- add_value_indicator(valid_lagged, cutoff = cutoff) 
-  test_final  <- add_value_indicator(test_lagged, cutoff = cutoff)
+  training_final <- add_value_indicator(training_set_lagged, cutoff = cutoff)
+  valid_final  <- add_value_indicator(valid_lagged, cutoff = cutoff) 
+  test_final   <- add_value_indicator(test_lagged, cutoff = cutoff)
   
   #(8) Call first stage
   output <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
-                         training_set = training_set, number_of_bootstraps = 2, threshold_presentation = cutoff, 
-                         threshold_selection = 0.5, log_transf = FALSE, weather = weather) 
+                        training_set = training_set_lagged, number_of_bootstraps = 2, 
+                        threshold_presentation = cutoff, 
+                        threshold_selection = 0.5, log_transf = FALSE, weather = weather) 
   
   # THIS IS ONLY HERE FOR CHECKING WHETHER THE CODE RUNS CORRECTLY
   training_set_na = training_set_na
   validation_set = valid_final
-  training_set = training_set
-  number_of_bootstraps = 2
+  training_set = training_final
+  number_of_bootstraps = 20
   threshold_presentation = cutoff
   threshold_selection = 0.5
   log_transf = FALSE
@@ -76,23 +85,17 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
                         threshold_selection = 0.5, log_transf = FALSE, weather) {
 
   set.seed(510)
-  # number_of_covariates <- ncol(training_set) - 1 # -1 as the response is also included in training_set --> I probably have to change this!
-  # names_covariates <- colnames(training_set)[-1] # I probably have to change this!
-   
-  # # (1) Split data in a training and validation set
-  # train_test_list <- split_train_test(df = training_set,  smpl_size = 0.85, chronologically = FALSE, 
-  #                                     remove_NA = TRUE, remove_adm_date = FALSE)
-  # training_set   <- train_test_list$train
-  # validation_set <- train_test_list$test
 
   # (1) Apple bootstrap on the training set
-  bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps, training_set = training_set_na)
+  bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps, 
+                                         training_set = training_set_na)
   
   # (2) Apply imputation methods, transform your dependent variable and add lagged values
   complete_samples  <- complete_samples(number_of_bootstraps = number_of_bootstraps, 
                                        threshold_presentation = threshold_presentation, 
                                        bootstrap_samples = bootstrap_samples, log_transf = log_transf, 
                                        weather = weather)
+  
   temp <- complete_samples[[1]][,-c(1,2,3)]  #DO maybe fix it 
   only_covariates <- temp[ ,!(names(temp) == "value_indicator")]
   number_of_covariates <- ncol(only_covariates) 
@@ -107,14 +110,27 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
                                                        model_type = "logit")
   
   # (4) Estimate the model with imputed training set from stage 0
-  training_set <- add_value_indicator(training_set, cutoff = 0.5)
   logitMod     <- glm(value_indicator ~ . , data = training_set[, c(final_covariates, "value_indicator")], 
                       family=binomial(link='logit'))
   
   # (5) Determine threshold
   # (5.1) Get the value 
   predicted_probability <- logitMod$fitted.values
-  predicted_index       <- ifelse(predicted_probability >= 0.5, 1, 0)
+  
+  #determine threshold2 based on F1 score or spec / sens
+  threshold <- threshold_bootstrap(train = training_set, valid = validation_set,
+                                   model = logitMod)
+  #determine threshold2 same as threshold1
+  threshold <- cutoff
+  
+  #WORK IN PROGRESS: evaluate threshold
+  predicted_index <- ifelse(predicted_probability >= threshold, 1, 0)
+  target_index    <- training_set[ ,"value_indicator"]
+  accuracy        <- sum(predicted_index == target_index)/nrow(training_set)
+  print(paste0("Predicted count of 1: ", sum(predicted_index == 1)))
+  print(paste0("Predicted count of 0: ", sum(predicted_index == 0)))
+  print(paste0("Accuracy: ", accuracy))
+  
   # (5.2) Get a fraction of once per province pased on the predicted_index
   
   # (5.3) Get a fraction of once per province pased on the training_set
@@ -384,13 +400,13 @@ imputations <- function(K, M, completedata) { # I used the standard setup where 
   
   ######### Imputing ovitrap data #########
   
-  ovitrap_imputed <- kNN(completedata, variable = "value", k=K, imp_var = F)
+  ovitrap_imputed <- VIM::kNN(completedata, variable = "value", k=K, imp_var = F)
   
   ######### Imputing weather data #########
   weather_missing <- completedata[ , !(names(full_data_NA) == "value")]
   
-  imputation_mice <- mice(weather_missing, m = M, print = FALSE) # Impute by Multiple Imputations with Chained Equations
-  imputed_weather <- complete(imputation_mice)
+  imputation_mice <- mice::mice(weather_missing, m = M, print = FALSE) # Impute by Multiple Imputations with Chained Equations
+  imputed_weather <- mice::complete(imputation_mice)
   
   names(imputed_weather)[names(imputed_weather) == "adm_level"] <- "adm" 
   
