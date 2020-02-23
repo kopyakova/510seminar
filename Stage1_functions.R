@@ -100,10 +100,8 @@ threshold_bootstrap <- function(train, valid = NULL, model,
   missclassTest <- c()
   for (cutoff in cutoffs){
     missclassTest <- c(missclassTest, sum(ifelse(predicted_test > cutoff,1,0) != target_test))
-    print(ifelse(predicted_test > cutoff,1,0))
   }
   #select cut-off that minimizes number of miscalssifications
-  print(missclassTest)
   bestMethodInd <- which.min(missclassTest)
   if (bestMethodInd == 2){
     method = "F1 score"
@@ -128,7 +126,7 @@ stage1_logit <- function(df, model = "logit", include_two_way_interactions = FAL
   df <- df[ ,!(names(df) == "value")] #exclude value
   df <- df[ ,!(names(df) == "adm")]
   df <- df[ ,!(names(df) == "date")]
-  
+  df <- df[rowSums(is.na(df)) == 0, ] 
   if (model == "logit"){
     logitMod <- glm(value_indicator ~. , data =  df, family = binomial(link='logit'))
     if (include_two_way_interactions){
@@ -316,121 +314,220 @@ split_train_test <- function(df, train = 0.8, validate = NA, chronologically = T
 #' @param date_index name of the variable that has time series index
 #' @param num_lags indicates the "distance" in time of the lag. Num_lags 1 is the previous month
 #' @param vars_to_be_lagged list of variable that must be lagged
-make_lags <- function(data, weather_data, id_index = "adm", date_index = "date", num_lags = 1,
+make_lags <- function(data, weather_data, id_index = "adm", date_index = "date", num_lags = 1, imputation = FALSE,
                       vars_to_be_lagged =c("ls_temp_day", "ls_temp_night", "evi", "humid", 
                                            "new_perc", "soil_moist", "soil_temp", "ns_temp", "wind_speed")){
-  
+  # id_index = "adm"
+  # date_index = "date"
+  # num_lags = 1
+  # imputation = T
+  # vars_to_be_lagged =c("ls_temp_day", "ls_temp_night", "evi", "humid", 
+  #                      "new_perc", "soil_moist", "soil_temp", "ns_temp", "wind_speed")
+  # weather_data <- 
+  data  <- data[order(data[,id_index], data[,date_index]),]
   original_data <- data
+  original_data <- original_data[!duplicated(original_data[,c(1,2)]), ]
+  
+  
   #Check if weather has the right label for administration
   if (!("adm" %in% colnames(weather_data))){
     index <- which(colnames(weather_data) == "adm_level")
     colnames(weather_data)[index] <- "adm"
   }
- 
-  data <- data.frame(data[,c(id_index, date_index, vars_to_be_lagged)])
-  data <- data[order(data[,id_index], data[,date_index]),]
-  p = length(vars_to_be_lagged)
-  n = dim(data)[1]
-  lagged_vars <- data.frame(matrix(NA, n, p + 2))
-  colnames(lagged_vars) <- c(id_index, date_index, paste0(vars_to_be_lagged, "_lag_", num_lags))
-  lagged_vars[,c(id_index, date_index)] <- data[,c(id_index, date_index)]
-  for (j in 3:(p+2)){
+  
+  #If lags are made on the bootstrapped data not all month are present in the data set
+  #Thus all weather lags are taken from the weather file
+  if(imputation){
+    #count number of times the obesvations are repeted
+    count <- plyr:: count(data[,c(1,2)])
+    count <- as.matrix(count$freq)
+    data  <- data.frame(data[,c(id_index, date_index, vars_to_be_lagged)]) #select only relevant variables
+    data  <- data[!duplicated(data[,c(1,2)]), ]  #remove duplicate rows
+  
+    p = length(vars_to_be_lagged)
+    n = dim(data)[1]
+    
+    #create data frame that will be filled with lags
+    lagged_vars <- data.frame(matrix(NA, n, p + 2))
+    colnames(lagged_vars) <- c(id_index, date_index, paste0(vars_to_be_lagged, "_lag_", num_lags))
+    lagged_vars[,c(id_index, date_index)] <- data[,c(id_index, date_index)]
+
+    #iterare over uniqe observations
     for (i in 1:n){
-      if (i - num_lags > 0){
-        if (data[i-num_lags,"adm"] == lagged_vars[i, "adm"]){
-          lagged_vars[i, j] <- data[i-num_lags,j]
+      adm  <- as.character(data[i,]$adm) 
+      date <- as.character(data[i,]$date)
+      split_date <- strsplit(date, "-")
+      month      <- as.numeric(split_date[[1]][2])
+      if (num_lags == 1){
+        if (month == 1){ # lag is December previous year
+          year <- as.numeric(split_date[[1]][1])
+          date_lag_1 <- paste0(year-1, "-", 12, "-", split_date[[1]][3])
+        } else if ((month-1) > 9){
+          date_lag_1 <- paste0(split_date[[1]][1], "-", month-1, "-", split_date[[1]][3])
+        } else {
+          date_lag_1 <- paste0(split_date[[1]][1], "-0", month-1, "-", split_date[[1]][3])
+        }
+        #select weater variables for relevant province
+        subset <- weather_data[weather_data$adm == adm,] 
+        #select weater variables in the relevant province for relevant date
+        subset <- subset[subset$date == date_lag_1, ]
+        subset <- subset[, vars_to_be_lagged] #drop unnecessary variables
+        lagged_vars[i,3:(p+2)] <- subset
+      } else {
+        year <- as.numeric(split_date[[1]][1])
+        if (month == 1){
+          date_lag_2 <- paste0(year-1, "-", 11, "-", split_date[[1]][3])
+        } else if (month == 2){
+          date_lag_2 <- paste0(year-1, "-", 12, "-", split_date[[1]][3])
+        } else if ((month-2) > 9){
+          date_lag_2 <- paste0(split_date[[1]][1], "-", month-2, "-", split_date[[1]][3])
+        } else {
+          date_lag_2 <- paste0(split_date[[1]][1], "-0", month-2, "-", split_date[[1]][3])
+        }
+        subset <-  weather_data[weather_data$adm == adm,] 
+        subset <- subset[subset$date == date_lag_2, ]
+        subset <- subset[, vars_to_be_lagged] #drop unnecessary variables
+        lagged_vars[i,3:(p+2)] <- subset
+      }
+    }
+   
+    combined_data <- merge(original_data, lagged_vars, by=c("adm","date"))
+    combined_data <- cbind(combined_data, count)
+    combined_data <- combined_data[rep(row.names(combined_data), combined_data$count), ]
+    combined_data <- combined_data[, (names(combined_data) != "count")]
+  } else {
+    data <- data.frame(data[,c(id_index, date_index, vars_to_be_lagged)])
+    data <- data[order(data[,id_index], data[,date_index]),]
+    p = length(vars_to_be_lagged)
+    n = dim(data)[1]
+    lagged_vars <- data.frame(matrix(NA, n, p + 2))
+    colnames(lagged_vars) <- c(id_index, date_index, paste0(vars_to_be_lagged, "_lag_", num_lags))
+    lagged_vars[,c(id_index, date_index)] <- data[,c(id_index, date_index)]
+    for (j in 3:(p+2)){
+      for (i in 1:n){
+        if (i - num_lags > 0){
+          if (data[i-num_lags,"adm"] == lagged_vars[i, "adm"]){
+            lagged_vars[i, j] <- data[i-num_lags,j]
+          }
         }
       }
     }
+    ####Fix NA values in the first num_lags ####
+    df_NA <- lagged_vars[rowSums(is.na(lagged_vars)) > 2, ]
+    
+    missing_months <- unique(as.Date(df_NA[,"date"]))
+    n_months       <- length(missing_months)
+    weather_data   <- weather_data[,c(id_index, date_index, vars_to_be_lagged)]
+    dates          <- unique(original_data$date[order((original_data$date))])
+    date_1     <- as.character(dates[1])
+    date_2     <- as.character(dates[2])
+    if(num_lags == 1){
+      #Find dates, that correspond to previous months
+      split_date <- strsplit(date_1, "-")
+      month_1    <- as.numeric(split_date[[1]][2])
+      if ((month_1-1) > 9){
+        date1_lag_1 <- paste0(split_date[[1]][1], "-", month_1-1, "-", split_date[[1]][3])
+      } else if (month_1 == 1){
+        year <- as.numeric(split_date[[1]][1])
+        date1_lag_1 <- paste0(year-1, "-", 12, "-", split_date[[1]][3])
+      } else {
+        date1_lag_1 <- paste0(split_date[[1]][1], "-0", month_1-1, "-", split_date[[1]][3])
+      }
+      # print(date_1)
+      # print(date1_lag_1)
+      # print(".")
+      #find weather data for the missing month
+      weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date1_lag_1, ]
+      
+      #merge the data
+      missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
+      missing_data <- missing_data[,c(1,2)]
+      
+      merged <- merge(missing_data, weather_month_lag1, by=c("adm"))
+      merged <- merged[, -c(3)] #drop second date
+      df_NA[as.Date(df_NA$date) == date_1,] = merged
+    } else {
+      #Find dates, that correspond to two previous months
+      split_date <- strsplit(date_2, "-")
+      month_2    <- as.numeric(split_date[[1]][2])
+      print(month_2)
+      if (month_2 == 2){
+        year <- as.numeric(split_date[[1]][1])
+        date2_lag_1 <- paste0(year-1, "-", 11, "-", split_date[[1]][3])
+        date2_lag_2 <- paste0(year-1, "-", 12, "-", split_date[[1]][3])
+      } else if (month_2 == 1){
+        year <- as.numeric(split_date[[1]][1])
+        date2_lag_1 <- paste0(year-1, "-", 10, "-", split_date[[1]][3])
+        date2_lag_2 <- paste0(year-1, "-", 11, "-", split_date[[1]][3])
+      } else {
+        if ((month_2-2) > 9){
+          date2_lag_2 <- paste0(split_date[[1]][1], "-", month_2-2, "-", split_date[[1]][3])
+        } else {
+          date2_lag_2 <- paste0(split_date[[1]][1], "-0", month_2-2, "-", split_date[[1]][3])
+        }
+        
+        if ((month_2-3) > 9){
+          date2_lag_1 <- paste0(split_date[[1]][1], "-", month_2-3, "-", split_date[[1]][3])
+        } else {
+          date2_lag_1 <- paste0(split_date[[1]][1], "-0", month_2-3, "-", split_date[[1]][3])
+        }
+      }
+     
+      # if (month_2 == 1) {
+      #   
+      # } else if ((month_2-2) > 9) {
+      #   date2_lag_2 <- paste0(split_date[[1]][1], "-", month_2-2, "-", split_date[[1]][3])
+      # } else {
+      #   date2_lag_2 <- paste0(split_date[[1]][1], "-0", month_2-2, "-", split_date[[1]][3])
+      # }
+      # 
+      # if (month_2 == 1) {
+      #   year <- as.numeric(split_date[[1]][1])
+      #   date2_lag_1 <- paste0(year-1, "-", 10, "-", split_date[[1]][3])
+      # } else if ((month_2-3) > 9) {
+      #   date2_lag_1 <- paste0(split_date[[1]][1], "-", month_2-3, "-", split_date[[1]][3])
+      # } else {
+      #   date2_lag_1 <- paste0(split_date[[1]][1], "-0", month_2-3, "-", split_date[[1]][3])
+      # }
+      
+      for (i in 1:n_months){
+        months <- missing_months[i]
+        if (months == date_1){
+          #find weather data for the missing month
+          # print(date_1)
+          # print(date2_lag_1)
+          # print(".")
+          weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date2_lag_1,]
+
+          #merge the data
+          missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
+          missing_data <- missing_data[,c(1,2)]
+          
+          merged <- merge(missing_data, weather_month_lag1, by=c("adm"))
+          merged <- merged[, -c(3)] #drop second date
+          df_NA[as.Date(df_NA$date) == date_1,] = merged
+        }
+        if (months == date_2){
+          #find weather data for the missing months
+          # print(date_2)
+          # print(date2_lag_2)
+          # print(".")
+          weather_month_lag2  <- weather_data[as.Date(weather_data$date) == date2_lag_2,]
+          
+          #merge the data
+          missing_data <- df_NA[as.Date(df_NA$date) == date_2,]
+          missing_data <- missing_data[,c(1,2)]
+          
+          merged <- merge(missing_data, weather_month_lag2, by=c("adm"))
+          merged <- merged[, -c(3)] #drop second date
+          df_NA[as.Date(df_NA$date) == date_2,] = merged
+        }
+      }
+    }
+    lagged_vars[rowSums(is.na(lagged_vars)) > 2, ] <- df_NA
+    combined_data <- merge(original_data, lagged_vars, by=c("adm","date"))
   }
   
-  
-  ####Fix NA values in the first num_lags ####
-  df_NA <- lagged_vars[rowSums(is.na(lagged_vars)) > 2, ]
-
-  missing_months <- unique(as.Date(df_NA[,"date"]))
-  n_months       <- length(missing_months)
-  weather_data   <- weather_data[,c(id_index, date_index, vars_to_be_lagged)]
-  dates          <- unique(original_data$date[order((original_data$date))])
-  date_1     <- as.character(dates[1])
-  date_2     <- as.character(dates[2])
-  if(num_lags == 1){
-    #Find dates, that correspond to previous months
-    split_date <- strsplit(date_1, "-")
-    month_1    <- as.numeric(split_date[[1]][2])
-    if ((month_1-1) > 9){
-      date1_lag_1 <- paste0(split_date[[1]][1], "-", month_1-1, "-", split_date[[1]][3])
-    } else {
-      date1_lag_1 <- paste0(split_date[[1]][1], "-0", month_1-1, "-", split_date[[1]][3])
-    }
-    print(date_1)
-    print(date1_lag_1)
-    print(".")
-    #find weather data for the missing month
-    weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date1_lag_1, ]
-    
-    #merge the data
-    missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
-    missing_data <- missing_data[,c(1,2)]
-    
-    merged <- merge(missing_data, weather_month_lag1, by=c("adm"))
-    merged <- merged[, -c(3)] #drop second date
-    df_NA[as.Date(df_NA$date) == date_1,] = merged
-  } else {
-    #Find dates, that correspond to two previous months
-    split_date <- strsplit(date_2, "-")
-    month_2    <- as.numeric(split_date[[1]][2])
-
-    if ((month_2-2) > 9){
-      date2_lag_2 <- paste0(split_date[[1]][1], "-", month_2-2, "-", split_date[[1]][3])
-    } else {
-      date2_lag_2 <- paste0(split_date[[1]][1], "-0", month_2-2, "-", split_date[[1]][3])
-    }
-    if ((month_2-3) > 9){
-      date2_lag_1 <- paste0(split_date[[1]][1], "-", month_2-3, "-", split_date[[1]][3])
-    } else {
-      date2_lag_1 <- paste0(split_date[[1]][1], "-0", month_2-3, "-", split_date[[1]][3])
-    }
-    
-    
-    
-    for (i in 1:n_months){
-      months <- missing_months[i]
-      if (months == date_1){
-        #find weather data for the missing month
-        weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date2_lag_1,]
-        print(date_1)
-        print(date2_lag_1)
-        print(".")
-        #merge the data
-        missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
-        missing_data <- missing_data[,c(1,2)]
-        
-        merged <- merge(missing_data, weather_month_lag1, by=c("adm"))
-        merged <- merged[, -c(3)] #drop second date
-        df_NA[as.Date(df_NA$date) == date_1,] = merged
-      }
-      if (months == date_2){
-        #find weather data for the missing months
-        print(date_2)
-        print(date2_lag_2)
-        print(".")
-        weather_month_lag2  <- weather_data[as.Date(weather_data$date) == date2_lag_2,]
-        
-        #merge the data
-        missing_data <- df_NA[as.Date(df_NA$date) == date_2,]
-        missing_data <- missing_data[,c(1,2)]
-        
-        merged <- merge(missing_data, weather_month_lag2, by=c("adm"))
-        merged <- merged[, -c(3)] #drop second date
-        df_NA[as.Date(df_NA$date) == date_2,] = merged
-      }
-    }
-  }
-  
-  lagged_vars[rowSums(is.na(lagged_vars)) > 2, ] <- df_NA
-  combined_data <- merge(original_data, lagged_vars, by=c("adm","date"))
- 
   return(combined_data)
 }
 

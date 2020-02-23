@@ -1,12 +1,12 @@
 main <- function(df, cutoff = 0.1){
   cutoff = 0.1
   # DO outside function and add them as input parameters
-  weather <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
-  ovitrap_cleaned <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
-  ovitrap_original <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
-  # weather <- read.delim("new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
-  # ovitrap_cleaned <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
-  # ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+  # weather <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
+  # ovitrap_cleaned <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
+  # ovitrap_original <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+  weather <- read.delim("new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
+  ovitrap_cleaned <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
+  ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
 
   set.seed(510)
   
@@ -19,10 +19,15 @@ main <- function(df, cutoff = 0.1){
   full_data_imputed <- imputations(5, 5, full_data_NA)
   full_data_imputed <- full_data_imputed[order(full_data_imputed$date), ]
   
-  # (3) Split full data set in a training, validation and test set --> In order????????
-  # Months are not taken correctly into account yet --> Anna does it in her code! --> use it!
-  split_sets <- split_train_test(df = full_data_imputed, train = 0.8, validate = 0.1, chronologically = TRUE, 
-                                 remove_NA = TRUE, remove_adm_date = F) # remove_adm_date = F --> do not remove them --> needed in bootstrap 
+  #DO: change this such that imputations function returns FULL weather data file (with 6794 observation)
+  n_vars <- dim(full_data_imputed)[2]
+  weather_data_imputed <- full_data_imputed[, 1:(n_vars-2)]
+  weather_data_imputed <- weather_data_imputed[, !(names(weather_data_imputed) == "value")]
+  
+  # (3) Split full data set in a training, validation and test set --> In chronological order
+  split_sets <- split_train_test(df = full_data_imputed, train = 0.85, validate = 0.1, chronologically = TRUE, 
+                                 remove_NA = TRUE, remove_adm_date = F) 
+  # remove_adm_date = F --> do not remove administation and date since they are needed in bootstrap 
  
   training_set   <- split_sets$train
   validation_set <- split_sets$valid
@@ -42,39 +47,40 @@ main <- function(df, cutoff = 0.1){
   
   # (6) Add value lags to the validation and test sets 
   # ANNAAAAAA --> Not ready yet!!! 
-  training_set_lag1 <- make_lags(data = training_set, weather_data = weather, id_index = "adm", date_index = "date",
+  weather_data_imputed <- weather #DO: change output 
+  training_set_lag1 <- make_lags(data = training_set, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
                                   num_lags = 1)
-  training_set_lagged <- make_lags(data = training_set_lag1, weather_data = weather, id_index = "adm", date_index = "date",
+  training_set_lagged <- make_lags(data = training_set_lag1, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
                                   num_lags = 2)
   
-  valid_lag1 <- make_lags(data = validation_set, weather_data = weather, id_index = "adm", date_index = "date",
+  valid_lag1 <- make_lags(data = validation_set, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
                           num_lags = 1)
-  valid_lagged <- make_lags(data = valid_lag1, weather_data = weather, id_index = "adm", date_index = "date",
+  valid_lagged <- make_lags(data = valid_lag1, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
                           num_lags = 2)
 
-  test_lag1 <- make_lags(data = test_set, weather_data = weather, id_index = "adm", date_index = "date",
+  test_lag1 <- make_lags(data = test_set, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
                           num_lags = 1)
-  test_lagged <- make_lags(data = test_lag1, weather_data = weather, id_index = "adm", date_index = "date",
+  test_lagged <- make_lags(data = test_lag1, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
                           num_lags = 2)
   
   # (7) Add indicators to the validation and test sets 
   training_final <- add_value_indicator(training_set_lagged, cutoff = cutoff)
-  valid_final  <- add_value_indicator(valid_lagged, cutoff = cutoff) 
-  test_final   <- add_value_indicator(test_lagged, cutoff = cutoff)
+  valid_final    <- add_value_indicator(valid_lagged, cutoff = cutoff) 
+  test_final     <- add_value_indicator(test_lagged, cutoff = cutoff)
   
   #(8) Call first stage
   output <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
                         training_set = training_final, number_of_bootstraps = 2,          # BEFORE training_set_lagged WAS HERE :(
                         threshold_presentation = cutoff, 
-                        threshold_selection = 0.5, log_transf = FALSE, weather = weather) 
-  
+                        threshold_selection = 0.5, log_transf = FALSE, weather = weather_data_imputed) 
   # THIS IS ONLY HERE FOR CHECKING WHETHER THE CODE RUNS CORRECTLY
   training_set_na = training_set_na
   validation_set = valid_final
   training_set = training_final
-  number_of_bootstraps = 20
+  number_of_bootstraps = 2
   threshold_presentation = cutoff
   threshold_selection = 0.5
+  weather = weather_data_imputed
   log_transf = FALSE
 }
 
@@ -104,14 +110,15 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
   names_covariates     <- colnames(only_covariates)
   
   # (3) Estimate a model for each complete sample, apply variable selection and return list of 'final variables'
-  final_covariates <- estimation_and_selection_process(number_of_bootstraps = number_of_bootstraps, 
-                                                       threshold_selection = threshold_selection, 
-                                                       number_of_covariates = number_of_covariates, 
-                                                       names_covariates = names_covariates, 
+  final_covariates <- estimation_and_selection_process(number_of_bootstraps = number_of_bootstraps,
+                                                       threshold_selection = threshold_selection,
+                                                       number_of_covariates = number_of_covariates,
+                                                       names_covariates = names_covariates,
                                                        complete_samples = complete_samples,
                                                        model_type = "logit")
   
   # (4) Estimate the model with imputed training set from stage 0
+
   logitMod     <- glm(value_indicator ~ . , data = training_set[, c(final_covariates, "value_indicator")], 
                       family=binomial(link='logit'))
   
@@ -123,7 +130,7 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
   threshold <- threshold_bootstrap(train = training_set, valid = validation_set,
                                    model = logitMod)
   #determine threshold2 same as threshold1
-  threshold <- cutoff
+  #threshold <- cutoff
   
   #WORK IN PROGRESS: evaluate threshold
   predicted_index <- ifelse(predicted_probability >= threshold, 1, 0)
@@ -246,7 +253,6 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
   
   for (r in 1:number_of_bootstraps) {
    
-    # r = 1
     bootstrap_sample <- bootstrap_samples[[r]]
     
     # (1) Impute ovitrap data based on the incomplete weather data (KNN)
@@ -255,9 +261,12 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
     
     # (3) Add lagged values to the complete data set
     imputed_data_lag1   <- make_lags(data = imputed_data, weather_data = weather, id_index = "adm", date_index = "date",
-                            num_lags = 1)
+                            num_lags = 1, imputation = TRUE)
+    
     imputed_data_lagged <- make_lags(data = imputed_data_lag1, weather_data = weather, id_index = "adm", date_index = "date",
-                            num_lags = 2)
+                            num_lags = 2, imputation = TRUE)
+    
+    
     
     # (4) Add indicators to the validation and test sets 
     # imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation) # ADD THIS ONE AGAIN IN CASE OF RUNNING TWO LAGS --> and remove the sentence below!
@@ -289,8 +298,7 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
     complete_sample <- complete_samples[[r]]
     # (1) Estimate a model for the rth sample in complete_samples + 
     # (2) Apply variable selection on the rth estimated model 
-    #TODO: remove administration and date columns
-    
+    #DO: remove administration and date columns
     if (model_type == "logit") {
       selected_model <- stage1_logit(df = complete_sample, model = "logit", include_two_way_interactions = FALSE,
                                        direction_search = "backward")
