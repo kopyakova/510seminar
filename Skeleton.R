@@ -25,7 +25,7 @@ main <- function(df, cutoff = 0.1){
   weather_data_imputed <- weather_data_imputed[, !(names(weather_data_imputed) == "value")]
   
   # (3) Split full data set in a training, validation and test set --> In chronological order
-  split_sets <- split_train_test(df = full_data_imputed, train = 0.8, validate = 0.1, chronologically = TRUE, 
+  split_sets <- split_train_test(df = full_data_imputed, train = 0.85, validate = 0.1, chronologically = TRUE, 
                                  remove_NA = TRUE, remove_adm_date = F) 
   # remove_adm_date = F --> do not remove administation and date since they are needed in bootstrap 
  
@@ -71,7 +71,6 @@ main <- function(df, cutoff = 0.1){
                         training_set = training_final, number_of_bootstraps = 2, 
                         threshold_presentation = cutoff, 
                         threshold_selection = 0.5, log_transf = FALSE, weather = weather_data_imputed) 
-  
   # THIS IS ONLY HERE FOR CHECKING WHETHER THE CODE RUNS CORRECTLY
   training_set_na = training_set_na
   validation_set = valid_final

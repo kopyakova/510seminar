@@ -427,6 +427,9 @@ make_lags <- function(data, weather_data, id_index = "adm", date_index = "date",
       month_1    <- as.numeric(split_date[[1]][2])
       if ((month_1-1) > 9){
         date1_lag_1 <- paste0(split_date[[1]][1], "-", month_1-1, "-", split_date[[1]][3])
+      } else if (month_1 == 1){
+        year <- as.numeric(split_date[[1]][1])
+        date1_lag_1 <- paste0(year-1, "-", 12, "-", split_date[[1]][3])
       } else {
         date1_lag_1 <- paste0(split_date[[1]][1], "-0", month_1-1, "-", split_date[[1]][3])
       }
@@ -447,26 +450,55 @@ make_lags <- function(data, weather_data, id_index = "adm", date_index = "date",
       #Find dates, that correspond to two previous months
       split_date <- strsplit(date_2, "-")
       month_2    <- as.numeric(split_date[[1]][2])
-      
-      if ((month_2-2) > 9){
-        date2_lag_2 <- paste0(split_date[[1]][1], "-", month_2-2, "-", split_date[[1]][3])
+      print(month_2)
+      if (month_2 == 2){
+        year <- as.numeric(split_date[[1]][1])
+        date2_lag_1 <- paste0(year-1, "-", 11, "-", split_date[[1]][3])
+        date2_lag_2 <- paste0(year-1, "-", 12, "-", split_date[[1]][3])
+      } else if (month_2 == 1){
+        year <- as.numeric(split_date[[1]][1])
+        date2_lag_1 <- paste0(year-1, "-", 10, "-", split_date[[1]][3])
+        date2_lag_2 <- paste0(year-1, "-", 11, "-", split_date[[1]][3])
       } else {
-        date2_lag_2 <- paste0(split_date[[1]][1], "-0", month_2-2, "-", split_date[[1]][3])
+        if ((month_2-2) > 9){
+          date2_lag_2 <- paste0(split_date[[1]][1], "-", month_2-2, "-", split_date[[1]][3])
+        } else {
+          date2_lag_2 <- paste0(split_date[[1]][1], "-0", month_2-2, "-", split_date[[1]][3])
+        }
+        
+        if ((month_2-3) > 9){
+          date2_lag_1 <- paste0(split_date[[1]][1], "-", month_2-3, "-", split_date[[1]][3])
+        } else {
+          date2_lag_1 <- paste0(split_date[[1]][1], "-0", month_2-3, "-", split_date[[1]][3])
+        }
       }
-      if ((month_2-3) > 9){
-        date2_lag_1 <- paste0(split_date[[1]][1], "-", month_2-3, "-", split_date[[1]][3])
-      } else {
-        date2_lag_1 <- paste0(split_date[[1]][1], "-0", month_2-3, "-", split_date[[1]][3])
-      }
+     
+      # if (month_2 == 1) {
+      #   
+      # } else if ((month_2-2) > 9) {
+      #   date2_lag_2 <- paste0(split_date[[1]][1], "-", month_2-2, "-", split_date[[1]][3])
+      # } else {
+      #   date2_lag_2 <- paste0(split_date[[1]][1], "-0", month_2-2, "-", split_date[[1]][3])
+      # }
+      # 
+      # if (month_2 == 1) {
+      #   year <- as.numeric(split_date[[1]][1])
+      #   date2_lag_1 <- paste0(year-1, "-", 10, "-", split_date[[1]][3])
+      # } else if ((month_2-3) > 9) {
+      #   date2_lag_1 <- paste0(split_date[[1]][1], "-", month_2-3, "-", split_date[[1]][3])
+      # } else {
+      #   date2_lag_1 <- paste0(split_date[[1]][1], "-0", month_2-3, "-", split_date[[1]][3])
+      # }
       
       for (i in 1:n_months){
         months <- missing_months[i]
         if (months == date_1){
           #find weather data for the missing month
-          weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date2_lag_1,]
           # print(date_1)
           # print(date2_lag_1)
           # print(".")
+          weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date2_lag_1,]
+
           #merge the data
           missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
           missing_data <- missing_data[,c(1,2)]
@@ -477,9 +509,9 @@ make_lags <- function(data, weather_data, id_index = "adm", date_index = "date",
         }
         if (months == date_2){
           #find weather data for the missing months
-          print(date_2)
-          print(date2_lag_2)
-          print(".")
+          # print(date_2)
+          # print(date2_lag_2)
+          # print(".")
           weather_month_lag2  <- weather_data[as.Date(weather_data$date) == date2_lag_2,]
           
           #merge the data
