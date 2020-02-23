@@ -457,10 +457,10 @@ stage2_regression <- function(df, model = "linear_regression", include_two_way_i
     if (any(value==1)|any(value==0)){
       y.transf.betareg <- function(y){
         n.obs <- sum(!is.na(y))
-        (y * (n.obs - 1) + 0.5) / n.obs
+        value <- (y * (n.obs - 1) + 0.5) / n.obs
       }
     }
-    betaMod <- betaselect(y.transf.betareg(value), df, criterion="AIC", method= direction_search)
+    betaMod <- betaselect(value, df, criterion="AIC", method= direction_search)
     #look into link function
     selected_model <- betaMod
   }
