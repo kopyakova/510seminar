@@ -17,7 +17,7 @@ imputations <- function(K, M, completedata, weather) { # I used the standard set
   result <- merge(ovitrap_imputed[,1:3], imputed_weather, by = c("adm", "date"))
   result$value <- as.numeric(as.character(result$value))
   
-  output <- list(result, imputed_weather)
+  output <- list("completedata" = result, "imputed_weather" = imputed_weather)
   
   return(result)
 }
