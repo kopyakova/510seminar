@@ -88,7 +88,7 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
 
   set.seed(510)
 
-  # (1) Apple bootstrap on the training set
+  # (1) Apply bootstrap on the training set
   bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps, 
                                          training_set = training_set_na)
   
@@ -186,7 +186,6 @@ second_stage <- function(number_of_bootstrap = 100, provinces_on_risk, threshold
   only_covariates <- temp[ , !(names(temp) == "value_indicator")]
   number_of_covariates <- ncol(only_covariates) 
   names_covariates     <- colnames(only_covariates)
-  
   
   final_covariates <- estimation_and_selection_process(number_of_bootstraps = number_of_bootstraps, 
                                                        threshold_selection = threshold_selection, 
@@ -449,6 +448,24 @@ stage2_regression <- function(df, model = "linear_regression", include_two_way_i
     }
     
     selected_model <- selectedLsMod
+  }
+  else if (model == "beta_regression"){
+    # are values already [0, 1] scale or [0, 100]?
+    value <- value/100
+    
+    # Transform according to Smithson and Verkuilen 2006, if 0 and 1.
+    if (any(value==1)|any(value==0)){
+      y.transf.betareg <- function(y){
+        n.obs <- sum(!is.na(y))
+        (y * (n.obs - 1) + 0.5) / n.obs
+      }
+    }
+    betaMod <- betaselect(y.transf.betareg(value), df, criterion="AIC", method= direction_search)
+    #look into link function
+    selected_model <- betaMod
+  }
+  else if (model == "XGBoost"){
+    predictions <- XG_fit(df, 0.8, 5, 0.1, 40)
   }
   
   return(selected_model)
