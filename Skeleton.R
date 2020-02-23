@@ -35,7 +35,8 @@ main <- function(df, cutoff = 0.1){
   # df_imputed[is.na(df_original_training)] = NA ONLY TRAINING
   training_set_na <- training_set
   rows            <- nrow(training_set_na)
-  subsss          <- full_data_NA[1:rows, ]
+  full_data_NA_2  <- full_data_NA[order(full_data_NA$date), ] # We totally FORGOT to oder the full_data_NA as well!
+  subsss          <- full_data_NA_2[1:rows, ]
   indices         <- is.na(subsss)
   training_set_na[indices] <- NA # CAN GIVE ERROR DUE TO EXTRA COLUMN X THAT IS CREATED
   
@@ -55,6 +56,7 @@ main <- function(df, cutoff = 0.1){
                           num_lags = 1)
   test_lagged <- make_lags(data = test_lag1, weather_data = weather, id_index = "adm", date_index = "date",
                           num_lags = 2)
+  
   # (7) Add indicators to the validation and test sets 
   training_final <- add_value_indicator(training_set_lagged, cutoff = cutoff)
   valid_final  <- add_value_indicator(valid_lagged, cutoff = cutoff) 
@@ -62,7 +64,7 @@ main <- function(df, cutoff = 0.1){
   
   #(8) Call first stage
   output <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
-                        training_set = training_set_lagged, number_of_bootstraps = 2, 
+                        training_set = training_final, number_of_bootstraps = 2,          # BEFORE training_set_lagged WAS HERE :(
                         threshold_presentation = cutoff, 
                         threshold_selection = 0.5, log_transf = FALSE, weather = weather) 
   
@@ -334,6 +336,7 @@ fulldata <- function(weather, ovitrap_cleaned, ovitrap_original) {
     
     province_month <- cbind(months, current_province)
     full_months <- rbind(full_months, province_month)
+    # print(rbind(full_months, province_month))
   }
   
   full_months <- full_months[-1,]
