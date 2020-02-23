@@ -257,12 +257,12 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
     # (3) Add lagged values to the complete data set
     imputed_data_lag1   <- make_lags(data = imputed_data, weather_data = weather, id_index = "adm", date_index = "date",
                             num_lags = 1)
-    # imputed_data_lagged <- make_lags(data = imputed_data_lag1, weather_data = weather, id_index = "adm", date_index = "date",
-    #                         num_lags = 2)
+    imputed_data_lagged <- make_lags(data = imputed_data_lag1, weather_data = weather, id_index = "adm", date_index = "date",
+                            num_lags = 2)
     
     # (4) Add indicators to the validation and test sets 
     # imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation) # ADD THIS ONE AGAIN IN CASE OF RUNNING TWO LAGS --> and remove the sentence below!
-    imputed_final <- add_value_indicator(imputed_data_lag1, cutoff = threshold_presentation)
+    imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation)
     
     # (5) Standardise the explanatory space
     standardized_data <- scale_variables(imputed_final, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
