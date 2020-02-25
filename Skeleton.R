@@ -8,6 +8,7 @@ main <- function(df, cutoff = 0.1){
   # ovitrap_cleaned <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
   # ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
   
+  # Index column created by merging is dropped 
   weather <- weather[,!(names(weather) == "perc")]
   weather <- weather[,!(names(weather) == "X")]
 
@@ -15,85 +16,66 @@ main <- function(df, cutoff = 0.1){
   
   # (1) Initial full data set with NA values - df
   full_data_NA <- fulldata(weather, ovitrap_cleaned, ovitrap_original)
-  # Index column created by merging is dropped
-  # full_data_NA <- full_data_NA[,!(names(full_data_NA) == "X")]
-  # full_data_NA <- full_data_NA[,!(names(full_data_NA) == "perc")]
+
   # (2) Impute total df
   imputed_data <- imputations(5, 5, full_data_NA, weather)
   full_data_imputed <- imputed_data$completedata
   full_data_imputed <- full_data_imputed[order(full_data_imputed$date), ]
   
-  #DO: change this such that imputations function returns FULL weather data file (with 6794 observation)
+  # (3) Get full imputed weather data
   n_vars <- dim(weather)[2]
   weather_data_imputed <- imputed_data$imputed_weather
-  weather_data_imputed <- weather_data_imputed[, 1:(n_vars-2)]
-  # weather_data_imputed <- weather_data_imputed[, !(names(weather_data_imputed) == "value")]
-  # weather_data_imputed <- weather_data_imputed[, !(names(weather_data_imputed) == "X")]
+  weather_data_imputed <- weather_data_imputed[, 1:(n_vars-2)] #skip long and lat
+
+  # (4) Add value lags to the validation and test sets 
+  df_lag1    <- make_lags(data = full_data_imputed, weather_data = weather_data_imputed, 
+                       id_index = "adm", date_index = "date", num_lags = 1)
+  df_lagged  <- make_lags(data = df_lag1, weather_data = weather_data_imputed, 
+                          id_index = "adm", date_index = "date", num_lags = 2)
+  # (5) Add indicators to the validation and test sets 
+  df_lagged_ind <- add_value_indicator(df_lagged, cutoff = cutoff)
   
-  # (3) Split full data set in a training, validation and test set --> In chronological order
-  split_sets <- split_train_test(df = full_data_imputed, train = 0.85, validate = 0.05, chronologically = TRUE, 
+  # (6) Split full data set in a training, validation and test set --> In chronological order
+  split_sets <- split_train_test(df = df_lagged_ind, train = 0.8, validate = NA, chronologically = TRUE, 
                                  remove_NA = TRUE, remove_adm_date = F) 
   # remove_adm_date = F --> do not remove administation and date since they are needed in bootstrap 
- 
-  training_set   <- split_sets$train
-  validation_set <- split_sets$valid
-  test_set       <- split_sets$test
-  # training_set <- full_data_imputed[(1:(0.8*nrow(full_data_imputed))), ] # 80%
-  # validation_set <- full_data_imputed[(0.8*nrow(full_data_imputed)+1):(0.9*nrow(full_data_imputed)), ] # 10%
-  # test_set <- full_data_imputed[((0.9*nrow(full_data_imputed)+1):nrow(full_data_imputed)), ]# # 10%
+  training_final <- split_sets$train
+  test_final     <- split_sets$test
+  #validation_set <- split_sets$valid
   
-  # (4) Set the imputed values in training set to NA - find a match base of date and adm
+  # (7) Set the imputed values in training set to NA - find a match base of date and adm
   # df_imputed[is.na(df_original_training)] = NA ONLY TRAINING
-  training_set_na <- training_set
+  training_set_na <- training_set[,1:ncol(full_data_imputed)] # drop lags and inicator
   rows            <- nrow(training_set_na)
   full_data_NA_2  <- full_data_NA[order(full_data_NA$date), ] # We totally FORGOT to oder the full_data_NA as well!
   subsss          <- full_data_NA_2[1:rows, ]
   indices         <- is.na(subsss)
   training_set_na[indices] <- NA # CAN GIVE ERROR DUE TO EXTRA COLUMN X THAT IS CREATED
   
-  # (6) Add value lags to the validation and test sets 
-  # ANNAAAAAA --> Not ready yet!!! 
-  # weather_data_imputed <- imputed_data$imputed_weather[,-((ncol(imputed_data$imputed_weather)-1):ncol(imputed_data$imputed_weather))] #DO: change output 
-  training_set_lag1 <- make_lags(data = training_set, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
-                                  num_lags = 1)
-  training_set_lagged <- make_lags(data = training_set_lag1, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
-                                  num_lags = 2)
   
-  valid_lag1 <- make_lags(data = validation_set, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
-                          num_lags = 1)
-  valid_lagged <- make_lags(data = valid_lag1, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
-                          num_lags = 2)
-
-  test_lag1 <- make_lags(data = test_set, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
-                          num_lags = 1)
-  test_lagged <- make_lags(data = test_lag1, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
-                          num_lags = 2)
-  
-  # (7) Add indicators to the validation and test sets 
-  training_final <- add_value_indicator(training_set_lagged, cutoff = cutoff)
-  valid_final    <- add_value_indicator(valid_lagged, cutoff = cutoff) 
-  test_final     <- add_value_indicator(test_lagged, cutoff = cutoff)
-  
-  #(8) Call first stage
-  output   <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
+  # (8) Call first stage
+  output   <- first_stage(training_set_na = training_set_na, validation_set = NA, 
                         training_set = training_final, number_of_bootstraps = 100,          # BEFORE training_set_lagged WAS HERE :(
-                        threshold_presentation = cutoff, 
-                        threshold_selection = 0.5, log_transf = FALSE, weather = weather_data_imputed, test_set = test_final) 
+                        threshold_presentation = cutoff, threshold_selection = 0.5, 
+                        log_transf = FALSE, weather = weather_data_imputed, test_set = test_final) 
   
-  output_2 <- second_stage(number_of_bootstraps = 100, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na = training_set_na, 
+  
+  output_2 <- second_stage(number_of_bootstraps = 100, threshold_presentation = 0.1,
+                           threshold_selection = 0.5, training_set_na = training_set_na, 
                            training_set = training_final, test_set = test_final, 
-                           weather = weather, model_type = "linear_regression")
+                           weather = weather_data_imputed, model_type = "linear_regression")
   
   # THIS IS ONLY HERE FOR CHECKING WHETHER THE CODE RUNS CORRECTLY
-  training_set_na = training_set_na
-  validation_set = valid_final
-  training_set = training_final
-  test_set = test_final
-  number_of_bootstraps = 20
-  threshold_presentation = cutoff
-  threshold_selection = 0.5
-  weather = weather_data_imputed
-  log_transf = FALSE
+  # training_set_na = training_set_na
+  # validation_set = NA
+  # training_set = training_final
+  # test_set = test_final
+  # number_of_bootstraps = 20
+  # threshold_presentation = cutoff
+  # threshold_selection = 0.5
+  # weather = weather_data_imputed
+  # log_transf = FALSE
+  # model_type = "linear_regression"
 }
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -116,10 +98,15 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
                                        bootstrap_samples = bootstrap_samples, log_transf = log_transf, 
                                        weather = weather)
   
-  temp <- complete_samples[[1]][,-c(1,2,3, ncol(complete_samples[[1]]))]  #DO maybe fix it 
-  only_covariates <- temp[ ,!(names(temp) == "value_indicator")]
-  number_of_covariates <- ncol(only_covariates) 
-  names_covariates     <- colnames(only_covariates)
+  temp <- complete_samples[[1]]#[,-c(1,2,3, ncol(complete_samples[[1]]))]  #DO maybe fix it 
+  temp <- temp[ ,!(names(temp) == "adm")]
+  temp <- temp[ ,!(names(temp) == "date")]
+  temp <- temp[ ,!(names(temp) == "value")]
+  temp <- temp[ ,!(names(temp) == "value_indicator")]
+  only_covariates <- colnames(temp)
+  
+  number_of_covariates <- length(only_covariates) 
+  names_covariates     <- only_covariates
   
   # (3) Estimate a model for each complete sample, apply variable selection and return list of 'final variables'
   final_covariates <- estimation_and_selection_process(number_of_bootstraps = number_of_bootstraps,
@@ -128,16 +115,19 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
                                                        names_covariates = names_covariates,
                                                        complete_samples = complete_samples,
                                                        model_type = "logit")
-  
-  standardized_data_training_set <- scale_variables(training_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+  standardized_data_training_set <- training_set
+  #standardized_data_training_set <- scale_variables(training_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
   
   # (4) Estimate the model with imputed training set from stage 0
   logitMod <- glm(value_indicator ~ . , data = standardized_data_training_set[, c(final_covariates, "value_indicator")], 
                   family = binomial(link = 'logit'))
+  predictions_logitMod_train <- predict(logitMod, newdata = standardized_data_training_set[, c(final_covariates, "value_indicator")], type = "response")
   
-  standardized_data_test_set <- scale_variables(test_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
   
-  predictions_logitMod <- predict(logitMod, newdata = standardized_data_test_set[, c(final_covariates, "value_indicator")], type = "response")
+  standardized_data_test_set <- test_set
+  #standardized_data_test_set <- scale_variables(test_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+  
+  predictions_logitMod_test <- predict(logitMod, newdata = standardized_data_test_set[, c(final_covariates, "value_indicator")], type = "response")
   
   # ------------------------------------------------------------------------------------------------------------
   
@@ -192,7 +182,7 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
   #   - Shrink data set by removing test_set part
   #   - Return this one for input in Second_Stage --> training_set_na
   
-  return(list("predictions" = predictions_logitMod, "final_logit" = logitMod, "final_covariates" = final_covariates))
+  return(list("predictions_train" = predictions_logitMod_train, "predictions_test" = predictions_logitMod_test, "final_logit" = logitMod, "final_covariates" = final_covariates))
 }
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -200,7 +190,7 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
 # SECOND STAGE 
 second_stage <- function(number_of_bootstraps = 20, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na, training_set, test_set, 
                          weather, model_type = "linear_regression") { 
-  
+  set.seed(510)
   # (1) Select the 'sub-sample' from the training_set (with NA's) corresponding to those provinces which are on risk
   # Already done in previous First Stage
   # training_set_na <- training_set_na[as.character(training_set_na$adm) == provinces_on_risk, ]
@@ -209,16 +199,23 @@ second_stage <- function(number_of_bootstraps = 20, threshold_presentation = 0.1
   
   bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps, training_set = training_set_na)
   
-  complete_samples <- complete_samples(number_of_bootstraps = number_of_bootstraps, threshold_presentation = threshold_presentation, 
-                                       bootstrap_samples = bootstrap_samples, log_transf = F, weather = weather)
+  complete_samples <- complete_samples(number_of_bootstraps = number_of_bootstraps, 
+                                       threshold_presentation = threshold_presentation, 
+                                       bootstrap_samples = bootstrap_samples, log_transf = F, 
+                                       weather = weather)
   
-  # number_of_covariates <- ncol((complete_samples[[1]])[, -c(1,2,ncol(complete_samples[[1]]))]) 
-  # names_covariates     <- colnames(complete_samples[[1]])[-c(1,2,ncol(complete_samples[[1]]))] 
-  temp <- complete_samples[[1]][ , -c(1,2,3, ncol(complete_samples[[1]]))]  #DO maybe fix it 
-  only_covariates <- temp[ , !(names(temp) == "value_indicator")]
-  number_of_covariates <- ncol(only_covariates) 
-  names_covariates     <- colnames(only_covariates)
+  # (3) Get information about covariates
+  temp <- complete_samples[[1]]#[,-c(1,2,3, ncol(complete_samples[[1]]))]  #DO maybe fix it 
+  temp <- temp[ ,!(names(temp) == "adm")]
+  temp <- temp[ ,!(names(temp) == "date")]
+  temp <- temp[ ,!(names(temp) == "value")]
+  temp <- temp[ ,!(names(temp) == "value_indicator")]
+  only_covariates <- colnames(temp)
   
+  number_of_covariates <- length(only_covariates) 
+  names_covariates     <- only_covariates
+  
+  # (4) Final model
   final_covariates <- estimation_and_selection_process(number_of_bootstraps = number_of_bootstraps, 
                                                        threshold_selection = threshold_selection, 
                                                        number_of_covariates = number_of_covariates, 
@@ -226,17 +223,27 @@ second_stage <- function(number_of_bootstraps = 20, threshold_presentation = 0.1
                                                        complete_samples = complete_samples,
                                                        model_type = model_type)
   
-  standardized_data_training_set <- scale_variables(training_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
   
-  # (3) Return the final model
-  final_model <- lm(value ~ ., data = standardized_data_training_set[, c(final_covariates, "value")]) 
-  #klopt het dat we hier alleen maar lm doen + klopt het dat final covariates de value niet include?
+  #standardized_data_training_set <- scale_variables(training_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+  standardized_data_training_set <- training_set
+  #standardized_data_test_set <- scale_variables(test_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+  standardized_data_test_set <- test_set
   
-  standardized_data_test_set <- scale_variables(test_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+  # write.csv(x = standardized_data_training_set, file = "training_set.csv")
+  # write.csv(x = standardized_data_test_set, file = "test_set.csv")
+  # 
+  # (5) Return the final model
+  if (model_type == "linear_regression"){
+    final_model <- lm(value ~ ., data = standardized_data_training_set[, c(final_covariates, "value")]) 
+    predictions_final_train <- predict(final_model, newdata = standardized_data_training_set[, c(final_covariates, "value")])
+    predictions_final_test <- predict(final_model, newdata = standardized_data_test_set[, c(final_covariates, "value")])
+    
+  } else {
+    
+  }
+  #klopt het dat we hier alleen maar lm doen. no + klopt het dat final covariates de value niet include? yes
   
-  predictions_final_model <- predict(final_model, newdata = standardized_data_test_set[, c(final_covariates, "value")])
-  
-  return(list("predictions" = predictions_final_model, "final_lm" = final_model, "final_covariates" = final_covariates))
+  return(list("predictions_test" = predictions_final_test, "predictions_train" = predictions_final_train, "final_lm" = final_model, "final_covariates" = final_covariates))
 }
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -303,8 +310,8 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
     imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation)
     
     # (5) Standardise the explanatory space
-    standardized_data <- scale_variables(imputed_final, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
-    
+    #standardized_data <- scale_variables(imputed_final, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+    standardized_data <- imputed_final
     complete_sample   <- standardized_data
     
     complete_samples[[r]] <- complete_sample

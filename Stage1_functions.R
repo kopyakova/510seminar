@@ -299,7 +299,6 @@ split_train_test <- function(df, train = 0.8, validate = NA, chronologically = T
       valid[,c("adm","date")] <- list(NULL)
       test[,c("adm","date")] <- list(NULL)
     }
-    
     return_list$train <- train
     return_list$valid <- valid
     return_list$test  <- test
@@ -450,7 +449,6 @@ make_lags <- function(data, weather_data, id_index = "adm", date_index = "date",
       #Find dates, that correspond to two previous months
       split_date <- strsplit(date_2, "-")
       month_2    <- as.numeric(split_date[[1]][2])
-      print(month_2)
       if (month_2 == 2){
         year <- as.numeric(split_date[[1]][1])
         date2_lag_1 <- paste0(year-1, "-", 11, "-", split_date[[1]][3])
