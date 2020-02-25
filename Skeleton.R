@@ -31,7 +31,7 @@ main <- function(df, cutoff = 0.1){
   # weather_data_imputed <- weather_data_imputed[, !(names(weather_data_imputed) == "X")]
   
   # (3) Split full data set in a training, validation and test set --> In chronological order
-  split_sets <- split_train_test(df = full_data_imputed, train = 0.85, validate = 0.1, chronologically = TRUE, 
+  split_sets <- split_train_test(df = full_data_imputed, train = 0.85, validate = 0.05, chronologically = TRUE, 
                                  remove_NA = TRUE, remove_adm_date = F) 
   # remove_adm_date = F --> do not remove administation and date since they are needed in bootstrap 
  
@@ -76,11 +76,11 @@ main <- function(df, cutoff = 0.1){
   
   #(8) Call first stage
   output   <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
-                        training_set = training_final, number_of_bootstraps = 20,          # BEFORE training_set_lagged WAS HERE :(
+                        training_set = training_final, number_of_bootstraps = 100,          # BEFORE training_set_lagged WAS HERE :(
                         threshold_presentation = cutoff, 
                         threshold_selection = 0.5, log_transf = FALSE, weather = weather_data_imputed, test_set = test_final) 
   
-  output_2 <- second_stage(number_of_bootstrap = 20, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na = training_set_na, 
+  output_2 <- second_stage(number_of_bootstraps = 100, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na = training_set_na, 
                            training_set = training_final, test_set = test_final, 
                            weather = weather, model_type = "linear_regression")
   
@@ -198,7 +198,7 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # SECOND STAGE 
-second_stage <- function(number_of_bootstrap = 20, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na, training_set, test_set, 
+second_stage <- function(number_of_bootstraps = 20, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na, training_set, test_set, 
                          weather, model_type = "linear_regression") { 
   
   # (1) Select the 'sub-sample' from the training_set (with NA's) corresponding to those provinces which are on risk
@@ -209,7 +209,7 @@ second_stage <- function(number_of_bootstrap = 20, threshold_presentation = 0.1,
   
   bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps, training_set = training_set_na)
   
-  complete_samples <- complete_samples(number_of_bootstraps = number_of_bootstrap, threshold_presentation = threshold_presentation, 
+  complete_samples <- complete_samples(number_of_bootstraps = number_of_bootstraps, threshold_presentation = threshold_presentation, 
                                        bootstrap_samples = bootstrap_samples, log_transf = F, weather = weather)
   
   # number_of_covariates <- ncol((complete_samples[[1]])[, -c(1,2,ncol(complete_samples[[1]]))]) 
