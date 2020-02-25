@@ -1,28 +1,34 @@
 main <- function(df, cutoff = 0.1){
   cutoff = 0.1
   # DO outside function and add them as input parameters
-  # weather <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
-  # ovitrap_cleaned <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
-  # ovitrap_original <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
-  weather <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
-  ovitrap_cleaned <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
-  ovitrap_original <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+  weather <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
+  ovitrap_cleaned <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
+  ovitrap_original <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+  # weather <- read.delim("new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
+  # ovitrap_cleaned <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
+  # ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+  
+  weather <- weather[,!(names(weather) == "perc")]
+  weather <- weather[,!(names(weather) == "X")]
 
   set.seed(510)
   
   # (1) Initial full data set with NA values - df
   full_data_NA <- fulldata(weather, ovitrap_cleaned, ovitrap_original)
   # Index column created by merging is dropped
-  full_data_NA <- full_data_NA[,!(names(full_data_NA) == "X")]
-  full_data_NA <- full_data_NA[,!(names(full_data_NA) == "perc")]
+  # full_data_NA <- full_data_NA[,!(names(full_data_NA) == "X")]
+  # full_data_NA <- full_data_NA[,!(names(full_data_NA) == "perc")]
   # (2) Impute total df
-  full_data_imputed <- imputations(5, 5, full_data_NA)
+  imputed_data <- imputations(5, 5, full_data_NA, weather)
+  full_data_imputed <- imputed_data$completedata
   full_data_imputed <- full_data_imputed[order(full_data_imputed$date), ]
   
   #DO: change this such that imputations function returns FULL weather data file (with 6794 observation)
-  n_vars <- dim(full_data_imputed)[2]
-  weather_data_imputed <- full_data_imputed[, 1:(n_vars-2)]
-  weather_data_imputed <- weather_data_imputed[, !(names(weather_data_imputed) == "value")]
+  n_vars <- dim(weather)[2]
+  weather_data_imputed <- imputed_data$imputed_weather
+  weather_data_imputed <- weather_data_imputed[, 1:(n_vars-2)]
+  # weather_data_imputed <- weather_data_imputed[, !(names(weather_data_imputed) == "value")]
+  # weather_data_imputed <- weather_data_imputed[, !(names(weather_data_imputed) == "X")]
   
   # (3) Split full data set in a training, validation and test set --> In chronological order
   split_sets <- split_train_test(df = full_data_imputed, train = 0.85, validate = 0.1, chronologically = TRUE, 
@@ -47,7 +53,7 @@ main <- function(df, cutoff = 0.1){
   
   # (6) Add value lags to the validation and test sets 
   # ANNAAAAAA --> Not ready yet!!! 
-  weather_data_imputed <- weather #DO: change output 
+  # weather_data_imputed <- imputed_data$imputed_weather[,-((ncol(imputed_data$imputed_weather)-1):ncol(imputed_data$imputed_weather))] #DO: change output 
   training_set_lag1 <- make_lags(data = training_set, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
                                   num_lags = 1)
   training_set_lagged <- make_lags(data = training_set_lag1, weather_data = weather_data_imputed, id_index = "adm", date_index = "date",
@@ -69,15 +75,21 @@ main <- function(df, cutoff = 0.1){
   test_final     <- add_value_indicator(test_lagged, cutoff = cutoff)
   
   #(8) Call first stage
-  output <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
-                        training_set = training_final, number_of_bootstraps = 2,          # BEFORE training_set_lagged WAS HERE :(
+  output   <- first_stage(training_set_na = training_set_na, validation_set = valid_final, 
+                        training_set = training_final, number_of_bootstraps = 20,          # BEFORE training_set_lagged WAS HERE :(
                         threshold_presentation = cutoff, 
-                        threshold_selection = 0.5, log_transf = FALSE, weather = weather_data_imputed) 
+                        threshold_selection = 0.5, log_transf = FALSE, weather = weather_data_imputed, test_set = test_final) 
+  
+  output_2 <- second_stage(number_of_bootstrap = 20, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na = training_set_na, 
+                           training_set = training_final, test_set = test_final, 
+                           weather = weather, model_type = "linear_regression")
+  
   # THIS IS ONLY HERE FOR CHECKING WHETHER THE CODE RUNS CORRECTLY
   training_set_na = training_set_na
   validation_set = valid_final
   training_set = training_final
-  number_of_bootstraps = 2
+  test_set = test_final
+  number_of_bootstraps = 20
   threshold_presentation = cutoff
   threshold_selection = 0.5
   weather = weather_data_imputed
@@ -89,8 +101,8 @@ main <- function(df, cutoff = 0.1){
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # FIRST STAGE 
-first_stage <- function(training_set_na, validation_set, training_set, number_of_bootstraps = 100, threshold_presentation = 0.1, 
-                        threshold_selection = 0.5, log_transf = FALSE, weather) {
+first_stage <- function(training_set_na, validation_set, training_set, number_of_bootstraps = 20, threshold_presentation = 0.1, 
+                        threshold_selection = 0.5, log_transf = FALSE, weather, test_set) {
 
   set.seed(510)
 
@@ -104,7 +116,7 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
                                        bootstrap_samples = bootstrap_samples, log_transf = log_transf, 
                                        weather = weather)
   
-  temp <- complete_samples[[1]][,-c(1,2,3)]  #DO maybe fix it 
+  temp <- complete_samples[[1]][,-c(1,2,3, ncol(complete_samples[[1]]))]  #DO maybe fix it 
   only_covariates <- temp[ ,!(names(temp) == "value_indicator")]
   number_of_covariates <- ncol(only_covariates) 
   names_covariates     <- colnames(only_covariates)
@@ -117,49 +129,59 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
                                                        complete_samples = complete_samples,
                                                        model_type = "logit")
   
+  standardized_data_training_set <- scale_variables(training_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+  
   # (4) Estimate the model with imputed training set from stage 0
+  logitMod <- glm(value_indicator ~ . , data = standardized_data_training_set[, c(final_covariates, "value_indicator")], 
+                  family = binomial(link = 'logit'))
+  
+  standardized_data_test_set <- scale_variables(test_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+  
+  predictions_logitMod <- predict(logitMod, newdata = standardized_data_test_set[, c(final_covariates, "value_indicator")], type = "response")
+  
+  # ------------------------------------------------------------------------------------------------------------
+  
+  # # (5) Determine threshold
+  # # (5.1) Get the value 
+  # predicted_probability <- logitMod$fitted.values
+  # 
+  # #determine threshold2 based on F1 score or spec / sens
+  # threshold <- threshold_bootstrap(train = training_set, valid = validation_set,
+  #                                  model = logitMod)
+  # 
+  # #determine threshold2 same as threshold1
+  # #threshold <- cutoff
+  # 
+  # #WORK IN PROGRESS: evaluate threshold
+  # predicted_index <- ifelse(predicted_probability >= threshold, 1, 0)
+  # target_index    <- training_set[ ,"value_indicator"]
+  # accuracy        <- sum(predicted_index == target_index)/nrow(training_set)
+  # print(paste0("Predicted count of 1: ", sum(predicted_index == 1)))
+  # print(paste0("Predicted count of 0: ", sum(predicted_index == 0)))
+  # print(paste0("Accuracy: ", accuracy))
+  # 
+  # # (5.2) Get a fraction of once per province pased on the predicted_index
+  # 
+  # # (5.3) Get a fraction of once per province pased on the training_set
+  # 
+  # # (5.4) Find a threshold that "optimizes" 
+  # 
+  # # (6) Merge validation and training sets !check if the columns are the same)
+  # merged_set <- rbind(training_set, validation_set)
+  # merged_set <- merged_set[, -which(colnames(merged_set) == "value")]
+  # logitMod   <- glm(value_indicator ~ . , data = merged_set[, final_covariates], family=binomial(link='logit'))
+  # 
+  # index_of_selected_observations <- logitMod$fitted.values > threshold # DISCUSSION POINT!!!
+  # 
+  # # ADD NA'S BACK TO THE MERGED DATA SET --> NEED THOSE NA'S AGAIN IN THE SECOND STAGE
+  # # Return both please! WE NEED THEM BOTH IN THE SECOND STAGE
+  # selected_data <- merged_set[index_of_selected_observations, ] # risky observations
+  
+  # ------------------------------------------------------------------------------------------------------------
 
-  logitMod     <- glm(value_indicator ~ . , data = training_set[, c(final_covariates, "value_indicator")], 
-                      family=binomial(link='logit'))
-  
-  # (5) Determine threshold
-  # (5.1) Get the value 
-  predicted_probability <- logitMod$fitted.values
-  
-  #determine threshold2 based on F1 score or spec / sens
-  threshold <- threshold_bootstrap(train = training_set, valid = validation_set,
-                                   model = logitMod)
-  #determine threshold2 same as threshold1
-  #threshold <- cutoff
-  
-  #WORK IN PROGRESS: evaluate threshold
-  predicted_index <- ifelse(predicted_probability >= threshold, 1, 0)
-  target_index    <- training_set[ ,"value_indicator"]
-  accuracy        <- sum(predicted_index == target_index)/nrow(training_set)
-  print(paste0("Predicted count of 1: ", sum(predicted_index == 1)))
-  print(paste0("Predicted count of 0: ", sum(predicted_index == 0)))
-  print(paste0("Accuracy: ", accuracy))
-  
-  # (5.2) Get a fraction of once per province pased on the predicted_index
-  
-  # (5.3) Get a fraction of once per province pased on the training_set
-  
-  # (5.4) Find a threshold that "optimizes" 
-
-  # (6) Merge validation and training sets !check if the columns are the same)
-  merged_set <- rbind(training_set, validation_set)
-  merged_set <- merged_set[, -which(colnames(merged_set) == "value")]
-  logitMod   <- glm(value_indicator ~ . , data = merged_set[, final_covariates], family=binomial(link='logit'))
-
-  index_of_selected_observations <- logitMod$fitted.values > threshold # DISCUSSION POINT!!!
-
-  # ADD NA'S BACK TO THE MERGED DATA SET --> NEED THOSE NA'S AGAIN IN THE SECOND STAGE
-  # Return both please! WE NEED THEM BOTH IN THE SECOND STAGE
-  selected_data <- merged_set[index_of_selected_observations, ] # risky observations
-
-  return_list <- list()
-  return_list$model <- logitMod
-  return_list$data  <- selected_data
+  # return_list <- list()
+  # return_list$model <- logitMod
+  # return_list$data  <- selected_data
   
   # OUTPUT: 
   # (1) Provinces on risky 
@@ -169,27 +191,30 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
   #   - Determine where the NA's are in this ordered full_data_NA
   #   - Shrink data set by removing test_set part
   #   - Return this one for input in Second_Stage --> training_set_na
-  return(return_list)
+  
+  return(list("predictions" = predictions_logitMod, "final_logit" = logitMod, "final_covariates" = final_covariates))
 }
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # SECOND STAGE 
-second_stage <- function(number_of_bootstrap = 100, provinces_on_risk, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na, training_set) { 
+second_stage <- function(number_of_bootstrap = 20, threshold_presentation = 0.1, threshold_selection = 0.5, training_set_na, training_set, test_set, 
+                         weather, model_type = "linear_regression") { 
   
   # (1) Select the 'sub-sample' from the training_set (with NA's) corresponding to those provinces which are on risk
   # Already done in previous First Stage
-  training_set_na <- training_set_na[as.character(training_set_na$adm) == provinces_on_risk, ]
+  # training_set_na <- training_set_na[as.character(training_set_na$adm) == provinces_on_risk, ]
   
   # (2) For this 'sub-sample' apply bootstrap, impute the missing data, estimate models, do variable selection and determine the final model 
   
   bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps, training_set = training_set_na)
   
-  complete_samples <- complete_samples(number_of_bootstraps = number_of_bootstrap, threshold_presentation = threshold_presentation, bootstrap_samples = bootstrap_samples, log_transf = F)
+  complete_samples <- complete_samples(number_of_bootstraps = number_of_bootstrap, threshold_presentation = threshold_presentation, 
+                                       bootstrap_samples = bootstrap_samples, log_transf = F, weather = weather)
   
   # number_of_covariates <- ncol((complete_samples[[1]])[, -c(1,2,ncol(complete_samples[[1]]))]) 
   # names_covariates     <- colnames(complete_samples[[1]])[-c(1,2,ncol(complete_samples[[1]]))] 
-  temp <- complete_samples[[1]][ , -c(1,2,3)]  #DO maybe fix it 
+  temp <- complete_samples[[1]][ , -c(1,2,3, ncol(complete_samples[[1]]))]  #DO maybe fix it 
   only_covariates <- temp[ , !(names(temp) == "value_indicator")]
   number_of_covariates <- ncol(only_covariates) 
   names_covariates     <- colnames(only_covariates)
@@ -199,13 +224,19 @@ second_stage <- function(number_of_bootstrap = 100, provinces_on_risk, threshold
                                                        number_of_covariates = number_of_covariates, 
                                                        names_covariates = names_covariates, 
                                                        complete_samples = complete_samples,
-                                                       model_type = "linear_regression")
+                                                       model_type = model_type)
+  
+  standardized_data_training_set <- scale_variables(training_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
   
   # (3) Return the final model
-  final_model <- lm(value ~ ., data = training_set[, c(final_covariates, "value")]) 
+  final_model <- lm(value ~ ., data = standardized_data_training_set[, c(final_covariates, "value")]) 
   #klopt het dat we hier alleen maar lm doen + klopt het dat final covariates de value niet include?
   
-  return(final_model)
+  standardized_data_test_set <- scale_variables(test_set, variables_not_to_scale = c("adm", "date", "value", "value_indicator", "longitude", "latitude"))
+  
+  predictions_final_model <- predict(final_model, newdata = standardized_data_test_set[, c(final_covariates, "value")])
+  
+  return(list("predictions" = predictions_final_model, "final_lm" = final_model, "final_covariates" = final_covariates))
 }
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -253,11 +284,12 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
   
   for (r in 1:number_of_bootstraps) {
    
+    # r = 1
     bootstrap_sample <- bootstrap_samples[[r]]
     
     # (1) Impute ovitrap data based on the incomplete weather data (KNN)
     # (2) Impute weather data based on the incomplete weather data (model-based)
-    imputed_data <- imputations(5, 5, bootstrap_sample)
+    imputed_data <- (imputations(5, 5, bootstrap_sample, weather))$completedata # misschien extra check nodig
     
     # (3) Add lagged values to the complete data set
     imputed_data_lag1   <- make_lags(data = imputed_data, weather_data = weather, id_index = "adm", date_index = "date",
@@ -265,8 +297,6 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
     
     imputed_data_lagged <- make_lags(data = imputed_data_lag1, weather_data = weather, id_index = "adm", date_index = "date",
                             num_lags = 2, imputation = TRUE)
-    
-    
     
     # (4) Add indicators to the validation and test sets 
     # imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation) # ADD THIS ONE AGAIN IN CASE OF RUNNING TWO LAGS --> and remove the sentence below!
@@ -295,6 +325,7 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
   
   for (r in 1:number_of_bootstraps) {
    
+    # r = 1
     complete_sample <- complete_samples[[r]]
     # (1) Estimate a model for the rth sample in complete_samples + 
     # (2) Apply variable selection on the rth estimated model 
@@ -305,7 +336,7 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
     } else if (model_type == "linear_regression") {
       # WHAT DOES THE COMPLETE_SAMPLE LOOKL LIKE (IN WHICH ORDER ARE THE VARIABLES)
       # DELET THE OVI_INDEX AND LEAVE THE MEAN_OVI
-      selected_model <- stage2_regression(df = complete_sample, model = "linear_regression", include_two_way_interactions = FALSE, direction_search = "both")
+      selected_model <- stage2_regression(df = complete_sample, model = "linear_regression", include_two_way_interactions = FALSE, direction_search = "backward")
       
       # lm_model <- lm(... ~ ..., data = complete_sample)
       # selected_model <- stepAIC(object = lm_model, direction = c("both"))
@@ -326,6 +357,7 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
   final_covariates <- names_covariates[fraction > threshold_selection]
 
   return(final_covariates)
+  # return(selected_covariates)
 }
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -404,33 +436,46 @@ fulldata <- function(weather, ovitrap_cleaned, ovitrap_original) {
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-imputations <- function(K, M, completedata) { # I used the standard setup where k = 5 and m = 5
+imputations <- function(K, M, completedata, weather) { # I used the standard setup where k = 5 and m = 5
   # completedata <- fulldata(weather, ovitrap_cleaned, ovitrap_original)
   # completedata <- full_data_NA
   
   ######### Imputing ovitrap data #########
   
-  ovitrap_imputed <- VIM::kNN(completedata, variable = "value", k=K, imp_var = F)
+  ovitrap_imputed <- kNN(completedata, variable = "value", k=K, imp_var = F)
   
   ######### Imputing weather data #########
-  weather_missing <- completedata[ , !(names(full_data_NA) == "value")]
+  weather_missing <- completedata[,  !(names(completedata) == "value")]
+  weather_missing_full <- weather
+
+  imputation_mice <- mice(weather_missing, m = M, print = FALSE) # Impute by Multiple Imputations with Chained Equations
+  imputation_mice_full <- mice(weather_missing_full, m = M, print = FALSE) 
   
-  imputation_mice <- mice::mice(weather_missing, m = M, print = FALSE) # Impute by Multiple Imputations with Chained Equations
-  imputed_weather <- mice::complete(imputation_mice)
+  imputed_weather <- complete(imputation_mice)
+  imputed_weather_full <- complete(imputation_mice_full)
   
   names(imputed_weather)[names(imputed_weather) == "adm_level"] <- "adm" 
+  names(imputed_weather_full)[names(imputed_weather_full) == "adm_level"] <- "adm" 
+   
+  #imputed_weather_threeyears <- imputed_weather[which((as.Date(weather$date) >= as.Date("2013-03-01")) & (as.Date(weather$date) < as.Date("2016-03-01"))),]
+  #provinces <- unique(completedata$adm)
+  #imputed_weather_threeyears <- imputed_weather_threeyears[imputed_weather_threeyears$adm %in% as.character(provinces), ]
   
   ovitrap_imputed <- as.data.frame(cbind(ovitrap_imputed, c(1:nrow(ovitrap_imputed))))
   names(ovitrap_imputed)[names(ovitrap_imputed) == "c(1:nrow(ovitrap_imputed))"] <- "index" 
   imputed_weather <- as.data.frame(cbind(imputed_weather, c(1:nrow(imputed_weather))))
   names(imputed_weather)[names(imputed_weather) == "c(1:nrow(imputed_weather))"] <- "index" 
   
-  result <- merge(ovitrap_imputed[,c(1:3, ncol(ovitrap_imputed))], imputed_weather, by = c("adm", "date", "index"))
-  result <- result[, -which(colnames(result) == "index")]
-  result$value <- as.numeric(as.character(result$value))
-  # result$value <- as.numeric(as.character(result$value))
+  result <- merge(ovitrap_imputed[, c(1:3, ncol(ovitrap_imputed))], imputed_weather, by = c("adm", "date", "index"))
   
-  return(result)
+  result <- result[,  !(names(result) == "index")]
+  result <- result[,  !(names(result) == "X")]
+  imputed_weather <- imputed_weather[, !(names(imputed_weather) == "X")]
+  imputed_weather_full <- imputed_weather_full[, !(names(imputed_weather_full) == "X")]
+  
+  result$value <- as.numeric(as.character(result$value))
+  
+  return(list("completedata" = result, "imputed_weather" = imputed_weather_full))
 }
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -481,6 +526,7 @@ stage2_regression <- function(df, model = "linear_regression", include_two_way_i
   else if (model == "CatBoost"){
     #work in progress
   }
+  
   
   return(selected_model)
 }
