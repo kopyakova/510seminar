@@ -438,7 +438,7 @@ make_lags <- function(data, weather_data, id_index = "adm", date_index = "date",
       #find weather data for the missing month
       weather_month_lag1  <- weather_data[as.Date(weather_data$date) == date1_lag_1, ]
       
-      #merge the data
+      #merge the data set
       missing_data <- df_NA[as.Date(df_NA$date) == date_1,]
       missing_data <- missing_data[,c(1,2)]
       

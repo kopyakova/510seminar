@@ -59,7 +59,7 @@ main <- function(df, cutoff = 0.1){
                         threshold_presentation = cutoff, threshold_selection = 0.5, 
                         log_transf = FALSE, weather = weather_data_imputed, test_set = test_final) 
   
-  
+  # (9) Call second stage
   output_2 <- second_stage(number_of_bootstraps = 100, threshold_presentation = 0.1,
                            threshold_selection = 0.5, training_set_na = training_set_na, 
                            training_set = training_final, test_set = test_final, 
