@@ -1,6 +1,6 @@
 library(xgboost)
 
-set.seed(123)
+set.seed(510)
 df <- read_csv('/Users/Yur/Downloads/Ovitrap and weather (with 2 lags) data.csv')
 
 #' @description 
@@ -44,14 +44,14 @@ XG_fit <- function(df, split_size, depth, learning_rate, n_rounds){
   # Make input suitable for XGBoost
   dtrain <- xgb.DMatrix(split_input$X_train, label=split_input$y_train)
   dtest <- xgb.DMatrix(split_input$X_test, label=split_input$y_test)
-  
+
   # Create list of evaluations that we want to check
   watchlist <- list(train=dtrain, eval=dtest)
   
   # A simple xgb.train example:
   param <- list(max_depth = depth, 
                 eta = learning_rate, 
-                verbose = 1,
+                verbose = 0,
                 objective = "reg:squarederror",
                 eval_metric = "rmse")
   bst <- xgb.train(param, 
@@ -60,15 +60,18 @@ XG_fit <- function(df, split_size, depth, learning_rate, n_rounds){
                    watchlist)
   
   e <- data.frame(bst$evaluation_log)
-  plot(e$iter, e$train_rmse, col='blue')
-  lines(e$iter, e$eval_rmse, col='red')
+  #plot(e$iter, e$train_rmse, col='blue')
+  #lines(e$iter, e$eval_rmse, col='red')
   min(e$test_rmse)
   
-  imp <- xgb.importance(colnames(dtrain),
-                        model=bst)
-  print(imp)
-  xgb.plot.importance(imp)
+  #imp <- xgb.importance(colnames(dtrain),
+  #                      model=bst)
+  #print(imp)
+  #xgb.plot.importance(imp)
   
   p <- predict(bst, newdata=dtest)
+  y_test <- unlist(split_input$y_test, use.names=FALSE)
+
+  return(c(p, y_test))
 }
-XG_fit(df, 0.8, 5, 0.1, 40)
+predictions <- XG_fit(df, 0.8, 5, 0.1, 40)

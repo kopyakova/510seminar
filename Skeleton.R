@@ -490,10 +490,14 @@ imputations <- function(K, M, completedata, weather) { # I used the standard set
 stage2_regression <- function(df, model = "linear_regression", include_two_way_interactions = FALSE,
                              direction_search = "both"){
   # direction_search = "both"
+  # create replicate of full df (XGBoost does splitting itself)
+  df_full <- df
   # df <- temp
-  df <- df[ ,!(names(df) == "value_indicator")] #exclude value
+  value <- df[,(names(df)== 'value')]
+  df <- df[ ,!(names(df) == "value")] #exclude value
   df <- df[ ,!(names(df) == "adm")]
   df <- df[ ,!(names(df) == "date")]
+  
   
   if (model == "linear_regression"){
     lsMod <- lm(value ~ ., data = df)
@@ -514,18 +518,20 @@ stage2_regression <- function(df, model = "linear_regression", include_two_way_i
     value <- value/100
     
     # Transform according to Smithson and Verkuilen 2006, if 0 and 1.
-    if (any(value==1)|any(value==0)){
-      y.transf.betareg <- function(y){
-        n.obs <- sum(!is.na(y))
-        (y * (n.obs - 1) + 0.5) / n.obs
-      }
+    if (any(value==1)||any(value==0)){
+        n.obs <- sum(!is.na(value))
+        value <- (value * (n.obs - 1) + 0.5) / n.obs
     }
-    betaMod <- betaselect(y.transf.betareg(value), df, criterion="AIC", method= direction_search)
+    betaMod <- betaselect(df, value, criterion="AIC", method= direction_search)
     #look into link function
     selected_model <- betaMod
   }
   else if (model == "XGBoost"){
-    predictions <- XG_fit(df, 0.8, 5, 0.1, 40)
+    predictions <- XG_fit(df_full, 0.8, 4, 0.1, 40)
+    selected_model <- predictions
+  }
+  else if (model == "CatBoost"){
+    #work in progress
   }
   
   
