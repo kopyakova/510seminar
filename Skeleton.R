@@ -45,7 +45,7 @@ main <- function(df, cutoff = 0.1){
   
   # (7) Set the imputed values in training set to NA - find a match base of date and adm
   # df_imputed[is.na(df_original_training)] = NA ONLY TRAINING
-  training_set_na <- training_set[,1:ncol(full_data_imputed)] # drop lags and inicator
+  training_set_na <- training_final[,1:ncol(full_data_imputed)] # drop lags and inicator
   rows            <- nrow(training_set_na)
   full_data_NA_2  <- full_data_NA[order(full_data_NA$date), ] # We totally FORGOT to oder the full_data_NA as well!
   subsss          <- full_data_NA_2[1:rows, ]
