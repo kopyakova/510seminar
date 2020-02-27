@@ -1,9 +1,9 @@
 main <- function(df, cutoff = 0.1){
   cutoff = 0.1
   # DO outside function and add them as input parameters
-  weather <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
-  ovitrap_cleaned <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
-  ovitrap_original <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+  weather <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
+  ovitrap_cleaned <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
+  ovitrap_original <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
   # weather <- read.delim("new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
   # ovitrap_cleaned <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
   # ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
@@ -11,12 +11,12 @@ main <- function(df, cutoff = 0.1){
   # Index column created by merging is dropped 
   weather <- weather[,!(names(weather) == "perc")]
   weather <- weather[,!(names(weather) == "X")]
-
+  
   set.seed(510)
   
   # (1) Initial full data set with NA values - df
   full_data_NA <- fulldata(weather, ovitrap_cleaned, ovitrap_original)
-
+  
   # (2) Impute total df
   imputed_data <- imputations(5, 5, full_data_NA, weather)
   full_data_imputed <- imputed_data$completedata
@@ -26,10 +26,10 @@ main <- function(df, cutoff = 0.1){
   n_vars <- dim(weather)[2]
   weather_data_imputed <- imputed_data$imputed_weather
   weather_data_imputed <- weather_data_imputed[, 1:(n_vars-2)] #skip long and lat
-
+  
   # (4) Add value lags to the validation and test sets 
   df_lag1    <- make_lags(data = full_data_imputed, weather_data = weather_data_imputed, 
-                       id_index = "adm", date_index = "date", num_lags = 1)
+                          id_index = "adm", date_index = "date", num_lags = 1)
   df_lagged  <- make_lags(data = df_lag1, weather_data = weather_data_imputed, 
                           id_index = "adm", date_index = "date", num_lags = 2)
   # (5) Add indicators to the validation and test sets 
@@ -55,15 +55,15 @@ main <- function(df, cutoff = 0.1){
   
   # (8) Call first stage
   output   <- first_stage(training_set_na = training_set_na, validation_set = NA, 
-                        training_set = training_final, number_of_bootstraps = 100,          # BEFORE training_set_lagged WAS HERE :(
-                        threshold_presentation = cutoff, threshold_selection = 0.5, 
-                        log_transf = FALSE, weather = weather_data_imputed, test_set = test_final) 
+                          training_set = training_final, number_of_bootstraps = 100,          # BEFORE training_set_lagged WAS HERE :(
+                          threshold_presentation = cutoff, threshold_selection = 0.5, 
+                          log_transf = FALSE, weather = weather_data_imputed, test_set = test_final) 
   
   # (9) Call second stage
   output_2 <- second_stage(number_of_bootstraps = 100, threshold_presentation = 0.1,
                            threshold_selection = 0.5, training_set_na = training_set_na, 
                            training_set = training_final, test_set = test_final, 
-                           weather = weather_data_imputed, model_type = "linear_regression")
+                           weather = weather_data_imputed, model_type = "beta_regression")
   
   # THIS IS ONLY HERE FOR CHECKING WHETHER THE CODE RUNS CORRECTLY
   # training_set_na = training_set_na
@@ -85,18 +85,18 @@ main <- function(df, cutoff = 0.1){
 # FIRST STAGE 
 first_stage <- function(training_set_na, validation_set, training_set, number_of_bootstraps = 20, threshold_presentation = 0.1, 
                         threshold_selection = 0.5, log_transf = FALSE, weather, test_set) {
-
+  
   set.seed(510)
-
+  
   # (1) Apply bootstrap on the training set
   bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps, 
                                          training_set = training_set_na)
   
   # (2) Apply imputation methods, transform your dependent variable and add lagged values
   complete_samples  <- complete_samples(number_of_bootstraps = number_of_bootstraps, 
-                                       threshold_presentation = threshold_presentation, 
-                                       bootstrap_samples = bootstrap_samples, log_transf = log_transf, 
-                                       weather = weather)
+                                        threshold_presentation = threshold_presentation, 
+                                        bootstrap_samples = bootstrap_samples, log_transf = log_transf, 
+                                        weather = weather)
   
   temp <- complete_samples[[1]]#[,-c(1,2,3, ncol(complete_samples[[1]]))]  #DO maybe fix it 
   temp <- temp[ ,!(names(temp) == "adm")]
@@ -168,7 +168,7 @@ first_stage <- function(training_set_na, validation_set, training_set, number_of
   # selected_data <- merged_set[index_of_selected_observations, ] # risky observations
   
   # ------------------------------------------------------------------------------------------------------------
-
+  
   # return_list <- list()
   # return_list$model <- logitMod
   # return_list$data  <- selected_data
@@ -238,11 +238,17 @@ second_stage <- function(number_of_bootstraps = 20, threshold_presentation = 0.1
     predictions_final_train <- predict(final_model, newdata = standardized_data_training_set[, c(final_covariates, "value")])
     predictions_final_test <- predict(final_model, newdata = standardized_data_test_set[, c(final_covariates, "value")])
     
-  } else {
+  } else if (model_type == "beta_regression") {
     
+    if (any(standardized_data_training_set$value==1)||any(standardized_data_training_set$value==0)){
+      n.obs <- sum(!is.na(standardized_data_training_set$value))
+      standardized_data_training_set$value <- ((standardized_data_training_set$value * (n.obs - 1) + 0.5) / n.obs )/100
+    }
+    final_model <- betareg(value ~ ., data = standardized_data_training_set[, c(final_covariates, "value")], link = "logit") 
+    predictions_final_train <- predict(final_model, newdata = standardized_data_training_set[, c(final_covariates, "value")])
+    predictions_final_test <- predict(final_model, newdata = standardized_data_test_set[, c(final_covariates, "value")])
   }
-  #klopt het dat we hier alleen maar lm doen. no + klopt het dat final covariates de value niet include? yes
-  
+
   return(list("predictions_test" = predictions_final_test, "predictions_train" = predictions_final_train, "final_lm" = final_model, "final_covariates" = final_covariates))
 }
 
@@ -290,7 +296,7 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
   complete_samples <- list()
   
   for (r in 1:number_of_bootstraps) {
-   
+    
     # r = 1
     bootstrap_sample <- bootstrap_samples[[r]]
     
@@ -300,10 +306,10 @@ complete_samples <- function(number_of_bootstraps = 100, threshold_presentation 
     
     # (3) Add lagged values to the complete data set
     imputed_data_lag1   <- make_lags(data = imputed_data, weather_data = weather, id_index = "adm", date_index = "date",
-                            num_lags = 1, imputation = TRUE)
+                                     num_lags = 1, imputation = TRUE)
     
     imputed_data_lagged <- make_lags(data = imputed_data_lag1, weather_data = weather, id_index = "adm", date_index = "date",
-                            num_lags = 2, imputation = TRUE)
+                                     num_lags = 2, imputation = TRUE)
     
     # (4) Add indicators to the validation and test sets 
     # imputed_final <- add_value_indicator(imputed_data_lagged, cutoff = threshold_presentation) # ADD THIS ONE AGAIN IN CASE OF RUNNING TWO LAGS --> and remove the sentence below!
@@ -331,7 +337,6 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
   row.names(selected_covariates) <- names_covariates
   
   for (r in 1:number_of_bootstraps) {
-   
     # r = 1
     complete_sample <- complete_samples[[r]]
     # (1) Estimate a model for the rth sample in complete_samples + 
@@ -339,7 +344,7 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
     #DO: remove administration and date columns
     if (model_type == "logit") {
       selected_model <- stage1_logit(df = complete_sample, model = "logit", include_two_way_interactions = FALSE,
-                                       direction_search = "backward")
+                                     direction_search = "backward")
     } else if (model_type == "linear_regression") {
       # WHAT DOES THE COMPLETE_SAMPLE LOOKL LIKE (IN WHICH ORDER ARE THE VARIABLES)
       # DELET THE OVI_INDEX AND LEAVE THE MEAN_OVI
@@ -348,21 +353,27 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
       # lm_model <- lm(... ~ ..., data = complete_sample)
       # selected_model <- stepAIC(object = lm_model, direction = c("both"))
     } else if (model_type == "beta_regression") {
-      print("ERROR: no model selcted")
-    } else {
+      selected_model <- stage2_regression(df = complete_sample, model = "beta_regression", include_two_way_interactions = FALSE, direction_search = "backward")
+   
+       } else {
       print("ERROR: no model selcted")
     }
     
     # (3) Extract the variables which are selected and update the selected_covariates matrix
-    selected_variables <- row.names(data.frame(selected_model$coefficients))[-1]   # [-1] to exclude intercept
-    
+    if (model_type == "beta_regression") {
+      selected_variables <- selected_model$variable
+      #print(selected_variables)# [-1] to exclude intercept
+    }
+    else {
+      selected_variables <- row.names(data.frame(selected_model$coefficients))[-1]   # [-1] to exclude intercept
+    }
     #check which variables are in the final 
     index <- !is.na(names_covariates[match(names_covariates, intersect(names_covariates, selected_variables))])
     selected_covariates[index,r] <- 1
   }
   fraction         <- rowMeans(selected_covariates)
   final_covariates <- names_covariates[fraction > threshold_selection]
-
+  
   return(final_covariates)
   # return(selected_covariates)
 }
@@ -454,7 +465,7 @@ imputations <- function(K, M, completedata, weather) { # I used the standard set
   ######### Imputing weather data #########
   weather_missing <- completedata[,  !(names(completedata) == "value")]
   weather_missing_full <- weather
-
+  
   imputation_mice <- mice(weather_missing, m = M, print = FALSE) # Impute by Multiple Imputations with Chained Equations
   imputation_mice_full <- mice(weather_missing_full, m = M, print = FALSE) 
   
@@ -463,7 +474,7 @@ imputations <- function(K, M, completedata, weather) { # I used the standard set
   
   names(imputed_weather)[names(imputed_weather) == "adm_level"] <- "adm" 
   names(imputed_weather_full)[names(imputed_weather_full) == "adm_level"] <- "adm" 
-   
+  
   #imputed_weather_threeyears <- imputed_weather[which((as.Date(weather$date) >= as.Date("2013-03-01")) & (as.Date(weather$date) < as.Date("2016-03-01"))),]
   #provinces <- unique(completedata$adm)
   #imputed_weather_threeyears <- imputed_weather_threeyears[imputed_weather_threeyears$adm %in% as.character(provinces), ]
@@ -488,16 +499,15 @@ imputations <- function(K, M, completedata, weather) { # I used the standard set
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 stage2_regression <- function(df, model = "linear_regression", include_two_way_interactions = FALSE,
-                             direction_search = "both"){
+                              direction_search = "both"){
   # direction_search = "both"
   # create replicate of full df (XGBoost does splitting itself)
   df_full <- df
   # df <- temp
   value <- df[,(names(df)== 'value')]
-  df <- df[ ,!(names(df) == "value")] #exclude value
+  df <- df[ ,!(names(df) == "value_indicator")] #exclude value
   df <- df[ ,!(names(df) == "adm")]
   df <- df[ ,!(names(df) == "date")]
-  
   
   if (model == "linear_regression"){
     lsMod <- lm(value ~ ., data = df)
@@ -515,14 +525,14 @@ stage2_regression <- function(df, model = "linear_regression", include_two_way_i
   }
   else if (model == "beta_regression"){
     # are values already [0, 1] scale or [0, 100]?
-    value <- value/100
+    df$value <- df$value/100
     
     # Transform according to Smithson and Verkuilen 2006, if 0 and 1.
-    if (any(value==1)||any(value==0)){
-        n.obs <- sum(!is.na(value))
-        value <- (value * (n.obs - 1) + 0.5) / n.obs
+    if (any(df$value==1)||any(df$value==0)){
+      n.obs <- sum(!is.na(df$value))
+      df$value <- (df$value * (n.obs - 1) + 0.5) / n.obs
     }
-    betaMod <- betaselect(df, value, criterion="AIC", method= direction_search)
+    betaMod <- betaselect(df[,!(names(df) == "value")], df$value, criterion="AIC", method= direction_search)
     #look into link function
     selected_model <- betaMod
   }
@@ -533,7 +543,5 @@ stage2_regression <- function(df, model = "linear_regression", include_two_way_i
   else if (model == "CatBoost"){
     #work in progress
   }
-  
-  
   return(selected_model)
 }
