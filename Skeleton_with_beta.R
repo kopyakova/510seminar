@@ -1,9 +1,9 @@
 main <- function(df, cutoff = 0.1){
   cutoff = 0.1
   # DO outside function and add them as input parameters
-  weather <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
-  ovitrap_cleaned <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
-  ovitrap_original <- read.delim("~/Desktop/MAPS/Seminar/Code_1/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+  weather <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
+  ovitrap_cleaned <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
+  ovitrap_original <- read.delim("/Users/Yur/Desktop/Seminar/510seminar/ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
   # weather <- read.delim("new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
   # ovitrap_cleaned <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
   # ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
@@ -63,7 +63,7 @@ main <- function(df, cutoff = 0.1){
   output_2 <- second_stage(number_of_bootstraps = 100, threshold_presentation = 0.1,
                            threshold_selection = 0.5, training_set_na = training_set_na, 
                            training_set = training_final, test_set = test_final, 
-                           weather = weather_data_imputed, model_type = "linear_regression")
+                           weather = weather_data_imputed, model_type = "beta_regression")
   
   # THIS IS ONLY HERE FOR CHECKING WHETHER THE CODE RUNS CORRECTLY
   # training_set_na = training_set_na
@@ -239,6 +239,11 @@ second_stage <- function(number_of_bootstraps = 20, threshold_presentation = 0.1
     predictions_final_test <- predict(final_model, newdata = standardized_data_test_set[, c(final_covariates, "value")])
     
   } else if (model_type == "beta_regression") {
+    
+    if (any(standardized_data_training_set$value==1)||any(standardized_data_training_set$value==0)){
+      n.obs <- sum(!is.na(standardized_data_training_set$value))
+      standardized_data_training_set$value <- ((standardized_data_training_set$value * (n.obs - 1) + 0.5) / n.obs )/100
+    }
     final_model <- betareg(value ~ ., data = standardized_data_training_set[, c(final_covariates, "value")], link = "logit") 
     predictions_final_train <- predict(final_model, newdata = standardized_data_training_set[, c(final_covariates, "value")])
     predictions_final_test <- predict(final_model, newdata = standardized_data_test_set[, c(final_covariates, "value")])
@@ -332,7 +337,6 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
   row.names(selected_covariates) <- names_covariates
   
   for (r in 1:number_of_bootstraps) {
-    
     # r = 1
     complete_sample <- complete_samples[[r]]
     # (1) Estimate a model for the rth sample in complete_samples + 
@@ -356,12 +360,13 @@ estimation_and_selection_process <- function(number_of_bootstraps = 100, thresho
     }
     
     # (3) Extract the variables which are selected and update the selected_covariates matrix
-    if (model_type = "beta_regression") {
-      selected_variables <- row.names(data.frame(selected_model$variable))[-1]   # [-1] to exclude intercept
+    if (model_type == "beta_regression") {
+      selected_variables <- selected_model$variable
+      #print(selected_variables)# [-1] to exclude intercept
     }
-    
-    selected_variables <- row.names(data.frame(selected_model$coefficients))[-1]   # [-1] to exclude intercept
-    
+    else {
+      selected_variables <- row.names(data.frame(selected_model$coefficients))[-1]   # [-1] to exclude intercept
+    }
     #check which variables are in the final 
     index <- !is.na(names_covariates[match(names_covariates, intersect(names_covariates, selected_variables))])
     selected_covariates[index,r] <- 1
@@ -500,10 +505,9 @@ stage2_regression <- function(df, model = "linear_regression", include_two_way_i
   df_full <- df
   # df <- temp
   value <- df[,(names(df)== 'value')]
-  df <- df[ ,!(names(df) == "value")] #exclude value
+  df <- df[ ,!(names(df) == "value_indicator")] #exclude value
   df <- df[ ,!(names(df) == "adm")]
   df <- df[ ,!(names(df) == "date")]
-  
   
   if (model == "linear_regression"){
     lsMod <- lm(value ~ ., data = df)
@@ -539,7 +543,5 @@ stage2_regression <- function(df, model = "linear_regression", include_two_way_i
   else if (model == "CatBoost"){
     #work in progress
   }
-  
-  
   return(selected_model)
 }
