@@ -122,7 +122,7 @@ threshold_bootstrap <- function(train, valid = NULL, model,
 
 stage1_logit <- function(df, model = "logit", include_two_way_interactions = FALSE,
                              direction_search = "both"){
-  
+  set.seed(510)
   df <- df[ ,!(names(df) == "value")] #exclude value
   df <- df[ ,!(names(df) == "adm")]
   df <- df[ ,!(names(df) == "date")]
@@ -210,6 +210,8 @@ add_value_indicator <- function(df, cutoff = 10){
 #' @return list with two data frames 
 split_train_test <- function(df, train = 0.8, validate = NA, chronologically = TRUE, remove_NA = TRUE,
                              remove_adm_date = TRUE){
+  set.seed(510)
+  return_list <- list()
   n <- nrow(df)
   
   if (remove_NA){ #drop NA
@@ -232,6 +234,9 @@ split_train_test <- function(df, train = 0.8, validate = NA, chronologically = T
       train_index <- sample(seq_len(n), size = smp_size)
       train       <- df[train_index, ]
       test        <- df[-train_index, ]
+      
+      
+      return_list$train_index <- train_index
     }
   } 
   #if validation fraction is  povided split the data into training, valiation and testing sets only
@@ -278,10 +283,11 @@ split_train_test <- function(df, train = 0.8, validate = NA, chronologically = T
     train <- df[ind_train, ]
     valid <- df[ind_valid, ]
     test  <- df[ind_test, ]
+    
+    return_list$train_index <- ind_train
     }
   }
   
-  return_list <- list()
   if (is.na(validate)){
     
     #remove date and administration
@@ -292,6 +298,7 @@ split_train_test <- function(df, train = 0.8, validate = NA, chronologically = T
     
     return_list$train <- train
     return_list$test  <- test
+    
   } else {
     #remove date and administration
     if(remove_adm_date){
@@ -316,6 +323,7 @@ split_train_test <- function(df, train = 0.8, validate = NA, chronologically = T
 make_lags <- function(data, weather_data, id_index = "adm", date_index = "date", num_lags = 1, imputation = FALSE,
                       vars_to_be_lagged =c("ls_temp_day", "ls_temp_night", "evi", "humid", 
                                            "new_perc", "soil_moist", "soil_temp", "ns_temp", "wind_speed")){
+  set.seed(510)
   # id_index = "adm"
   # date_index = "date"
   # num_lags = 1

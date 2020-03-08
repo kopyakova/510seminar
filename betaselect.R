@@ -81,10 +81,17 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
     forward.1 <- function(x,y){
       result <- list()
       criteria <- vector()
-      for(i in 1:p){
-        result[[i]] <- betareg::betareg(y ~ x[,i], link = link)
-        criteria[i] <- -2 * result[[i]]$loglik + k*(1 + 2)
+      result <- foreach(i = 1:p)  %dopar% {
+          result <-  betareg::betareg(y ~ x[,i], link = link)
       }
+      for(i in 1:p){
+          #compute the information criterion
+          criteria[i] <- -2 * result[[i]]$loglik + k*(1 + 2)
+      }
+      # for(i in 1:p){
+      #   result[[i]] <- betareg::betareg(y ~ x[,i], link = link)
+      #   criteria[i] <- -2 * result[[i]]$loglik + k*(1 + 2)
+      # }
       min_criteria <- min(criteria)
       index <- which.min(criteria)
       variable <- colnames(x)[index]
@@ -100,9 +107,20 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
     repeat{
       result <- list()
       criteria <- vector()
+      # for(i in 1:p){
+      #   if(!(i %in% ind)){
+      #     result[[i]] <- betareg::betareg(y ~ x[,sort(c(ind,i))], link = link)
+      #     #compute the information criterion
+      #     criteria[i] <- -2* result[[i]]$loglik + k * (m + 1)
+      #   }
+      # }
+      result <- foreach(i = 1:p)  %dopar% {
+        if(!(i %in% ind)){
+          result <-betareg::betareg(y ~ x[,sort(c(ind,i))], link = link)
+        }
+      }
       for(i in 1:p){
         if(!(i %in% ind)){
-          result[[i]] <- betareg::betareg(y ~ x[,sort(c(ind,i))], link = link)
           #compute the information criterion
           criteria[i] <- -2* result[[i]]$loglik + k * (m + 1)
         }
@@ -136,13 +154,26 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
     repeat{
       result <- list()
       criteria <- vector()
+      # for(i in 1:p){
+      #   if(!(i %in% ind)){
+      #     result[[i]] <- betareg::betareg(y ~ x[,-sort(c(ind,i))], link = link)
+      #     #compute the information criterion
+      #     criteria[i] <- -2*result[[i]]$loglik + k * (p + 2 - m)
+      #   }
+      # }
+      result <- foreach(i = 1:p)  %dopar% {
+        if(!(i %in% ind)){
+          result <- betareg::betareg(y ~ x[,-sort(c(ind,i))], link = link)
+        }
+      }
       for(i in 1:p){
         if(!(i %in% ind)){
-          result[[i]] <- betareg::betareg(y ~ x[,-sort(c(ind,i))], link = link)
           #compute the information criterion
           criteria[i] <- -2*result[[i]]$loglik + k * (p + 2 - m)
         }
       }
+      
+        
       criteria_new <- min(na.omit(criteria))
       if(criteria_new >= criteria_old){
         break
