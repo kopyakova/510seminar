@@ -1,9 +1,9 @@
-weather          <- read.delim("new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
-ovitrap_cleaned  <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
-ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
-weather <- weather[,!(names(weather) == "perc")]
-weather <- weather[,!(names(weather) == "X")]
-weather <- weather[, 1:11]
+# weather          <- read.delim("new_weather_cleaned.csv", sep = ",", header = TRUE) # Not imputed yet
+# ovitrap_cleaned  <- read.delim("monthly_mosquito_per_province.csv", sep = ",", header = TRUE)
+# ovitrap_original <- read.delim("ovitrap_data_aggregated_per_month_per_province.csv", sep = ",", header = TRUE)
+# weather <- weather[,!(names(weather) == "perc")]
+# weather <- weather[,!(names(weather) == "X")]
+# weather <- weather[, 1:11]
 
 main <- function(ovitrap_original, ovitrap_cleaned, weather, threshold_HO = 0.1, threshold_selection = 0.5,
                  number_of_bootstraps = 100, model_type = "linear_regression", two_stage = FALSE,

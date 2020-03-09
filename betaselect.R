@@ -141,7 +141,6 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
     coefficient <- coef(est)
     return(list(criteria = plot_criteria, min_criteria = min_criteria, index = ind, variable = variable, coefficient = coefficient))
   }
-  
   #backward stepwise
   backward <- function(x,y){
     #Start with the full model
