@@ -61,8 +61,8 @@ beta_bw_resid$resid_vs_actual
 
 
 ######Base models - no variable selection######
-# training_final <- training_final[, 3:30]
-# test_final     <- test_final[, 3:30]
+training_final <- training_final[, 3:30]
+test_final     <- test_final[, 3:30]
 ols_base <- lm(value ~ ., data = training_final)
 ols_base_pred_train <- ols_base$fitted.values
 ols_base_pred_test <- predict(ols_base, newdata = test_final)
@@ -106,7 +106,7 @@ xg_results_resid  <- evaluate_residuals(predicted_test = xg_pred_test, true_test
 xg_results_resid$resid_vs_pred
 xg_results_resid$resid_vs_actual
 ###########
-beta_regression <- function(data, var_select = F, test_set){
+beta_regression <- function(data, var_select = F, test_set, type = "ML", link = "logit"){
   if (any(data$value==1)||any(data$value==0)){
     n.obs <- sum(!is.na(data$value))
     data$value <- ((data$value * (n.obs - 1) + 0.5) / n.obs )/100
@@ -116,7 +116,7 @@ beta_regression <- function(data, var_select = F, test_set){
     selection <- betaselect(data[,!(names(data) == "value")], data$value, 
                               criterion="AIC", method = "backward")
     final_covariates <- selection$variable
-    final_model  <- betareg(value ~ ., data = data[, c(final_covariates, "value")], link = "logit") 
+    final_model  <- betareg(value ~ ., data = data[, c(final_covariates, "value")], link = link, type = type) 
     predictions_final_train <- predict(final_model, newdata = data[, c(final_covariates, "value")])
     predictions_final_test <- predict(final_model, newdata = test_set[, c(final_covariates, "value")])
     

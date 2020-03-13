@@ -28,7 +28,7 @@
 #' @author Lydia2kkx
 
 
-betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward", plotit = FALSE){
+betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward", plotit = FALSE, type = "ML"){
   #In the first part, check the conditions whether the given command is satisfied with the requirements.
   if(any(missing(x) || missing(y))){
     stop("Error: Missing data")
@@ -82,7 +82,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
       result <- list()
       criteria <- vector()
       result <- foreach(i = 1:p)  %dopar% {
-          result <-  betareg::betareg(y ~ x[,i], link = link)
+          result <-  betareg::betareg(y ~ x[,i], link = link, 
+                                      type = type)
       }
       for(i in 1:p){
           #compute the information criterion
@@ -116,7 +117,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
       # }
       result <- foreach(i = 1:p)  %dopar% {
         if(!(i %in% ind)){
-          result <-betareg::betareg(y ~ x[,sort(c(ind,i))], link = link)
+          result <-betareg::betareg(y ~ x[,sort(c(ind,i))], link = link, 
+                                    type = type)
         }
       }
       for(i in 1:p){
@@ -137,14 +139,16 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
     min_criteria <- criteria_old
     variable <- colnames(x)[ind]
     index <- sort(ind)
-    est <- betareg::betareg(y ~ x[,index], link = link)
+    est <- betareg::betareg(y ~ x[,index], link = link, 
+                            type = type)
     coefficient <- coef(est)
     return(list(criteria = plot_criteria, min_criteria = min_criteria, index = ind, variable = variable, coefficient = coefficient))
   }
   #backward stepwise
   backward <- function(x,y){
     #Start with the full model
-    first_step <- betareg::betareg(y ~ x, link = link)
+    first_step <- betareg::betareg(y ~ x, link = link, 
+                                   type = type)
     criteria_old <- -2 * first_step$loglik + k * (p + 2)#set the criterion as old criterion
     plot_criteria <- criteria_old #sign the criterion as the first plot criterion
     ind <- NULL
@@ -162,7 +166,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
       # }
       result <- foreach(i = 1:p)  %dopar% {
         if(!(i %in% ind)){
-          result <- betareg::betareg(y ~ x[,-sort(c(ind,i))], link = link)
+          result <- betareg::betareg(y ~ x[,-sort(c(ind,i))], link = link,
+                                     type = type)
         }
       }
       for(i in 1:p){
@@ -187,13 +192,15 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
     if(is.null(ind)){
       index <- ind
       variable <- colnames(x)
-      est <- betareg::betareg(y ~ x, link = link)
+      est <- betareg::betareg(y ~ x, link = link,
+                              type = type)
       coefficient <- coef(est)
     }else{
       #Else substract the index
       index <- seq(1, p)[-ind]
       variable <- colnames(x)[index]
-      est <- betareg::betareg(y ~ x[,index], link = link)
+      est <- betareg::betareg(y ~ x[,index], link = link,
+                              type = type)
       coefficient <- coef(est)
     }
     return(list(criteria = plot_criteria, min_criteria = min_criteria, index = index, variable = variable, coefficient = coefficient))
@@ -205,7 +212,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
       result <- list()
       criteria <- vector()
       for(i in 1:p){
-        result[[i]] <- betareg::betareg(y ~ x[,i], link = link)
+        result[[i]] <- betareg::betareg(y ~ x[,i], link = link,
+                                        type = type)
         criteria[i] <- -2 * result[[i]]$loglik + k*(1 + 2)
       }
       min_criteria <- min(na.omit(criteria))
@@ -232,7 +240,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
       for(i in 1:p){
         #Forward part
         if(!(i %in% ind)){
-          result_for[[i]] <- betareg::betareg(y ~ x[,sort(c(ind,i))], link = link)
+          result_for[[i]] <- betareg::betareg(y ~ x[,sort(c(ind,i))], link = link,
+                                              type = type)
           criteria_for[i] <- -2* result_for[[i]]$loglik + k * (m + 1)
           ind_for[[i]] <- c(ind,i)
           l <- length(ind)
@@ -240,7 +249,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
           if(l > 1){
             com <- combn(ind,l-1)
             for(j in 1:l){
-              result_back[[j]] <- betareg::betareg(y ~ x[, sort(c(com[,j],i))], link = link)
+              result_back[[j]] <- betareg::betareg(y ~ x[, sort(c(com[,j],i))], link = link,
+                                                   type = type)
               criteria_back[j] <- -2*result_back[[j]]$loglik + k * m
             }
             criteria_back_min[i] <- min(na.omit(criteria_back))
@@ -264,7 +274,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
     min_criteria <- criteria_old
     variable <- colnames(x)[ind]
     index <- sort(ind)
-    est <- betareg::betareg(y ~ x[,index], link = link)
+    est <- betareg::betareg(y ~ x[,index], link = link, 
+                            type = type)
     coefficient <- coef(est)
     return(list(criteria = plot_criteria, min_criteria = min_criteria, index = ind, variable = variable, coefficient = coefficient))
   }
@@ -282,7 +293,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
       result <- list()
       criteria <- vector()
       for(j in 1:count){
-        result[[j]] <- betareg::betareg(y ~ x[, com[,j]], link = link)
+        result[[j]] <- betareg::betareg(y ~ x[, com[,j]], link = link, 
+                                        type = type)
         #compute the information criterion
         criteria[j] <- -2 * result[[j]]$loglik + k * (i + 2)
       }
@@ -293,7 +305,8 @@ betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward
     plot_criteria <- criteria_min_part #get the minimal criteria with the increasing number of variables
     index <- ind[[which.min(criteria_min_part)]]
     variable <- colnames(x)[index]
-    est <- betareg::betareg(y ~ x[,index], link = link)
+    est <- betareg::betareg(y ~ x[,index], link = link, 
+                            type = type)
     coefficient <- coef(est)
     return(list(criteria = plot_criteria, min_criteria = min_criteria, index = index, variable = variable, coefficient = coefficient))
   }
