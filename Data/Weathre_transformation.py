@@ -97,4 +97,4 @@ df1.reset_index(inplace=True)
 df = df1
 df[df.adm_level == 'NCR, City of Manila, First District']
 
-df.to_csv(r'weather.csv')
+df.to_csv(r'weather_data.csv')
