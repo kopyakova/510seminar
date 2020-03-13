@@ -28,7 +28,7 @@
 #' @author Lydia2kkx
 
 
-betaselect <- function(x, y, criterion = "AIC",link = "logit", method = "forward", plotit = FALSE, type = "ML"){
+betaselect <- function(x, y, criterion = "AIC", link = "logit", method = "forward", plotit = FALSE, type = "ML"){
   #In the first part, check the conditions whether the given command is satisfied with the requirements.
   if(any(missing(x) || missing(y))){
     stop("Error: Missing data")
