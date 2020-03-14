@@ -19,13 +19,12 @@ Description of the source code used in this project. Note that the datacleaning 
 - main_analysis.R: --
 
 ## Data Description
-All data used in this research is positioned in the data folder.
+All data used in this research is collected from open-source databases. The ovitrap data is gathered by the Dengue Vector Surveillance Program and is publically available at http://dengue.pchrd.dost.gov.ph/. Furthermore, the weather data is gathered using the Google Earth Engine (https://developers.google.com/earth-engine/datasets/catalog/). The used datasets are then described as follows: 
 
-- ovitrap_data_per_month_per_province_cleaned.csv: --
-- ovitrap_data_per_month_per_province...
-- raw_weather_data.csv: ..
-- test_final.csv: ..
-- training_data.csv: ..
-- weather_data.csv: ..
+- ovitrap_data_per_month_per_province_cleaned.csv: cleaned ovitrap data that is aggregated on a monthly basis. Excluding imputed observations.
+- raw_weather_data.csv: raw weather data collected from the Google Earth Engine.
+- test_final.csv: the part of the dataset that is used for testing, including both the dependent and explanatory variables.
+- training_data.csv: the part of the dataset that is used for training, including both the dependent and explanatory variables. Note that the first 2 columns (index and adm) are not included in training.
+- weather_data.csv: cleaned and imputed weather data that is used for the analysis.
 
 ## References
