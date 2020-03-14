@@ -35,7 +35,7 @@ main_analysis <- function(ovitrap_original, ovitrap_cleaned, weather, threshold_
   library(VIM)          #used for knn imputation
   library(mice)         #used for mice imputation
   library(betareg)      #used for beta regression
-  #library(frmselection) #used for variable selection in beta regression
+  library(frmselection) #used for variable selection in beta regression
   library(doParallel)
   registerDoParallel(cores=4)
   # (1) Initial full data set with NA values
