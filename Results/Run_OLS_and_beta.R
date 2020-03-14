@@ -15,13 +15,13 @@ beta <- main_analysis(ovitrap_original, ovitrap_cleaned, weather, number_of_boot
                       model_type = "beta_regression", two_stage = F, save_train_test = T)
 
 # Load training and testing data
-training_final <- read.csv("training_data.csv")
+training_final <- read.csv("../Data/training_data.csv")
 training_final <- training_final[,!(names(training_final) == "X")]
 training_final <- training_final[,!(names(training_final) == "adm")]
 training_final <- training_final[,!(names(training_final) == "date")]
 training_final <- training_final[ ,!(names(training_final) == "value_indicator")]
 
-test_final <- read.csv("test_data.csv")
+test_final <- read.csv("../Data/test_data.csv")
 test_final <- test_final[,!(names(test_final) == "X")]
 test_final <- test_final[,!(names(test_final) == "adm")]
 test_final <- test_final[,!(names(test_final) == "date")]
