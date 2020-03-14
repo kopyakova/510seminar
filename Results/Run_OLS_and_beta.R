@@ -1,5 +1,3 @@
-setwd("/Users/annakopyakova/Desktop/Case Study 510/510seminar/Results")
-
 #Load raw data
 weather          <- read.delim("../Data/weather_data.csv", sep = ",", header = TRUE) # Not imputed yet
 ovitrap_cleaned  <- read.delim("../Data/ovitrap_data_per_month_per_province_cleaned.csv", 
