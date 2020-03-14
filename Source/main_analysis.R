@@ -232,8 +232,8 @@ first_stage <- function(training_set_na, validation_set, training_set, test_set,
   # (5) Provinces at risk 
   # (6) Selected threshold
   # (7) traingin set of risky provinces
-  # (8) traingin set with NA of risky provinces
-  # (9) testing set with NA of risky provinces
+  # (8) traingin set with NAs of risky provinces
+  # (9) testing set of risky provinces
 
   return(list("final_logit" = logitMod, 
               "final_covariates" = final_covariates,
