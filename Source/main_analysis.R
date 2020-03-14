@@ -30,27 +30,26 @@ main_analysis <- function(ovitrap_original, ovitrap_cleaned, weather, threshold_
                               threshold_selection = 0.5, number_of_bootstraps = 100, 
                               model_type = "linear_regression", two_stage = FALSE,
                               chronologically = TRUE, save = F, save_train_test = T) {
-  path <- paste0(setwd('..'), "/Source/Auxiliary_functions.R")
-  source(path, echo = F)
+  source("../Source/Auxiliary_functions.R", echo = F)
   library(VIM)          #used for knn imputation
   library(mice)         #used for mice imputation
   library(betareg)      #used for beta regression
-  library(frmselection) #used for variable selection in beta regression
+  #library(frmselection) #used for variable selection in beta regression
   library(doParallel)
   registerDoParallel(cores=4)
   # (1) Initial full data set with NA values
   #TODO uncomment
-  # full_data_NA <- fulldata(weather, ovitrap_cleaned, ovitrap_original)
-  # if(save){
-  #   save(full_data_NA, file = "full_data_NA.RData")
-  # }
-  # 
-  # # (2) Impute the full data set
-  # #TODO uncomment
-  # imputed_data      <- imputations(5, 5, full_data_NA, weather)
-  # if(save){
-  #   save(imputed_data, file = "imputed_data.RData")
-  # }
+  full_data_NA <- fulldata(weather, ovitrap_cleaned, ovitrap_original)
+  if(save){
+    save(full_data_NA, file = "full_data_NA.RData")
+  }
+
+  # (2) Impute the full data set
+  #TODO uncomment
+  imputed_data      <- imputations(5, 5, full_data_NA, weather)
+  if(save){
+    save(imputed_data, file = "imputed_data.RData")
+  }
   full_data_imputed <- imputed_data$completedata
   full_data_imputed <- full_data_imputed[order(full_data_imputed$date), ]
 
