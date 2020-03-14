@@ -18,6 +18,8 @@ Description of the source code used in this project. Note that the datacleaning 
 - main_analysis.R: The file contains the functions for the training of the OLS and the beta regressions, first stage of the two stage model, and the main function, which calls the analysis. The main function loads auxiliary functions, which allows it to combine the ovitrap and weather data, impute the full data sets, create lagged values, and split the data in training and testing sets. Furthermore, it is possible to call OLS or beta regressions with a possible first stage (logistic regression, that selects risky provinces for the analysis.
 - Auxiliary_functions.R: the working horse of the main_analysis.R. This file contains functions, which create bootstrapped samples, complete bootstrapped samples by imputation, and select variables for the OLS and beta regressions. It also contains the functions for completing the full data set, creation of lags, data set splitting, actual calls to the regression functions, as well as logit model of stage one in the two-stage model.
 
+## Obtaining the results
+To obtain the results described in out research one should pull this repository. You can run the econometric models (OLS and beta) by sourcing or running line by line *Run_OLS_and_beta.R* from the Results folder. To get the results of XGBoost, it is possible to source or running line by line *XGBoost.R* from Source folder. These files loads corresponding data and all relevant functions and documents.
 
 ## Data Description
 All data used in this research is collected from open-source databases. The ovitrap data is gathered by the Dengue Vector Surveillance Program and is publically available at http://dengue.pchrd.dost.gov.ph/. Furthermore, the weather data is gathered using the Google Earth Engine (https://developers.google.com/earth-engine/datasets/catalog/). The used datasets are then described as follows: 
@@ -27,7 +29,7 @@ All data used in this research is collected from open-source databases. The ovit
 - raw_weather_data.csv: raw weather data collected from the Google Earth Engine.
 - weather_data.csv: cleaned and imputed weather data that is used for the analysis.
 - training_data.csv: the part of the dataset that is used for training, including both the dependent and explanatory variables. Note that the first 2 columns (index and adm) are not included in training.
-- test_final.csv: the part of the dataset that is used for testing, including both the dependent and explanatory variables.
+- test_data.csv: the part of the dataset that is used for testing, including both the dependent and explanatory variables.
 
 ## References
 Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D., & Moore, R. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. Remote Sensing of Environment.
