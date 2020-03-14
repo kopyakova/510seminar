@@ -34,18 +34,16 @@ main_analysis <- function(ovitrap_original, ovitrap_cleaned, weather, threshold_
   library(VIM)          #used for knn imputation
   library(mice)         #used for mice imputation
   library(betareg)      #used for beta regression
-  #library(frmselection) #used for variable selection in beta regression
+  library(frmselection) #used for variable selection in beta regression
   library(doParallel)
   registerDoParallel(cores=4)
   # (1) Initial full data set with NA values
-  #TODO uncomment
   full_data_NA <- fulldata(weather, ovitrap_cleaned, ovitrap_original)
   if(save){
     save(full_data_NA, file = "full_data_NA.RData")
   }
 
   # (2) Impute the full data set
-  #TODO uncomment
   imputed_data      <- imputations(5, 5, full_data_NA, weather)
   if(save){
     save(imputed_data, file = "imputed_data.RData")
@@ -104,6 +102,11 @@ main_analysis <- function(ovitrap_original, ovitrap_cleaned, weather, threshold_
                               number_of_bootstraps = number_of_bootstraps, log_transf = FALSE,    
                               threshold_WHO = threshold_WHO, threshold_selection = threshold_selection,
                               save = save)
+    print(unique(test_final$adm))
+    training_set_na <- output_1$training_set_risk_na
+    training_final  <- output_1$training_set_risk
+    test_final      <- output_1$test_set_risk
+    print(unique(test_final$adm))
   }
   
   # (9) Call second stage
@@ -129,6 +132,26 @@ first_stage <- function(training_set_na, validation_set, training_set, test_set,
                         log_transf = FALSE, save = F) {
   
   set.seed(510)
+  line_search <- function(predicted_frac, actual_frac){
+    search_space <- seq(0.1, 0.9, 0.01)
+    diff <- Inf
+    for (i in search_space){
+      predicted_index <- ifelse(predicted_frac >= i, 1, 0)
+      actual_index    <- ifelse(actual_frac >= i, 1, 0)
+      
+      diff_new        <- sum(predicted_index != actual_index)
+      print(diff_new)
+      if (diff_new < diff){
+        diff <- diff_new
+        best_threshold <- i
+      } else if (diff_new == 0){
+        best_threshold <- i
+        break()
+      }
+    }
+    return(best_threshold)
+  }
+  
   # (1) Apply bootstrap on the training set
   bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps,
                                          training_set = training_set_na)
@@ -139,7 +162,7 @@ first_stage <- function(training_set_na, validation_set, training_set, test_set,
                                         bootstrap_samples = bootstrap_samples, log_transf = log_transf,
                                         weather = weather)
   if(save){
-    save(complete_samples, file = "complete_boot_samples_stage1.RData")
+    save(complete_samples, file = "complete_samples_stage1.RData")
   }
 
   # Remove unnecessry columns
@@ -176,50 +199,51 @@ first_stage <- function(training_set_na, validation_set, training_set, test_set,
                                        newdata = test_set[, c(final_covariates, "value_indicator")], 
                                        type = "response")
   
-  # ------------------------------------------------------------------------------------------------------------
-  #TODO fix this mess
-  # # (5) Determine threshold
-   
-  # # (5.2) Get a fraction of once per province pased on the predicted_index
-  # 
-  # # (5.3) Get a fraction of once per province pased on the training_set
-  # 
-  # # (5.4) Find a threshold that "optimizes" 
-  # 
-  # index_of_selected_observations <- logitMod$fitted.values > threshold # DISCUSSION POINT!!!
-  # 
-  # # ADD NA'S BACK TO THE MERGED DATA SET --> NEED THOSE NA'S AGAIN IN THE SECOND STAGE
-  # # Return both please! WE NEED THEM BOTH IN THE SECOND STAGE
-  # selected_data <- merged_set[index_of_selected_observations, ] # risky observations
-  # (1) Select the 'sub-sample' from the training_set (with NA's) corresponding to those provinces which are on risk
-  # Already done in previous First Stage
-  # training_set_na <- training_set_na[as.character(training_set_na$adm) == provinces_on_risk, ]
+  # (5) Determine threshold 
+  provinces       <- unique(training_set$adm)
+  predicted_index <- ifelse(predictions_logitMod_train >= threshold_WHO, 1, 0)
+  true_index      <- training_set$value_indicator
   
-  # ------------------------------------------------------------------------------------------------------------
+  # Get a fraction of once per province based on the predicted index
+  predicted_frac <- aggregate(predicted_index ~ ., data = cbind(training_set$adm, predicted_index), mean)[2]
   
-  # return_list <- list()
-  # return_list$model <- logitMod
-  # return_list$data  <- selected_data
+  # Get a fraction of once per province based on the actual index
+  actual_frac    <- aggregate(true_index ~ ., data = cbind(training_set$adm, true_index), mean)[2]
   
+  threshold      <- line_search(predicted_frac, actual_frac)
+
+  provinces_at_risk <- provinces[predicted_frac > threshold]
+  
+  if(length(provinces_at_risk) == length(provinces)){
+    training_set_risk    <- training_set
+    training_set_risk_na <- training_set_na
+    test_set_risk        <- test_set
+  } else {
+    training_set_risk    <- training_set[training_set$adm %in% provinces_at_risk,]
+    training_set_risk_na <- training_set_na[training_set_na$adm %in% provinces_at_risk,]
+    test_set_risk        <- test_set[test_set$adm %in% provinces_at_risk,]
+  }
+
   # OUTPUT
   # (1) Final model
   # (2) Selected variables
   # (3) Predictions for the training set 
   # (4) Predictions for the testing set 
-  
-  #TODO add 
-  # (1) Provinces at risk 
-  # (2) Selected threshold
-  # (3) traingin sets + testing sets for the second stage
-  #   - Order full_data_NA (like what we did we the fill_data_imputed)
-  #   - Determine where the NA's are in this ordered full_data_NA
-  #   - Shrink data set by removing test_set part
-  #   - Return this one for input in Second_Stage --> training_set_na
-  
+  # (5) Provinces at risk 
+  # (6) Selected threshold
+  # (7) traingin set of risky provinces
+  # (8) traingin set with NA of risky provinces
+  # (9) testing set with NA of risky provinces
+
   return(list("final_logit" = logitMod, 
               "final_covariates" = final_covariates,
               "predictions_train" = predictions_logitMod_train, 
-              "predictions_test" = predictions_logitMod_test))
+              "predictions_test" = predictions_logitMod_test,
+              "risky_provinces" = provinces_at_risk,
+              "threshold_risky_provinces" = threshold,
+              "training_set_risk" = training_set_risk,
+              "training_set_risk_na" = training_set_risk_na,
+              "test_set_risk" = test_set_risk))
 }
 
 ######### MODEL TRAINING #########
@@ -227,8 +251,7 @@ train_regressions <- function(number_of_bootstraps = 20, threshold_WHO = 0.1,
                               threshold_selection = 0.5, training_set_na, training_set, test_set, 
                               weather, model_type = "linear_regression", save = F) { 
   set.seed(510)
-  #uncomment
-  ## (1) Apply bootstrap on the training set
+  # (1) Apply bootstrap on the training set
   bootstrap_samples <- bootstrap_samples(number_of_bootstraps = number_of_bootstraps,
                                          training_set = training_set_na)
 
