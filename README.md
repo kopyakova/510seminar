@@ -29,3 +29,4 @@ All data used in this research is collected from open-source databases. The ovit
 - weather_data.csv: cleaned and imputed weather data that is used for the analysis.
 
 ## References
+Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D., & Moore, R. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. Remote Sensing of Environment.
