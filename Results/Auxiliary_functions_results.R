@@ -15,9 +15,8 @@ evaluate_results <- function(true_train, pred_train, true_test, pred_test, metho
   sd_error_test  <- sqrt(var(error_test))
   data <- data.frame(cbind(pred_test, true_test))
   plot <- ggplot(data, aes(x = pred_test, y = true_test)) + 
-    geom_point() + xlim(0, 100)+ ylim(0, 100)+ 
-    geom_line(color='red',
-              aes(x = c(1:480), y = c(1:480)))+
+    geom_point(color= "grey60") + xlim(0, 100)+ ylim(0, 100) + theme_minimal()+
+    geom_line(color='black', aes(x = c(1:480), y = c(1:480)))+
     labs(y="Actual ovitrap index", x = paste0("Ovitrap index predicted with ", method_name))
   
   return_list <- list()
@@ -40,13 +39,13 @@ resid_vs_pred_plot <- function(residuals, predictions, method_name, actual = F){
   data <- data.frame(cbind(residuals, predictions))
   if (actual){
     plot <- ggplot(data, aes(x = predictions, y = residuals)) + 
-      geom_point()+ ylim(-3, 3)+
-      geom_hline(yintercept = 0, color='red')+
+      geom_point(color='grey60')+ ylim(-3, 3)+theme_minimal()+
+      geom_hline(yintercept = 0, color='black')+
       labs(y="Standardized residuals", x = "Actual Ovitrap index")
   } else {
     plot <- ggplot(data, aes(x = predictions, y = residuals)) + 
-      geom_point()+ ylim(-3, 3)+
-      geom_hline(yintercept = 0, color='red')+
+      geom_point(color='grey60')+ ylim(-3, 3)+theme_minimal()+
+      geom_hline(yintercept = 0, color='black')+
       labs(y="Standardized residuals", x = paste0("Ovitrap index predicted with ", method_name))
   }
   return(plot)
